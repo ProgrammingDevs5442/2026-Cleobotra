@@ -18,6 +18,7 @@ public class Intake extends SubsystemBase {
     
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Intake Speed", intakeSpeed);
+    RobotContainer.intakeMotor.set(intakeSpeed);
   }
   public void setIntakeSpeed(double speed){
     intakeSpeed = speed;

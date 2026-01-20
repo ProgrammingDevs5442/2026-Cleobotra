@@ -79,10 +79,11 @@ public class RobotContainer {
     // public static SparkMax rotateMotor = new SparkMax(22, MotorType.kBrushless);
     public static TalonFXS rotateMotor = new TalonFXS(14, Rio);
     public static TalonFX shootMotor = new TalonFX(15, Driveloop);
+    public static SparkMax intakeMotor = new SparkMax(16, MotorType.kBrushed);
     
+
     public static Intake intake = new Intake();
     public static IntakeCommand intakeCommand = new IntakeCommand();
-    // public static PWMVictorSPX intakeMotor = new PWMVictorSPX(16);
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
 

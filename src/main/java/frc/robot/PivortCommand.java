@@ -52,13 +52,7 @@ public class PivortCommand extends Command {
     if (RobotContainer.xbox2.getRightBumperButton()) {
       targeting = true;
     }
-
-
-    if (RobotContainer.xbox2.getAButton()) {
-      RobotContainer.pivort.shootSpeed(Constants.pivotConstants.ShootSpeed);
-    } else {
-      RobotContainer.pivort.shootSpeed(0);
-    }
+    
   }
 
   // Called once the command ends or is interrupted.

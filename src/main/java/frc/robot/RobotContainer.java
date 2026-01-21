@@ -38,6 +38,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.DriveModes;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Pivort;
 import frc.robot.subsystems.Vision.Vision;
 
@@ -83,8 +84,12 @@ public class RobotContainer {
     public static Intake intake = new Intake();
     public static IntakeCommand intakeCommand = new IntakeCommand();
     // public static PWMVictorSPX intakeMotor = new PWMVictorSPX(16);
+
+    public static Shooter Shooter = new Shooter();
+    public static ShootCommand shootCommand = new ShootCommand();
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
+
 
     public RobotContainer() {
         autoChooser = AutoBuilder.buildAutoChooser("Tests");

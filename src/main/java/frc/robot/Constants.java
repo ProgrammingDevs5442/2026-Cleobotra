@@ -53,11 +53,20 @@ public class Constants {
 
     public static final class pivotConstants {
         public final static double ShooterDeadzone = .5;
-        public final static double PivotPIDkp = .008; //TODO Tune these
+        public final static double PivotPIDkp = .008;
         public final static double PivotPIDki = 0;
         public final static double PivotPIDkd = 0;
         public final static double PivotMotorRatio = .2;
         public final static double PivotTableRatio = 30/(88.66*3);
+        public final static double MaxRPMPivot = 7700; //Motor type dependent
+        public final static double RPMToRadPS = ((2*Math.PI) / 60);
+        public final static double MaxPivotAngularRate = MaxRPMPivot * PivotMotorRatio * PivotTableRatio * RPMToRadPS;
+        public final static double MotorTransferEfficency = .55;
+        public final static double PivotLowLimit = -360;
+        public final static double PivotHighLimit = 360;
+    }
+
+    public static final class shooterConstants {
         public final static double ShootSpeed = 1.15;
         public final static double DistanceToShootSpeedMultiplier = .2;
         public final static double AngleOfShooter = 65; //Degrees
@@ -65,13 +74,13 @@ public class Constants {
         public final static double MetersToFeet = 3.28;
         public final static double VelocityToMotorPower = 0;
         public final static double DiameterOfWheel = .1148; //Meters
-        public final static double MaxRPMPivot = 7700; //Motor type dependent
-        public final static double RPMToRadPS = ((2*Math.PI) / 60);
-        public final static double MaxPivotAngularRate = MaxRPMPivot * PivotMotorRatio * PivotTableRatio * RPMToRadPS;
-        public final static double MotorTransferEfficency = .55;
+    }
+
+    public static final class intakeConstants {
+        public final static double IntakeSpeed = -1;
     }
 
     public static final class fieldConstants {
-        public final static double HeightOfHub = 2.5; //Feet
+        public final static double HeightOfHub = 6; //Feet
     }
 }

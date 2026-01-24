@@ -83,7 +83,6 @@ public class RobotContainer {
     
     public static Intake intake = new Intake();
     public static IntakeCommand intakeCommand = new IntakeCommand();
-    // public static PWMVictorSPX intakeMotor = new PWMVictorSPX(16);
 
     public static Shooter Shooter = new Shooter();
     public static ShootCommand shootCommand = new ShootCommand();

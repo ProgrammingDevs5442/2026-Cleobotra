@@ -37,6 +37,8 @@ public class PivortCommand extends Command {
     else {
       RobotContainer.pivort.manualMode(false);
       // if (targeting) { //TODO TEST THIS
+      //Coords of hub in inches: (158.84,Constants.fieldConstants.HeightOfHub,156.61) //TODO double check order of values
+      //Coords of passing point in inches: (0,0,0) //TODO get actual values
       //   RobotContainer.pivort.shootAtPosition(0, Constants.fieldConstants.HeightOfHub, 0, Constants.pivotConstants.ShootSpeed);;
       // } else {
       //   RobotContainer.pivort.setAutoRotate(0);

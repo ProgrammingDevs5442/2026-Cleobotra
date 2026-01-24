@@ -13,11 +13,15 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Pivort;
 
 
 /** Add your docs here. */
 public class Constants {
-
+    public static final class measurementConstants {
+        public final static double RPMToRadPS = ((2*Math.PI) / 60);
+        public final static double MetersToFeet = 3.28;
+    }
     public static final class driveConstants {
 
         public final static double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -59,8 +63,7 @@ public class Constants {
         public final static double PivotMotorRatio = .2;
         public final static double PivotTableRatio = 30/(88.66*3);
         public final static double MaxRPMPivot = 7700; //Motor type dependent
-        public final static double RPMToRadPS = ((2*Math.PI) / 60);
-        public final static double MaxPivotAngularRate = MaxRPMPivot * PivotMotorRatio * PivotTableRatio * RPMToRadPS;
+        public final static double MaxPivotAngularRate = MaxRPMPivot * PivotMotorRatio * PivotTableRatio * measurementConstants.RPMToRadPS;
         public final static double MotorTransferEfficency = .55;
         public final static double PivotLowLimit = -360;
         public final static double PivotHighLimit = 360;
@@ -71,7 +74,6 @@ public class Constants {
         public final static double DistanceToShootSpeedMultiplier = .2;
         public final static double AngleOfShooter = 65; //Degrees
         public final static double HeightOfShooter = 1.33;//Feet
-        public final static double MetersToFeet = 3.28;
         public final static double VelocityToMotorPower = 0;
         public final static double DiameterOfWheel = .1148; //Meters
     }

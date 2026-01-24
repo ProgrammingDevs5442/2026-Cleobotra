@@ -30,13 +30,13 @@ public class Shooter extends SubsystemBase {
 
   public void shootSpeed(double speed){
     // shootSpeed = speed * Constants.pivotConstants.DistanceToShootSpeedMultiplier;
-    double xs = RobotContainer.turretVision.getDistanceToTag() * Constants.shooterConstants.MetersToFeet;
+    double xs = RobotContainer.turretVision.getDistanceToTag() * Constants.measurementConstants.MetersToFeet;
     double ys = Constants.shooterConstants.HeightOfShooter;
     double theta = Math.toRadians(Constants.shooterConstants.AngleOfShooter);
     calculatedShootVelocity = speed * ((4*xs))/(Math.sqrt(-(Math.cos(theta)*((Constants.fieldConstants.HeightOfHub-ys)*Math.cos(theta)-Math.sin(theta)*xs))));
     
     calcMotorAngVelo = calculatedShootVelocity/(Constants.shooterConstants.DiameterOfWheel/2);
-    shootSpeed = calcMotorAngVelo/(Constants.pivotConstants.MaxRPMPivot * Constants.pivotConstants.RPMToRadPS * Constants.pivotConstants.MotorTransferEfficency);
+    shootSpeed = calcMotorAngVelo/(Constants.pivotConstants.MaxRPMPivot * Constants.measurementConstants.RPMToRadPS * Constants.pivotConstants.MotorTransferEfficency);
     SmartDashboard.putNumber("shootSpeed", shootSpeed);
     SmartDashboard.putNumber("Calculated Shoot Speed", calculatedShootVelocity);
   }

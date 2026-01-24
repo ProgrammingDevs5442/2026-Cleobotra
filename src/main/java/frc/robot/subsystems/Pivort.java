@@ -5,6 +5,8 @@
 
 package frc.robot.subsystems;
 import java.lang.Math;
+import java.util.ArrayList;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -31,11 +33,12 @@ public class Pivort extends SubsystemBase {
   double trackedDifference;
   boolean continuing = false;
   double continueAngle = 0;
+  ArrayList<String> output = new ArrayList<>();
 
    //Initiallizing the PIDs
   PIDController rotatePID = new PIDController(pivotConstants.PivotPIDkp, pivotConstants.PivotPIDki, pivotConstants.PivotPIDkd);
   SlewRateLimiter rotateLimiter = new SlewRateLimiter(16);
-  SlewRateLimiter continueRotateLimiter = new SlewRateLimiter(5);
+  SlewRateLimiter continueRotateLimiter = new SlewRateLimiter(0.5);
 
   @Override
   public void periodic() {
@@ -45,7 +48,7 @@ public class Pivort extends SubsystemBase {
     SmartDashboard.putNumber("Pivot Target Angle", targetAngle);
     SmartDashboard.putNumber("Pivot Speed", rotateSpeed);
     SmartDashboard.putBoolean("Continuing", continuing);
-
+    SmartDashboard.putStringArray("output", output.toArray(new String[0]));
     SendableRegistry.setName(rotatePID, "Pivot", "PivotPID");
     
     SendableRegistry.setName(RobotContainer.rotateMotor, "Rotate speed");
@@ -54,6 +57,9 @@ public class Pivort extends SubsystemBase {
     if (difference == 0 && continuing) {
       difference = Math.toDegrees(getAngle()) - continueAngle;
       continuing = (Math.abs(difference) > 1) && (Math.abs(difference) < 400);
+      if (!continuing) {
+        difference = 0;
+      }
     } else {
       continuing = false;
     }
@@ -81,6 +87,7 @@ public class Pivort extends SubsystemBase {
   }
 
   public double rotate(double difference) {
+    // Positive difference means a more negative pivot angle
     // if (difference == 0) return 0;
     if (!continuing) {
       if (difference > 180) {
@@ -92,18 +99,25 @@ public class Pivort extends SubsystemBase {
       }
     }
     
-    double angle = Math.toDegrees(getAngle()) + difference;
+    double angle = Math.toDegrees(getAngle()) - difference;
+    if (continuing) System.out.println("2Angle: " + angle + "    Difference: " + difference);
     if (angle > Constants.pivotConstants.PivotHighLimit) {
-      difference += 360;
-      continuing = true;
-      continueAngle = Math.toDegrees(getAngle()) + difference;
+      System.out.println("[UPPER LIMIT] Angle: " + angle + "    Difference: " + difference);
+      difference = 0;
+      // difference += 360;
+      // continuing = true;
+      // continueAngle = Math.toDegrees(getAngle()) - difference;
     } else if (angle < Constants.pivotConstants.PivotLowLimit) {
-      difference -= 360;
-      continuing = true;
-      continueAngle = Math.toDegrees(getAngle()) + difference;
+      System.out.println("[LOWER LIMIT] Angle: " + angle + "    Difference: " + difference);
+      difference = 0;
+      // difference -= 360;
+      // continuing = true;
+      // continueAngle = Math.toDegrees(getAngle()) - difference;
     }
     
     SmartDashboard.putNumber("Difference", difference);
+    if (continuing) System.out.println("Continuing: " + continuing + "   Difference: " + difference + "   ContinueAngle: " + continueAngle);
+    // output.add("Difference: " + difference + " | Continuing: " + continuing + " | ContinueAngle: " + continueAngle);
     if (Double.isNaN(rotateSpeed)) {
       return 0;
     }
@@ -126,6 +140,7 @@ public class Pivort extends SubsystemBase {
     this.targetAngle = targetAngle;
     SmartDashboard.putNumber("Pivot Target Angle", targetAngle);
     SmartDashboard.putNumber("Pivot Speed", rotateSpeed);
+   
   }
 
   public double getAngle(){

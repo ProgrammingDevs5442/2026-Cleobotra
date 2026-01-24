@@ -74,4 +74,16 @@ public class Constants {
     public static final class fieldConstants {
         public final static double HeightOfHub = 2.5; //Feet
     }
+
+    public static final class climberConstants{
+        public final static double UpAndDownSpeedFactor = 0.4;
+        /** in inches */
+        public final static double ArmTopLimit = 2;
+        /** in inches */
+        public final static double ArmBottomLimit = -2;
+        /**Inches from floor to pivot point at lowest position */
+        public final static double PivotToFloorOffset = 9.375; 
+        public final static double InchesPerRotation = 10.95;
+        public static final double UpAndDownOffset = 0;
+    }
 }

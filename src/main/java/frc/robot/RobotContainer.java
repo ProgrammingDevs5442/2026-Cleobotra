@@ -35,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.driveConstants;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.DriveModes;
 import frc.robot.subsystems.Intake;
@@ -79,7 +80,13 @@ public class RobotContainer {
     // public static SparkMax rotateMotor = new SparkMax(22, MotorType.kBrushless);
     public static TalonFXS rotateMotor = new TalonFXS(14, Rio);
     public static TalonFX shootMotor = new TalonFX(15, Driveloop);
-    
+
+    public static TalonFX climbMotor = new TalonFX(16, Driveloop);
+    public static Climber climber = new Climber();
+    public static ClimberCommand climberCommand = new ClimberCommand();
+    public static DutyCycleEncoder climberEncoder = new DutyCycleEncoder(1);
+
+
     public static Intake intake = new Intake();
     public static IntakeCommand intakeCommand = new IntakeCommand();
     // public static PWMVictorSPX intakeMotor = new PWMVictorSPX(16);
@@ -94,6 +101,7 @@ public class RobotContainer {
 
         pivort.setDefaultCommand(pivortCommand);
         intake.setDefaultCommand(intakeCommand);
+        climber.setDefaultCommand(climberCommand);
     }
 
 

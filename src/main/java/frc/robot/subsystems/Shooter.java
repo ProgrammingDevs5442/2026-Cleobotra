@@ -40,4 +40,6 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("shootSpeed", shootSpeed);
     SmartDashboard.putNumber("Calculated Shoot Speed", calculatedShootVelocity);
   }
+
+  
 }

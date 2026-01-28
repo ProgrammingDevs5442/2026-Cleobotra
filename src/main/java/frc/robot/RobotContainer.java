@@ -111,9 +111,17 @@ public class RobotContainer {
                 DriveModes.driveField
                     .withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                     .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * driveConstants.MaxAngularRate) // Drive counterclockwise with negative X (left)
+                    .withRotationalRate(pivort.findRotateSpeed(-joystick.getRightX() * driveConstants.MaxAngularRate)) // Drive counterclockwise with negative X (left)
             )
         );
+
+
+        joystick.leftBumper().whileTrue(drivetrain.applyRequest(() -> 
+            DriveModes.driveRobot
+                .withVelocityX(-Sine(RobotContainer.joystick.getLeftX(), RobotContainer.joystick.getLeftY()) * driveConstants.MaxSpeed) // Drive forward with negative Y (forward)
+                .withVelocityY(-Cosine(RobotContainer.joystick.getLeftX(), RobotContainer.joystick.getLeftY()) * driveConstants.MaxSpeed) // Drive left with negative X (left)
+                .withRotationalRate(-Math.pow(Deadzone(RobotContainer.joystick.getRightX()), driveConstants.Linearity) * driveConstants.MaxAngularRate) // Drive counterclockwise with negative X (left)
+        ));
 
         joystick.a().whileTrue(drivetrain.applyRequest(() -> DriveModes.brake));
         // joystick.b().whileTrue(drivetrain.applyRequest(() ->
@@ -139,6 +147,35 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
+
+    /** Function that returns a given speed, as long as it is above the deadzone set in Constants. */
+    public static double Deadzone(double speed) {
+        if (Math.abs(speed) > driveConstants.ControllerDeadzone) return speed;
+        return 0;
+    }
+
+    /** Function that returns a given speed, as long as it is above the given deadzone. */
+    public static double Deadzone(double speed, double minValue) {
+        if (Math.abs(speed) > minValue) return speed;
+        return 0;
+    }
+
+    ///// Controller Y value curving \\\\\
+    public static double Cosine(double x, double y) {
+        return Math.pow(Deadzone(Math.sqrt((x*x)+(y*y))), driveConstants.Linearity) * Math.cos(Math.atan2(y,x));
+    }
+    public static double Cosine(double x, double y, double exp) {
+        return Math.pow(Math.sqrt((x*x)+(y*y)), exp) * Math.cos(Math.atan2(y,x));
+    }
+
+    ///// Controller X value curving \\\\\
+    public static double Sine(double x, double y) {
+        return Math.pow(Deadzone(Math.sqrt((x*x)+(y*y))), driveConstants.Linearity) * Math.sin(Math.atan2(y,x));
+    }
+    public static double Sine(double x, double y, double exp) {
+        return Math.pow(Math.sqrt((x*x)+(y*y)), exp) * Math.sin(Math.atan2(y,x));
+    }
+
 
     public Command getAutonomousCommand() {
         /* Run the path selected from the auto chooser */

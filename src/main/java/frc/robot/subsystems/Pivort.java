@@ -32,6 +32,7 @@ public class Pivort extends SubsystemBase {
   double manualDifference;
   double trackedDifference;
   boolean continuing = false;
+  boolean autoTarget = false;
   double continueAngle = 0;
   ArrayList<String> output = new ArrayList<>();
 
@@ -53,33 +54,43 @@ public class Pivort extends SubsystemBase {
     
     SendableRegistry.setName(RobotContainer.rotateMotor, "Rotate speed");
 
-    double difference = manualRotateMode ? manualDifference : (continuing ? 0 : trackedDifference);
-    if (difference == 0 && continuing) {
-      difference = Math.toDegrees(getAngle()) - continueAngle;
-      continuing = (Math.abs(difference) > 1) && (Math.abs(difference) < 400);
-      if (!continuing) {
-        difference = 0;
-      }
-    } else {
-      continuing = false;
-    }
-    rotateSpeed = rotate(difference);
-    // if (manualRotateMode) {
-    //   rotate(manualDifference);
+    // double difference =  trackedDifference;
+
+    // if (difference == 0 && continuing) {
+    //   difference = Math.toDegrees(getAngle()) - continueAngle;
+    //   continuing = (Math.abs(difference) > 1) && (Math.abs(difference) < 400);
+    //   if (!continuing) {
+    //     difference = 0;
+    //   }
     // } else {
-    //   rotate(trackedDifference);
+    //   continuing = false;
+    // }
+    // rotateSpeed = rotate(difference);
+    // // if (manualRotateMode) {
+    // //   rotate(manualDifference);
+    // // } else {
+    // //   rotate(trackedDifference);
+    // // }
+
+    // robotRotation = RobotContainer.joystick.getRightX() * (Constants.driveConstants.MaxAngularRate);
+    // if (Math.abs(robotRotation) < Constants.driveConstants.RotationalDeadband){
+    //   robotRotation = 0;
+    // } else {
+    //   robotRotation /= (20.247 * Math.PI);
     // }
 
-    robotRotation = RobotContainer.joystick.getRightX() * (Constants.driveConstants.MaxAngularRate);
-    if (Math.abs(robotRotation) < Constants.driveConstants.RotationalDeadband){
-      robotRotation = 0;
-    } else {
-      robotRotation /= (20.247 * Math.PI);
-    }
-
     //At all times, set the motor to the speed given
-    RobotContainer.rotateMotor.set(rotateSpeed);//-  4 * robotRotation);
+    // RobotContainer.rotateMotor.set(rotateSpeed);//-  4 * robotRotation);
     
+  }
+
+  public double findRotateSpeed(double manualSpeed){
+    if (autoTarget) {
+      return rotateSpeed;
+    }
+    else {
+      return manualSpeed;
+    }
   }
 
   public void calculateRotateDifference(double targetAngle){
@@ -99,34 +110,34 @@ public class Pivort extends SubsystemBase {
       }
     }
     
-    double angle = Math.toDegrees(getAngle()) - difference;
-    if (continuing) System.out.println("2Angle: " + angle + "    Difference: " + difference);
-    if (angle > Constants.pivotConstants.PivotHighLimit) {
-      System.out.println("[UPPER LIMIT] Angle: " + angle + "    Difference: " + difference);
-      difference = 0;
-      // difference += 360;
-      // continuing = true;
-      // continueAngle = Math.toDegrees(getAngle()) - difference;
-    } else if (angle < Constants.pivotConstants.PivotLowLimit) {
-      System.out.println("[LOWER LIMIT] Angle: " + angle + "    Difference: " + difference);
-      difference = 0;
-      // difference -= 360;
-      // continuing = true;
-      // continueAngle = Math.toDegrees(getAngle()) - difference;
-    }
+    // double angle = Math.toDegrees(getAngle()) - difference;
+    // if (continuing) System.out.println("2Angle: " + angle + "    Difference: " + difference);
+    // if (angle > Constants.pivotConstants.PivotHighLimit) {
+    //   System.out.println("[UPPER LIMIT] Angle: " + angle + "    Difference: " + difference);
+    //   difference = 0;
+    //   // difference += 360;
+    //   // continuing = true;
+    //   // continueAngle = Math.toDegrees(getAngle()) - difference;
+    // } else if (angle < Constants.pivotConstants.PivotLowLimit) {
+    //   System.out.println("[LOWER LIMIT] Angle: " + angle + "    Difference: " + difference);
+    //   difference = 0;
+    //   // difference -= 360;
+    //   // continuing = true;
+    //   // continueAngle = Math.toDegrees(getAngle()) - difference;
+    // }
     
     SmartDashboard.putNumber("Difference", difference);
-    if (continuing) System.out.println("Continuing: " + continuing + "   Difference: " + difference + "   ContinueAngle: " + continueAngle);
+    // if (continuing) System.out.println("Continuing: " + continuing + "   Difference: " + difference + "   ContinueAngle: " + continueAngle);
     // output.add("Difference: " + difference + " | Continuing: " + continuing + " | ContinueAngle: " + continueAngle);
     if (Double.isNaN(rotateSpeed)) {
       return 0;
     }
     // rotateSpeed = rotateLimiter.calculate(rotatePID.calculate(difference));
-    if (continuing) {
-      return continueRotateLimiter.calculate(rotatePID.calculate(difference)); //TODO double check the limiter
-    } else {
+    // if (continuing) {
+    //   return continueRotateLimiter.calculate(rotatePID.calculate(difference)); //TODO double check the limiter
+    // } else {
       return rotateLimiter.calculate(rotatePID.calculate(difference)); 
-    }
+    // }
   }
 
   public void setAutoRotate(double trackedDifference) {
@@ -180,6 +191,10 @@ public class Pivort extends SubsystemBase {
   public void TagTracking(double TagID) {
     
 
+  }
+
+  public void setAutoTarget(boolean autoTarget) {
+    this.autoTarget = autoTarget;
   }
 
   public void manualMode(boolean manualRotateMode) {

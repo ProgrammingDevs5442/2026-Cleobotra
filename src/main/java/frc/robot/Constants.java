@@ -24,13 +24,13 @@ public class Constants {
     }
     public static final class driveConstants {
 
-        public final static double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+        //public final static double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
         public final static double MaxAngularRate = RotationsPerSecond.of(4.5).in(RadiansPerSecond); // 4.5 rotations per second max angular velocity
 
         /** Deadzone value to control when to start using joystick input values */
         public final static double RotationalDeadband = MaxAngularRate * 0.1; // Add a 10% deadband
 
-        // public final static double MaxSpeed = 5; //Max targeted speed in M/S (15 NORMALLY)
+        public final static double MaxSpeed = 4; //Max targeted speed in M/S (15 NORMALLY)
         // public final static double MaxAngularRate = 1.5 * Math.PI * 3; //Max targeted rotations / second -- 3/4ths of a rotation for now
         public final static double MaxAcceleration = 2; //Max acceleration in M/s/s;
         public final static double MaxAngularAcceleration = 4 * Math.PI;

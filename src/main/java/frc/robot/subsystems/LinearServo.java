@@ -1,20 +1,31 @@
-package frc.robot;
+package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.math.MathUtil;
 
-public class LinearServo extends Servo {
+public class LinearServo extends Servo implements Subsystem{
     double m_speed;
     double m_length;
     double setPos;
     double curPos;
     double lastTime = 0;
     
-    final double microsecondsPerSecond = 1000000;
-    int secondsToMicroseconds(double seconds){
-        return (int)(seconds * microsecondsPerSecond);
+    final double microsecondsPerMillisecond = 1000;
+    int millisecondsToMicroseconds(double milliseconds){
+        return (int)(milliseconds * microsecondsPerMillisecond);
     }
+
+    @Override
+    public void periodic() {
+        updateCurPos();
+        lastTime = Timer.getFPGATimestamp();
+
+        SmartDashboard.putNumber("Servo Position", curPos);
+    }
+
 
     /**
      * Parameters for L16-R Actuonix Linear Actuators
@@ -26,18 +37,18 @@ public class LinearServo extends Servo {
     public LinearServo(int channel, int length, int speed) {
         super(channel);
         setBoundsMicroseconds( 
-            secondsToMicroseconds(2.0), 
-            secondsToMicroseconds(1.8), 
-            secondsToMicroseconds(1.5), 
-            secondsToMicroseconds(1.2), 
-            secondsToMicroseconds(1.0)
+            millisecondsToMicroseconds(2.0), 
+            millisecondsToMicroseconds(1.8), 
+            millisecondsToMicroseconds(1.5), 
+            millisecondsToMicroseconds(1.2), 
+            millisecondsToMicroseconds(1.0)
         );
         m_length = length;
         m_speed = speed;
     }
     
     public void setPosition(double setpoint){
-        setPos = MathUtil.clamp(setpoint, 0, m_length);
+        setPos = MathUtil.clamp(setpoint*m_length, 0, m_length);
         setSpeed( (setPos/m_length *2)-1);
     }
 

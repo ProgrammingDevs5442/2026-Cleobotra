@@ -38,6 +38,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.DriveModes;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LinearServo;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Pivort;
 import frc.robot.subsystems.Vision.Vision;
@@ -86,6 +87,10 @@ public class RobotContainer {
 
     public static Shooter Shooter = new Shooter();
     public static ShootCommand shootCommand = new ShootCommand();
+
+    public static LinearServo linearServo = new LinearServo(9, 100, 20);
+    public static LinearServo linearServo2 = new LinearServo(8, 100, 20);
+    public static LinearServoCommand linearServoCommand = new LinearServoCommand();
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
 
@@ -99,6 +104,8 @@ public class RobotContainer {
         pivort.setDefaultCommand(pivortCommand);
         intake.setDefaultCommand(intakeCommand);
         Shooter.setDefaultCommand(shootCommand);
+        linearServo.setDefaultCommand(linearServoCommand);
+        linearServo2.setDefaultCommand(linearServoCommand);
     }
 
 

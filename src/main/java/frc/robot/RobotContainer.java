@@ -96,16 +96,16 @@ public class RobotContainer {
 
 
     public RobotContainer() {
-        autoChooser = AutoBuilder.buildAutoChooser("Tests");
-        SmartDashboard.putData("Auto Mode", autoChooser);
-
-        configureBindings();
-
         pivort.setDefaultCommand(pivortCommand);
         intake.setDefaultCommand(intakeCommand);
         Shooter.setDefaultCommand(shootCommand);
         linearServo.setDefaultCommand(linearServoCommand);
         linearServo2.setDefaultCommand(linearServoCommand);
+        
+        autoChooser = AutoBuilder.buildAutoChooser("Tests");
+        SmartDashboard.putData("Auto Mode", autoChooser);
+
+        configureBindings();
     }
 
 

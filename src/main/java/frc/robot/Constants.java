@@ -76,6 +76,7 @@ public class Constants {
         public final static double HeightOfShooter = 1.33;//Feet
         public final static double VelocityToMotorPower = 0;
         public final static double DiameterOfWheel = .1148; //Meters
+        public final static double ShootRPSThreshold = 30; //RPS needed to be at to feed balls
     }
 
     public static final class intakeConstants {

@@ -22,11 +22,17 @@ public class ShootCommand extends Command {
   @Override
   public void execute() {
     if (RobotContainer.xbox2.getAButton()) {
-      RobotContainer.Shooter.shootSpeed(Constants.shooterConstants.ShootSpeed);
+      RobotContainer.Shooter.shootSpeed(.6);
     } else {
       RobotContainer.Shooter.shootSpeed(0);
     }
+    if (RobotContainer.shootMotorLeft.getVelocity().getValueAsDouble() >= Constants.shooterConstants.ShootRPSThreshold) {
+      RobotContainer.Shooter.feedSpeed(1);
+    } else {
+      RobotContainer.Shooter.feedSpeed(0);
+    }
   }
+  
 
   // Called once the command ends or is interrupted.
   @Override

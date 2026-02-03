@@ -26,6 +26,7 @@ import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 // import edu.wpi.first.wpilibj.drive.RobotDriveBase.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -78,8 +79,17 @@ public class RobotContainer {
     public static Pivort pivort = new Pivort();
     public static PivortCommand pivortCommand = new PivortCommand();
     // public static SparkMax rotateMotor = new SparkMax(22, MotorType.kBrushless);
-    public static TalonFXS rotateMotor = new TalonFXS(14, Rio);
-    public static TalonFX shootMotor = new TalonFX(15, Driveloop);
+    // public static TalonFXS rotateMotor = new TalonFXS(14, Rio);
+    // public static TalonFX shootMotor = new TalonFX(15, Driveloop);
+
+    //From back of robot.
+    public static TalonFX shootMotorLeft = new TalonFX(15);
+    public static TalonFX shootMotorMiddle = new TalonFX(14);
+    public static TalonFX shootMotorRight = new TalonFX(13);
+    public static TalonFX feedMotorLeft = new TalonFX(18);
+    public static TalonFX feedMotorMiddle = new TalonFX(17);
+    public static TalonFX feedMotorRight = new TalonFX(16);
+    public static TalonFX beltMotor = new TalonFX(19);
     
     public static Intake intake = new Intake();
     public static IntakeCommand intakeCommand = new IntakeCommand();

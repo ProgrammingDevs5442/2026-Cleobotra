@@ -35,6 +35,7 @@ public class PivortCommand extends Command {
     // } else if (RobotContainer.turretVision.hasTarget(RobotContainer.turretVision.turretCameras)) {
     } 
     else {
+      
       RobotContainer.pivort.manualMode(false);
       // if (targeting) { //TODO TEST THIS
       //Coords of hub in inches: (158.84,Constants.fieldConstants.HeightOfHub,156.61) //TODO double check order of values

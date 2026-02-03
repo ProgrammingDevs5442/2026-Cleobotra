@@ -8,6 +8,7 @@ import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
 public class Shooter extends SubsystemBase {
@@ -16,16 +17,24 @@ public class Shooter extends SubsystemBase {
   double calculatedShootVelocity = 0;
   double calcMotorAngVelo = 0;
   double shootSpeed;
+  double feedSpeed;
+  
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("dX", RobotContainer.turretVision.TagTracking());
     SmartDashboard.putNumber("dz", RobotContainer.turretVision.getDistanceToTag());
-    SendableRegistry.setName(RobotContainer.shootMotor, "Shoot speed");
+    SendableRegistry.setName(RobotContainer.shootMotorLeft, "Shoot speed");
     
 
-    RobotContainer.shootMotor.set(shootSpeed); 
+    RobotContainer.shootMotorLeft.set(shootSpeed);
+    RobotContainer.shootMotorMiddle.set(shootSpeed);
+    RobotContainer.shootMotorRight.set(shootSpeed);
+    RobotContainer.feedMotorLeft.set(feedSpeed); 
+    RobotContainer.feedMotorMiddle.set(feedSpeed);
+    RobotContainer.feedMotorRight.set(feedSpeed);
+    RobotContainer.beltMotor.set(-feedSpeed);
   }
 
   public void shootSpeed(double speed){
@@ -37,9 +46,17 @@ public class Shooter extends SubsystemBase {
     
     calcMotorAngVelo = calculatedShootVelocity/(Constants.shooterConstants.DiameterOfWheel/2);
     shootSpeed = calcMotorAngVelo/(Constants.pivotConstants.MaxRPMPivot * Constants.measurementConstants.RPMToRadPS * Constants.pivotConstants.MotorTransferEfficency);
+    shootSpeed = speed;
     SmartDashboard.putNumber("shootSpeed", shootSpeed);
     SmartDashboard.putNumber("Calculated Shoot Speed", calculatedShootVelocity);
+    SmartDashboard.putNumber("Shoot Motor Angular Velocity", RobotContainer.shootMotorLeft.getVelocity().getValueAsDouble());
   }
 
+  public double getVoltage() {
+    return RobotContainer.shootMotorLeft.getMotorVoltage().getValueAsDouble();
+  }
   
+  public void feedSpeed(double speed){
+    feedSpeed = speed;
+  }
 }

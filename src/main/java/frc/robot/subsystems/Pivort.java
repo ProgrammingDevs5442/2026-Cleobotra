@@ -44,7 +44,7 @@ public class Pivort extends SubsystemBase {
   @Override
   public void periodic() {
 
-    SmartDashboard.putNumber("Pivot Raw Encoder", RobotContainer.rotateMotor.getPosition().getValueAsDouble());
+    // SmartDashboard.putNumber("Pivot Raw Encoder", RobotContainer.rotateMotor.getPosition().getValueAsDouble());
     SmartDashboard.putNumber("Pivot Degrees", Math.toDegrees(getAngle()));
     SmartDashboard.putNumber("Pivot Target Angle", targetAngle);
     SmartDashboard.putNumber("Pivot Speed", rotateSpeed);
@@ -52,7 +52,7 @@ public class Pivort extends SubsystemBase {
     SmartDashboard.putStringArray("output", output.toArray(new String[0]));
     SendableRegistry.setName(rotatePID, "Pivot", "PivotPID");
     
-    SendableRegistry.setName(RobotContainer.rotateMotor, "Rotate speed");
+    // SendableRegistry.setName(RobotContainer.rotateMotor, "Rotate speed");
 
     // double difference =  trackedDifference;
 
@@ -156,7 +156,7 @@ public class Pivort extends SubsystemBase {
 
   public double getAngle(){
     //Takes in value from encoder in rotations and returns the value in Degrees
-    return (RobotContainer.rotateMotor.getPosition().getValueAsDouble() * pivotConstants.PivotTableRatio * pivotConstants.PivotMotorRatio * 2 * Math.PI);
+    return 0;//(RobotContainer.rotateMotor.getPosition().getValueAsDouble() * pivotConstants.PivotTableRatio * pivotConstants.PivotMotorRatio * 2 * Math.PI);
   }
 
   public void shootAtPosition(double x, double y, double z, double speed) {

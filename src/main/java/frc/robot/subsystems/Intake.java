@@ -6,11 +6,13 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   double intakeSpeed;
+  boolean isExtended = false;
   public Intake() {}
 
   @Override
@@ -22,5 +24,11 @@ public class Intake extends SubsystemBase {
   }
   public void setIntakeSpeed(double speed){
     intakeSpeed = speed;
+  }
+
+  public void extendIntake(){
+    if (!isExtended && RobotContainer.intakeExtendMotor.getPosition().getValueAsDouble() < Constants.intakeConstants.limit){
+      
+    }
   }
 }

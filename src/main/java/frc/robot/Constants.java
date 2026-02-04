@@ -81,6 +81,7 @@ public class Constants {
 
     public static final class intakeConstants {
         public final static double IntakeSpeed = -1;
+        public final static double limit = 1; //Limit for extending intake TODO: find actual limit
     }
 
     public static final class fieldConstants {

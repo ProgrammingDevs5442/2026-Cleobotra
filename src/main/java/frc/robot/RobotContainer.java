@@ -94,12 +94,13 @@ public class RobotContainer {
     
     public static Intake intake = new Intake();
     public static IntakeCommand intakeCommand = new IntakeCommand();
+    public static TalonFX intakeExtendMotor = new TalonFX(21);
 
     public static Shooter Shooter = new Shooter();
     public static ShootCommand shootCommand = new ShootCommand();
 
-    public static LinearServo linearServo = new LinearServo(9, 100, 20);
-    public static LinearServo linearServo2 = new LinearServo(8, 100, 20);
+    public static LinearServo linearServo = new LinearServo(0, 100, 40);
+    public static LinearServo linearServo2 = new LinearServo(1, 100, 40);
     public static LinearServoCommand linearServoCommand = new LinearServoCommand();
     
     /* Path follower */

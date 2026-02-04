@@ -48,7 +48,9 @@ public class LinearServo extends Servo implements Subsystem{
         m_speed = speed;
     }
     
-    public void setPosition(double setpoint){
+
+    public void setPosition(double angle){
+        double setpoint = angleToPosition(angle);
         setPos = MathUtil.clamp(setpoint*m_length, 0, m_length);
         setSpeed( (setPos/m_length *2)-1);
     }
@@ -65,6 +67,11 @@ public class LinearServo extends Servo implements Subsystem{
         } else {
             curPos = setPos;
         }
+    }
+
+    public double angleToPosition(double angle) {
+        //(dist-.05)*(50.726-12)+12 = angle
+        return (2.57572 * (90 - angle) - 24.15736 - 5) / 100;
     }
 
     /**

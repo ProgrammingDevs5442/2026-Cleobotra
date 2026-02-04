@@ -94,7 +94,8 @@ public class RobotContainer {
     
     public static Intake intake = new Intake();
     public static IntakeCommand intakeCommand = new IntakeCommand();
-    public static TalonFX intakeExtendMotor = new TalonFX(21);
+    public static TalonFX intakeMotor = new TalonFX(21);
+    public static TalonFX intakeExtendMotor = new TalonFX(22);
 
     public static Shooter Shooter = new Shooter();
     public static ShootCommand shootCommand = new ShootCommand();

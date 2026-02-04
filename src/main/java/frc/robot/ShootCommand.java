@@ -22,7 +22,7 @@ public class ShootCommand extends Command {
   @Override
   public void execute() {
     if (RobotContainer.xbox2.getAButton()) {
-      RobotContainer.Shooter.shootSpeed(.6);
+      RobotContainer.Shooter.shootSpeed(.8);
     } else {
       RobotContainer.Shooter.shootSpeed(0);
     }

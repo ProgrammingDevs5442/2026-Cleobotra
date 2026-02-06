@@ -14,8 +14,8 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 /** Add your docs here. */
 public class DriveModes {
     public static final SwerveRequest.FieldCentric driveField = new SwerveRequest.FieldCentric()
-            .withDeadband(driveConstants.MaxSpeed * 0.1)
-            .withRotationalDeadband(driveConstants.RotationalDeadband)
+            .withDeadband(driveConstants.MaxSpeed * .1)
+            .withRotationalDeadband(0)
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage) // Use open-loop control for drive motors
             .withVelocityX(-RobotContainer.joystick.getLeftY() * driveConstants.MaxSpeed) // Drive forward with negative Y (forward)
             .withVelocityY(-RobotContainer.joystick.getLeftX() * driveConstants.MaxSpeed) // Drive left with negative X (left)
@@ -23,7 +23,7 @@ public class DriveModes {
     
     public static final SwerveRequest.RobotCentric driveRobot = new SwerveRequest.RobotCentric()
             .withDeadband(driveConstants.MaxSpeed * 0.1)
-            .withRotationalDeadband(driveConstants.RotationalDeadband)
+            .withRotationalDeadband(driveConstants.MaxAngularRate * .025)
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage) // Use open-loop control for drive motors
             .withVelocityX(-RobotContainer.joystick.getLeftY() * driveConstants.MaxSpeed) // Drive forward with negative Y (forward)
             .withVelocityY(-RobotContainer.joystick.getLeftX() * driveConstants.MaxSpeed) // Drive left with negative X (left)

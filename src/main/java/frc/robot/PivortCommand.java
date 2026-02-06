@@ -35,7 +35,7 @@ public class PivortCommand extends Command {
     // } else if (RobotContainer.turretVision.hasTarget(RobotContainer.turretVision.turretCameras)) {
     } 
     else {
-      
+
       RobotContainer.pivort.manualMode(false);
       // if (targeting) { //TODO TEST THIS
       //Coords of hub in inches: (158.84,Constants.fieldConstants.HeightOfHub,156.61) //TODO double check order of values
@@ -45,16 +45,15 @@ public class PivortCommand extends Command {
       //   RobotContainer.pivort.setAutoRotate(0);
       // }
       if (RobotContainer.turretVision.hasTarget(RobotContainer.turretVision.turretCameras)) {
-        RobotContainer.pivort.setAutoRotate(RobotContainer.turretVision.TagTracking() + 6);
+        RobotContainer.pivort.setAutoRotate(RobotContainer.turretVision.TagTracking());
       } else {
         RobotContainer.pivort.setAutoRotate(0);
       }
     }
 
     
-    if (RobotContainer.xbox2.getRightBumperButton()) {
-      targeting = true;
-    }
+     RobotContainer.pivort.setAutoTarget(RobotContainer.xbox2.getRightBumperButton());
+    
     
   }
 

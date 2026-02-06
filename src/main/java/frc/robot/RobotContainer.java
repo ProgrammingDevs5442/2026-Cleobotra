@@ -131,7 +131,7 @@ public class RobotContainer {
                 DriveModes.driveField
                     .withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                     .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(pivort.findRotateSpeed(-joystick.getRightX() * driveConstants.MaxAngularRate)) // Drive counterclockwise with negative X (left)
+                    .withRotationalRate(pivort.findRotateSpeed(Deadzone(-joystick.getRightX()) * driveConstants.MaxAngularRate)) // Drive counterclockwise with negative X (left)
             )
         );
 

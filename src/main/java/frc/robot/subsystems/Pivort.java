@@ -47,14 +47,14 @@ public class Pivort extends SubsystemBase {
     // SmartDashboard.putNumber("Pivot Raw Encoder", RobotContainer.rotateMotor.getPosition().getValueAsDouble());
     SmartDashboard.putNumber("Pivot Degrees", Math.toDegrees(getAngle()));
     SmartDashboard.putNumber("Pivot Target Angle", targetAngle);
-    SmartDashboard.putNumber("Pivot Speed", rotateSpeed);
     SmartDashboard.putBoolean("Continuing", continuing);
     SmartDashboard.putStringArray("output", output.toArray(new String[0]));
     SendableRegistry.setName(rotatePID, "Pivot", "PivotPID");
+    SmartDashboard.putBoolean("Auto target", autoTarget);
     
     // SendableRegistry.setName(RobotContainer.rotateMotor, "Rotate speed");
 
-    // double difference =  trackedDifference;
+    double difference =  trackedDifference;
 
     // if (difference == 0 && continuing) {
     //   difference = Math.toDegrees(getAngle()) - continueAngle;
@@ -65,7 +65,7 @@ public class Pivort extends SubsystemBase {
     // } else {
     //   continuing = false;
     // }
-    // rotateSpeed = rotate(difference);
+    rotateSpeed = rotate(difference);
     // // if (manualRotateMode) {
     // //   rotate(manualDifference);
     // // } else {
@@ -84,12 +84,19 @@ public class Pivort extends SubsystemBase {
     
   }
 
+  public double getDifference() {
+    return this.trackedDifference;
+  }
+
   public double findRotateSpeed(double manualSpeed){
+    
+    SmartDashboard.putNumber("Pivot Speed", rotateSpeed);
+    SmartDashboard.putNumber("manualRotateSpeed", manualSpeed);
     if (autoTarget) {
-      return rotateSpeed;
+      return RobotContainer.Deadzone(rotateSpeed, .1);
     }
     else {
-      return manualSpeed;
+      return RobotContainer.Deadzone(manualSpeed);
     }
   }
 

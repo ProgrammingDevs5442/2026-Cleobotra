@@ -79,9 +79,6 @@ public class RobotContainer {
     // // Ballz Launcher
     public static Pivort pivort = new Pivort();
     public static PivortCommand pivortCommand = new PivortCommand();
-    // public static SparkMax rotateMotor = new SparkMax(22, MotorType.kBrushless);
-    // public static TalonFXS rotateMotor = new TalonFXS(14, Rio);
-    // public static TalonFX shootMotor = new TalonFX(15, Driveloop);
 
     //From back of robot.
     public static TalonFX shootMotorLeft = new TalonFX(15);
@@ -106,11 +103,13 @@ public class RobotContainer {
     
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
+    public boolean isLowBattery = false;
 
 
     public RobotContainer() {
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
+        SmartDashboard.putBoolean("Is low battery", !isLowBattery);
 
         configureBindings();
 
@@ -119,6 +118,7 @@ public class RobotContainer {
         Shooter.setDefaultCommand(shootCommand);
         linearServo.setDefaultCommand(linearServoCommand);
         linearServo2.setDefaultCommand(linearServoCommand);
+        
     }
 
 
@@ -144,16 +144,6 @@ public class RobotContainer {
         ));
 
         joystick.a().whileTrue(drivetrain.applyRequest(() -> DriveModes.brake));
-        // joystick.b().whileTrue(drivetrain.applyRequest(() ->
-        //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
-        // ));
-
-        // joystick.pov(0).whileTrue(drivetrain.applyRequest(() ->      //Can be enabled to make more precise movements
-        //     forwardStraight.withVelocityX(0.5).withVelocityY(0))
-        // );
-        // joystick.pov(180).whileTrue(drivetrain.applyRequest(() ->
-        //     forwardStraight.withVelocityX(-0.5).withVelocityY(0))
-        // );
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
@@ -166,6 +156,17 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+
+
+
+        
+        SmartDashboard.putBoolean("Is low battery", !isLowBattery);
+        if (shootMotorLeft.getSupplyVoltage().getValueAsDouble() < 7) {
+            isLowBattery = true;
+        }
+        if (isLowBattery) {
+            SmartDashboard.putBoolean("Is low battery", isLowBattery);
+        }
     }
 
     /** Function that returns a given speed, as long as it is above the deadzone set in Constants. */

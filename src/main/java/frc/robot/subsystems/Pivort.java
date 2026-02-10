@@ -52,36 +52,13 @@ public class Pivort extends SubsystemBase {
     SendableRegistry.setName(rotatePID, "Pivot", "PivotPID");
     SmartDashboard.putBoolean("Auto target", autoTarget);
     
+    
     // SendableRegistry.setName(RobotContainer.rotateMotor, "Rotate speed");
 
-    double difference =  trackedDifference;
-
-    // if (difference == 0 && continuing) {
-    //   difference = Math.toDegrees(getAngle()) - continueAngle;
-    //   continuing = (Math.abs(difference) > 1) && (Math.abs(difference) < 400);
-    //   if (!continuing) {
-    //     difference = 0;
-    //   }
-    // } else {
-    //   continuing = false;
-    // }
+    //double difference =  trackedDifference;
+    double difference = rotateToPosition(4, 12);
+   
     rotateSpeed = rotate(difference);
-    // // if (manualRotateMode) {
-    // //   rotate(manualDifference);
-    // // } else {
-    // //   rotate(trackedDifference);
-    // // }
-
-    // robotRotation = RobotContainer.joystick.getRightX() * (Constants.driveConstants.MaxAngularRate);
-    // if (Math.abs(robotRotation) < Constants.driveConstants.RotationalDeadband){
-    //   robotRotation = 0;
-    // } else {
-    //   robotRotation /= (20.247 * Math.PI);
-    // }
-
-    //At all times, set the motor to the speed given
-    // RobotContainer.rotateMotor.set(rotateSpeed);//-  4 * robotRotation);
-    
   }
 
   public double getDifference() {
@@ -89,7 +66,6 @@ public class Pivort extends SubsystemBase {
   }
 
   public double findRotateSpeed(double manualSpeed){
-    
     SmartDashboard.putNumber("Pivot Speed", rotateSpeed);
     SmartDashboard.putNumber("manualRotateSpeed", manualSpeed);
     if (autoTarget) {
@@ -117,34 +93,11 @@ public class Pivort extends SubsystemBase {
       }
     }
     
-    // double angle = Math.toDegrees(getAngle()) - difference;
-    // if (continuing) System.out.println("2Angle: " + angle + "    Difference: " + difference);
-    // if (angle > Constants.pivotConstants.PivotHighLimit) {
-    //   System.out.println("[UPPER LIMIT] Angle: " + angle + "    Difference: " + difference);
-    //   difference = 0;
-    //   // difference += 360;
-    //   // continuing = true;
-    //   // continueAngle = Math.toDegrees(getAngle()) - difference;
-    // } else if (angle < Constants.pivotConstants.PivotLowLimit) {
-    //   System.out.println("[LOWER LIMIT] Angle: " + angle + "    Difference: " + difference);
-    //   difference = 0;
-    //   // difference -= 360;
-    //   // continuing = true;
-    //   // continueAngle = Math.toDegrees(getAngle()) - difference;
-    // }
-    
     SmartDashboard.putNumber("Difference", difference);
-    // if (continuing) System.out.println("Continuing: " + continuing + "   Difference: " + difference + "   ContinueAngle: " + continueAngle);
-    // output.add("Difference: " + difference + " | Continuing: " + continuing + " | ContinueAngle: " + continueAngle);
-    if (Double.isNaN(rotateSpeed)) {
+    if (Double.isNaN(difference)) {
       return 0;
     }
-    // rotateSpeed = rotateLimiter.calculate(rotatePID.calculate(difference));
-    // if (continuing) {
-    //   return continueRotateLimiter.calculate(rotatePID.calculate(difference)); //TODO double check the limiter
-    // } else {
       return rotateLimiter.calculate(rotatePID.calculate(difference)); 
-    // }
   }
 
   public void setAutoRotate(double trackedDifference) {
@@ -166,35 +119,17 @@ public class Pivort extends SubsystemBase {
     return 0;//(RobotContainer.rotateMotor.getPosition().getValueAsDouble() * pivotConstants.PivotTableRatio * pivotConstants.PivotMotorRatio * 2 * Math.PI);
   }
 
-  public void shootAtPosition(double x, double y, double z, double speed) {
+  public double rotateToPosition(double x, double z) {
     //x,y,z is target position; y is vertical
     //speed is a constant factor, 1.15 (might want to change)
     Pose2d pose = RobotContainer.vision.getFieldPose();
-
-    setAutoRotate((180 - Math.atan2(z - pose.getY(), x - pose.getX())) - (pose.getRotation().getDegrees() + getAngle()));
-
-    // double dist = Math.sqrt(Math.pow(x - pose.getX(),2) + Math.pow(z - pose.getY(),2));
-    // double ys = Constants.shooterConstants.HeightOfShooter;
-    // double theta = Math.toRadians(Constants.shooterConstants.AngleOfShooter);
-    // calculatedShootVelocity = speed * ((4*dist))/(Math.sqrt(-(Math.cos(theta)*((y-ys)*Math.cos(theta)-Math.sin(theta)*dist))));
     
-    // calcMotorAngVelo = calculatedShootVelocity/(Constants.shooterConstants.DiameterOfWheel/2);
-    // shootSpeed = calcMotorAngVelo/(Constants.pivotConstants.MaxRPMPivot * Constants.pivotConstants.RPMToRadPS * Constants.pivotConstants.MotorTransferEfficency);
+    SmartDashboard.putNumber("Field Angle to hub", Math.toDegrees(Math.atan2(x - pose.getX(),z - pose.getY())));
+    SmartDashboard.putNumber("Relative Angle to hub", pose.getRotation().getDegrees() - Math.toDegrees(Math.atan2(x - pose.getX(),z - pose.getY())));
     
+    return(pose.getRotation().getDegrees() - Math.toDegrees(Math.atan2(x - pose.getX(),z - pose.getY())));
   }
 
-  // public void shootSpeed(double speed){
-  //   // shootSpeed = speed * Constants.pivotConstants.DistanceToShootSpeedMultiplier;
-  //   double xs = RobotContainer.turretVision.getDistanceToTag() * Constants.shooterConstants.MetersToFeet;
-  //   double ys = Constants.shooterConstants.HeightOfShooter;
-  //   double theta = Math.toRadians(Constants.shooterConstants.AngleOfShooter);
-  //   calculatedShootVelocity = speed * ((4*xs))/(Math.sqrt(-(Math.cos(theta)*((Constants.fieldConstants.HeightOfHub-ys)*Math.cos(theta)-Math.sin(theta)*xs))));
-    
-  //   calcMotorAngVelo = calculatedShootVelocity/(Constants.shooterConstants.DiameterOfWheel/2);
-  //   shootSpeed = calcMotorAngVelo/(Constants.pivotConstants.MaxRPMPivot * Constants.pivotConstants.RPMToRadPS * Constants.pivotConstants.MotorTransferEfficency);
-  //   SmartDashboard.putNumber("shootSpeed", shootSpeed);
-  //   SmartDashboard.putNumber("Calculated Shoot Speed", calculatedShootVelocity);
-  // }
   public void TagTracking(double TagID) {
     
 

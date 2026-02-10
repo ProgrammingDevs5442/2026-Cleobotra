@@ -25,17 +25,13 @@ public class LinearServoCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // RobotContainer.linearServo.setPosition(RobotContainer.xbox2.getRightTriggerAxis());
-    if (RobotContainer.xbox2.getBButton()){
-      // RobotContainer.linearServo.setPosition(RobotContainer.xbox2.getRightTriggerAxis());
-      // RobotContainer.linearServo2.setPosition(RobotContainer.xbox2.getRightTriggerAxis());
-      RobotContainer.linearServo.setPosition(65);
-      RobotContainer.linearServo2.setPosition(65);
-    }
-    else {
-      RobotContainer.linearServo.setPosition(90);
-      RobotContainer.linearServo2.setPosition(90);
-    }
+      RobotContainer.linearServo.setPosition(75);
+      RobotContainer.linearServo2.setPosition(75);
+    // }
+    // else {
+    //   RobotContainer.linearServo.setPosition(90);
+    //   RobotContainer.linearServo2.setPosition(90);
+    // }
   }
 
   // Called once the command ends or is interrupted.

@@ -70,8 +70,12 @@ public class LinearServo extends Servo implements Subsystem{
     }
 
     public double angleToPosition(double angle) {
-        //(dist-.05)*(50.726-12)+12 = angle
         return (2.57572 * (90 - angle) - 24.15736 - 5) / 100;
+    }
+
+    public double positionToAngle(double dist) {
+        return -((dist * 100) + 5 + 24.15736)/2.57572 + 90;
+        // return (2.57572 * (90 - dist) - 24.15736 - 5) / 100;
     }
 
     /**

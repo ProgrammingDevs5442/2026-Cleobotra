@@ -25,7 +25,7 @@ public class Constants {
     public static final class driveConstants {
 
         //public final static double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-        public final static double MaxAngularRate = RotationsPerSecond.of(4.5).in(RadiansPerSecond); // 4.5 rotations per second max angular velocity
+        public final static double MaxAngularRate = RotationsPerSecond.of(1.5).in(RadiansPerSecond); // 4.5 rotations per second max angular velocity
 
         /** Deadzone value to control when to start using joystick input values */
         public final static double RotationalDeadband = MaxAngularRate * 0.1; // Add a 10% deadband
@@ -33,7 +33,7 @@ public class Constants {
         public final static double MaxSpeed = 2; //Max targeted speed in M/S (15 NORMALLY)
         // public final static double MaxAngularRate = 1.5 * Math.PI * 3; //Max targeted rotations / second -- 3/4ths of a rotation for now
         public final static double MaxAcceleration = 2; //Max acceleration in M/s/s;
-        public final static double MaxAngularAcceleration = 4 * Math.PI;
+        public final static double MaxAngularAcceleration = 2 * Math.PI;
         public final static double SpeedDeadbandPercentage = 0; //Deadband or Deadzone of requested speed, as a percentage of the maximum speed;
 
         public final static double Linearity = 3; // How steep the response curve is (typically cubic, meaning 50% on stick = 12.5% speed)
@@ -57,7 +57,7 @@ public class Constants {
 
     public static final class pivotConstants {
         public final static double ShooterDeadzone = .5;
-        public final static double PivotPIDkp = .2;
+        public final static double PivotPIDkp = .15;
         public final static double PivotPIDki = 0;
         public final static double PivotPIDkd = 0;
         public final static double PivotMotorRatio = .2;
@@ -73,15 +73,15 @@ public class Constants {
         public final static double ShootSpeed = 1.15;
         public final static double DistanceToShootSpeedMultiplier = .2;
         public final static double AngleOfShooter = 65; //Degrees
-        public final static double HeightOfShooter = 1.33;//Feet
+        public final static double HeightOfShooter = 2;//Feet
         public final static double VelocityToMotorPower = 0;
         public final static double DiameterOfWheel = .1148; //Meters
-        public final static double ShootRPSThreshold = 50; //RPS needed to be at to feed balls
+        public final static double ShootRPSThreshold = 60; //RPS needed to be at to feed balls
         public final static double ShootDifferenceThreshold = 3; // Degrees between orientation and target needed to shoot
     }
 
     public static final class intakeConstants {
-        public final static double IntakeSpeed = 1;
+        public final static double IntakeSpeed = .6;
         public final static double limit = 1; //Limit for extending intake TODO: find actual limit
     }
 

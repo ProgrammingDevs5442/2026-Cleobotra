@@ -21,16 +21,21 @@ public class ShootCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (RobotContainer.xbox2.getAButton() && Math.abs(RobotContainer.pivort.getDifference()) <= Constants.shooterConstants.ShootDifferenceThreshold) {
-      RobotContainer.Shooter.shootSpeed(.8);
+     if (RobotContainer.xbox2.getAButton()) { //&& Math.abs(RobotContainer.pivort.getDifference()) <= Constants.shooterConstants.ShootDifferenceThreshold) {
+      // RobotContainer.Shooter.shootSpeed(.7);
+      RobotContainer.Shooter.shootAtPosition(4, 6/Constants.measurementConstants.MetersToFeet,12,1);
     } else {
       RobotContainer.Shooter.shootSpeed(0);
     }
     if (RobotContainer.shootMotorLeft.getVelocity().getValueAsDouble() >= Constants.shooterConstants.ShootRPSThreshold) {
       RobotContainer.Shooter.feedSpeed(1);
+    } else if (RobotContainer.xbox2.getYButton()) {
+      RobotContainer.Shooter.shootSpeed(.7);
+      RobotContainer.Shooter.feedSpeed(-.5);
     } else {
       RobotContainer.Shooter.feedSpeed(0);
     }
+    
   }
   
 

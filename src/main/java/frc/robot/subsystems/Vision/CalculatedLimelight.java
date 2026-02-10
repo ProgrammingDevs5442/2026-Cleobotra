@@ -58,10 +58,10 @@ public class CalculatedLimelight extends CalculatedCamera{
 
     return new Pose2d(
       new Translation2d(
-        fieldTable[2], // Z position (forward/back from camera perspective) in WPILIB coordinate system, x is forward back
+        fieldTable[1], // Z position (forward/back from camera perspective) in WPILIB coordinate system, x is forward back
         fieldTable[0]  // X position (right/left from camera perspective) in WPILIB coordinate system, y is right/left
       ),
-      Rotation2d.fromDegrees(fieldTable[5]) //TODO Rotation (pitch) actually nvm prolly not check later
+      Rotation2d.fromDegrees(fieldTable[5]) 
     );
   }
 

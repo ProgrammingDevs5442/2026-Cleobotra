@@ -19,21 +19,29 @@ public class Shooter extends SubsystemBase {
   double calcMotorAngVelo = 0;
   double shootSpeed;
   double feedSpeed;
+  double shooterEfficiency = .7;
+  
+    Pose2d pose = RobotContainer.vision.getFieldPose();
   
 
   @Override
   public void periodic() {
+    pose = RobotContainer.vision.getFieldPose();
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("dX", RobotContainer.turretVision.TagTracking());
     SmartDashboard.putNumber("dz", RobotContainer.turretVision.getDistanceToTag());
     SendableRegistry.setName(RobotContainer.shootMotorLeft, "Shoot speed");
+    SmartDashboard.putNumber("Shoot Motor Speed", RobotContainer.shootMotorLeft.getVelocity().getValueAsDouble());
+    
+    // double dist = Math.sqrt(Math.pow(x - pose.getX(),2) + Math.pow(z - pose.getY(),2));
+    // SmartDashboard.putNumber("Distance to target", dist);
     
 
     RobotContainer.shootMotorLeft.set(shootSpeed);
     RobotContainer.shootMotorMiddle.set(shootSpeed);
     RobotContainer.shootMotorRight.set(shootSpeed);
     RobotContainer.feedMotorLeft.set(feedSpeed); 
-    RobotContainer.feedMotorMiddle.set(feedSpeed);
+    RobotContainer.feedMotorMiddle.set(0);//feedSpeed);
     RobotContainer.feedMotorRight.set(feedSpeed);
     RobotContainer.beltMotor.set(-feedSpeed);
   }
@@ -46,7 +54,7 @@ public class Shooter extends SubsystemBase {
     calculatedShootVelocity = speed * ((4*xs))/(Math.sqrt(-(Math.cos(theta)*((Constants.fieldConstants.HeightOfHub-ys)*Math.cos(theta)-Math.sin(theta)*xs))));
     
     calcMotorAngVelo = calculatedShootVelocity/(Constants.shooterConstants.DiameterOfWheel/2);
-    shootSpeed = calcMotorAngVelo/(Constants.pivotConstants.MaxRPMPivot * Constants.measurementConstants.RPMToRadPS * Constants.pivotConstants.MotorTransferEfficency);
+    // shootSpeed = calcMotorAngVelo/(Constants.pivotConstants.MaxRPMPivot * Constants.measurementConstants.RPMToRadPS * Constants.pivotConstants.MotorTransferEfficency);
     shootSpeed = speed;
     SmartDashboard.putNumber("shootSpeed", shootSpeed);
     SmartDashboard.putNumber("Calculated Shoot Speed", calculatedShootVelocity);
@@ -65,12 +73,16 @@ public class Shooter extends SubsystemBase {
     double dist = Math.sqrt(Math.pow(x - pose.getX(),2) + Math.pow(z - pose.getY(),2));
     SmartDashboard.putNumber("Distance to target", dist);
     double ys = Constants.shooterConstants.HeightOfShooter;
-    double theta = RobotContainer.linearServo.positionToAngle(RobotContainer.linearServo.getPosition());
+    double theta = Math.toRadians(65);
+    // double theta = RobotContainer.linearServo.positionToAngle(RobotContainer.linearServo.getPosition());
     // double theta = Math.toRadians(Constants.shooterConstants.AngleOfShooter);
     calculatedShootVelocity = speed * ((4*dist))/(Math.sqrt(-(Math.cos(theta)*((y-ys)*Math.cos(theta)-Math.sin(theta)*dist))));
     
     calcMotorAngVelo = calculatedShootVelocity/(Constants.shooterConstants.DiameterOfWheel/2);
-    shootSpeed = calcMotorAngVelo/(Constants.pivotConstants.MaxRPMPivot * Constants.measurementConstants.RPMToRadPS * Constants.pivotConstants.MotorTransferEfficency);
+    shootSpeed = shooterEfficiency * speed;//calcMotorAngVelo/(Constants.pivotConstants.MaxRPMPivot * Constants.measurementConstants.RPMToRadPS * shooterEfficiency);
+  SmartDashboard.putNumber("shootSpeed", shootSpeed);
+    SmartDashboard.putNumber("Calculated Shoot Speed", calculatedShootVelocity);
+    SmartDashboard.putNumber("Shoot Motor Angular Velocity", RobotContainer.shootMotorLeft.getVelocity().getValueAsDouble());
   }
 
   public double getVoltage() {
@@ -79,5 +91,10 @@ public class Shooter extends SubsystemBase {
   
   public void feedSpeed(double speed){
     feedSpeed = speed;
+  }
+
+  public void modifyEfficiency(double efficiency) {
+    shooterEfficiency += efficiency;
+    SmartDashboard.putNumber("Shoot Efficiency", shooterEfficiency);
   }
 }

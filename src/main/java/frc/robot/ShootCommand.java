@@ -4,14 +4,20 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ShootCommand extends Command {
+  private boolean pressed;
+  private double increment = .01;
+
   /** Creates a new ShootCommand. */
   public ShootCommand() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.Shooter);
+    addRequirements(RobotContainer.linearServo);    
+    addRequirements(RobotContainer.linearServo2);
   }
 
   // Called when the command is initially scheduled.
@@ -21,21 +27,49 @@ public class ShootCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-     if (RobotContainer.xbox2.getAButton()) { //&& Math.abs(RobotContainer.pivort.getDifference()) <= Constants.shooterConstants.ShootDifferenceThreshold) {
-      // RobotContainer.Shooter.shootSpeed(.7);
+    RobotContainer.linearServo.setPosition(75);
+    RobotContainer.linearServo2.setPosition(75);
+    
+
+
+    if (RobotContainer.xbox2.getAButton()) { //&& Math.abs(RobotContainer.pivort.getDifference()) <= Constants.shooterConstants.ShootDifferenceThreshold) {
       RobotContainer.Shooter.shootAtPosition(4, 6/Constants.measurementConstants.MetersToFeet,12,1);
+    // } else if (true) {
+      // RobotContainer.Shooter.shootSpeed(.7);
     } else {
-      RobotContainer.Shooter.shootSpeed(0);
+      RobotContainer.Shooter.shootAtPosition(4, 6/Constants.measurementConstants.MetersToFeet,12,0);
     }
-    if (RobotContainer.shootMotorLeft.getVelocity().getValueAsDouble() >= Constants.shooterConstants.ShootRPSThreshold) {
-      RobotContainer.Shooter.feedSpeed(1);
+
+    if (RobotContainer.xbox2.getBButton()) {
+      RobotContainer.Shooter.feedSpeed(.85);
     } else if (RobotContainer.xbox2.getYButton()) {
-      RobotContainer.Shooter.shootSpeed(.7);
+      // RobotContainer.Shooter.shootSpeed(.7);
       RobotContainer.Shooter.feedSpeed(-.5);
     } else {
       RobotContainer.Shooter.feedSpeed(0);
     }
     
+
+    if (RobotContainer.xbox2.getPOV() == 0 && !pressed) {
+      RobotContainer.Shooter.modifyEfficiency(increment);
+      pressed = true;
+    } else if (RobotContainer.xbox2.getPOV() == 180 && !pressed) {
+      RobotContainer.Shooter.modifyEfficiency(-increment);
+      pressed = true;
+    } else if (RobotContainer.xbox2.getPOV() == 90 && !pressed) {
+      increment *= 2;
+      SmartDashboard.putNumber("Increment", increment);
+      pressed = true;
+    } else if (RobotContainer.xbox2.getPOV() == 270 && !pressed) {
+      increment /= 2;
+      SmartDashboard.putNumber("Increment", increment);
+      pressed = true;
+    } else if (RobotContainer.xbox2.getPOV() != 0 && RobotContainer.xbox2.getPOV() != 180 && RobotContainer.xbox2.getPOV() != 90 && RobotContainer.xbox2.getPOV() != 270) {
+      pressed = false;
+    }
+    else {
+      RobotContainer.Shooter.modifyEfficiency(0);
+    }
   }
   
 

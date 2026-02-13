@@ -76,7 +76,7 @@ public class Constants {
         public final static double HeightOfShooter = 2;//Feet
         public final static double VelocityToMotorPower = 0;
         public final static double DiameterOfWheel = .1148; //Meters
-        public final static double ShootRPSThreshold = 60; //RPS needed to be at to feed balls
+        public final static double ShootRPSThreshold = 40; //RPS needed to be at to feed balls
         public final static double ShootDifferenceThreshold = 3; // Degrees between orientation and target needed to shoot
     }
 

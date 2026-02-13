@@ -94,12 +94,13 @@ public class RobotContainer {
     public static TalonFX intakeMotor = new TalonFX(21);
     public static TalonFX intakeExtendMotor = new TalonFX(22);
 
+    
+    public static LinearServo linearServo = new LinearServo(0, 100, 40);
+    public static LinearServo linearServo2 = new LinearServo(1, 100, 40);
+    
     public static Shooter Shooter = new Shooter();
     public static ShootCommand shootCommand = new ShootCommand();
 
-    public static LinearServo linearServo = new LinearServo(0, 100, 40);
-    public static LinearServo linearServo2 = new LinearServo(1, 100, 40);
-    public static LinearServoCommand linearServoCommand = new LinearServoCommand();
     
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
@@ -116,8 +117,8 @@ public class RobotContainer {
         pivort.setDefaultCommand(pivortCommand);
         intake.setDefaultCommand(intakeCommand);
         Shooter.setDefaultCommand(shootCommand);
-        linearServo.setDefaultCommand(linearServoCommand);
-        linearServo2.setDefaultCommand(linearServoCommand);
+        linearServo.setDefaultCommand(shootCommand);
+        linearServo2.setDefaultCommand(shootCommand);
         
     }
 

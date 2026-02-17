@@ -16,8 +16,6 @@ public class ShootCommand extends Command {
   public ShootCommand() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.Shooter);
-    addRequirements(RobotContainer.linearServo);    
-    addRequirements(RobotContainer.linearServo2);
   }
 
   // Called when the command is initially scheduled.
@@ -27,9 +25,6 @@ public class ShootCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.linearServo.setPosition(75);
-    RobotContainer.linearServo2.setPosition(75);
-    
 
 
     if (RobotContainer.xbox2.getAButton()) { //&& Math.abs(RobotContainer.pivort.getDifference()) <= Constants.shooterConstants.ShootDifferenceThreshold) {
@@ -41,7 +36,7 @@ public class ShootCommand extends Command {
     }
 
     if (RobotContainer.xbox2.getBButton()) {
-      RobotContainer.Shooter.feedSpeed(.85);
+      RobotContainer.Shooter.feedSpeed(.95);
     } else if (RobotContainer.xbox2.getYButton()) {
       // RobotContainer.Shooter.shootSpeed(.7);
       RobotContainer.Shooter.feedSpeed(-.5);

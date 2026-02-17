@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import javax.sound.sampled.LineEvent;
+
 import org.photonvision.PhotonCamera;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -97,7 +99,8 @@ public class RobotContainer {
     
     public static LinearServo linearServo = new LinearServo(0, 100, 40);
     public static LinearServo linearServo2 = new LinearServo(1, 100, 40);
-    
+    public static LinearServoCommand linearServoCommand = new LinearServoCommand();
+
     public static Shooter Shooter = new Shooter();
     public static ShootCommand shootCommand = new ShootCommand();
 
@@ -117,8 +120,8 @@ public class RobotContainer {
         pivort.setDefaultCommand(pivortCommand);
         intake.setDefaultCommand(intakeCommand);
         Shooter.setDefaultCommand(shootCommand);
-        linearServo.setDefaultCommand(shootCommand);
-        linearServo2.setDefaultCommand(shootCommand);
+        linearServo.setDefaultCommand(linearServoCommand);
+        linearServo2.setDefaultCommand(linearServoCommand);
         
     }
 

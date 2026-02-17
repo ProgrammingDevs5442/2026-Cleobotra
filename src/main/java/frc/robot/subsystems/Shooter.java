@@ -11,6 +11,27 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import com.ctre.phoenix6.hardware.TalonFX;
+import java.util.List;
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.VoltageConfigs;
+import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
@@ -19,10 +40,20 @@ public class Shooter extends SubsystemBase {
   double calcMotorAngVelo = 0;
   double shootSpeed;
   double feedSpeed;
-  double shooterEfficiency = .7;
+  double shooterEfficiency = 0.8;
+  AngularVelocity kVelocityTolerance = RPM.of(100);
   
-    Pose2d pose = RobotContainer.vision.getFieldPose();
+  Pose2d pose = RobotContainer.vision.getFieldPose();
+
+  TalonFX leftMotor = RobotContainer.shootMotorLeft;
+  TalonFX middleMotor = RobotContainer.shootMotorMiddle;
+  TalonFX rightMotor = RobotContainer.shootMotorRight;
+  List<TalonFX> shootMotors = List.of(leftMotor, middleMotor, rightMotor);
   
+  private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
+  private final VoltageOut voltageRequest = new VoltageOut(0);
+
+  private double dashboardTargetRPM = 0.0;
 
   @Override
   public void periodic() {
@@ -37,14 +68,31 @@ public class Shooter extends SubsystemBase {
     // SmartDashboard.putNumber("Distance to target", dist);
     
 
-    RobotContainer.shootMotorLeft.set(shootSpeed);
-    RobotContainer.shootMotorMiddle.set(shootSpeed);
-    RobotContainer.shootMotorRight.set(shootSpeed);
-    RobotContainer.feedMotorLeft.set(feedSpeed); 
-    RobotContainer.feedMotorMiddle.set(0);//feedSpeed);
-    RobotContainer.feedMotorRight.set(feedSpeed);
-    RobotContainer.beltMotor.set(-feedSpeed);
-  }
+    // RobotContainer.shootMotorLeft.set(shootSpeed);
+    // RobotContainer.shootMotorMiddle.set(shootSpeed);
+    // RobotContainer.shootMotorRight.set(shootSpeed);
+    RobotContainer.shootMotorLeft.setControl(
+      // voltageRequest.withOutput(Volts.of(shootSpeed * 12.0))
+      new VoltageOut(12*shootSpeed)
+    );
+    
+    RobotContainer.beltMotor.setControl(
+      voltageRequest.withOutput(Volts.of(-feedSpeed/2 * 11.0))
+      // new VoltageOut(-11*feedSpeed/2)
+    );
+    RobotContainer.shootMotorMiddle.setControl(
+      // voltageRequest.withOutput(Volts.of(shootSpeed * 12.0))
+      new VoltageOut(12*shootSpeed)
+    );
+    RobotContainer.shootMotorRight.setControl(
+      // voltageRequest.withOutput(Volts.of(shootSpeed * 12.0))
+      new VoltageOut(12*shootSpeed)
+    );
+    RobotContainer.feedMotorLeft.setControl(
+      // voltageRequest.withOutput(Volts.of(feedSpeed * 11.0))
+      new VoltageOut(11*feedSpeed)
+    );
+    }
 
   public void shootSpeed(double speed){
     // shootSpeed = speed * Constants.pivotConstants.DistanceToShootSpeedMultiplier;

@@ -48,12 +48,11 @@ public class Shooter extends SubsystemBase {
   TalonFX leftMotor = RobotContainer.shootMotorLeft;
   TalonFX middleMotor = RobotContainer.shootMotorMiddle;
   TalonFX rightMotor = RobotContainer.shootMotorRight;
-  List<TalonFX> shootMotors = List.of(leftMotor, middleMotor, rightMotor);
+  TalonFX fourthMotor = RobotContainer.ExtraShootMotor;
+  List<TalonFX> shootMotors = List.of(leftMotor, middleMotor, rightMotor, fourthMotor);
   
   private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
   private final VoltageOut voltageRequest = new VoltageOut(0);
-
-  private double dashboardTargetRPM = 0.0;
 
   @Override
   public void periodic() {
@@ -71,28 +70,41 @@ public class Shooter extends SubsystemBase {
     // RobotContainer.shootMotorLeft.set(shootSpeed);
     // RobotContainer.shootMotorMiddle.set(shootSpeed);
     // RobotContainer.shootMotorRight.set(shootSpeed);
-    RobotContainer.shootMotorLeft.setControl(
-      // voltageRequest.withOutput(Volts.of(shootSpeed * 12.0))
-      new VoltageOut(12*shootSpeed)
-    );
-    
-    RobotContainer.beltMotor.setControl(
-      voltageRequest.withOutput(Volts.of(-feedSpeed/2 * 11.0))
-      // new VoltageOut(-11*feedSpeed/2)
-    );
-    RobotContainer.shootMotorMiddle.setControl(
-      // voltageRequest.withOutput(Volts.of(shootSpeed * 12.0))
-      new VoltageOut(12*shootSpeed)
-    );
-    RobotContainer.shootMotorRight.setControl(
-      // voltageRequest.withOutput(Volts.of(shootSpeed * 12.0))
-      new VoltageOut(12*shootSpeed)
-    );
-    RobotContainer.feedMotorLeft.setControl(
-      // voltageRequest.withOutput(Volts.of(feedSpeed * 11.0))
-      new VoltageOut(11*feedSpeed)
-    );
+    if (shootSpeed != 0) {
+      for (final TalonFX motor : shootMotors) {
+        motor.setControl(
+          velocityRequest
+            .withVelocity(RPM.of(shootSpeed))
+        );
+      }
     }
+    else {
+      for (final TalonFX motor : shootMotors) {
+        motor.set(0);
+      }
+    }
+    // RobotContainer.ExtraShootMotor.setControl(
+    //   // voltageRequest.withOutput(Volts.of(feedSpeed * 11.0))
+    //   velocityRequest.withVelocity(RPM.of(shootSpeed))// * Constants.shooterConstants.maxRPMFeeder))
+    // );
+    if (feedSpeed != 0) {    
+      RobotContainer.beltMotor.setControl(
+        // velocityRequest.withVelocity(RPM.of(feedSpeed))
+        new VoltageOut(-feedSpeed/5000 * 11)
+      );
+      
+      RobotContainer.feedMotorLeft.setControl(
+        // voltageRequest.withOutput(Volts.of(feedSpeed * 11.0))
+        velocityRequest.withVelocity(RPM.of(feedSpeed))// * Constants.shooterConstants.maxRPMFeeder))
+      );
+    }
+    else {
+      RobotContainer.beltMotor.set(0);
+      RobotContainer.feedMotorLeft.set(0);
+      // RobotContainer.ExtraShootMotor.set(0);
+    }
+
+  }
 
   public void shootSpeed(double speed){
     // shootSpeed = speed * Constants.pivotConstants.DistanceToShootSpeedMultiplier;

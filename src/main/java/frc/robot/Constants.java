@@ -30,7 +30,7 @@ public class Constants {
         /** Deadzone value to control when to start using joystick input values */
         public final static double RotationalDeadband = MaxAngularRate * 0.1; // Add a 10% deadband
 
-        public final static double MaxSpeed = 2; //Max targeted speed in M/S (15 NORMALLY)
+        public final static double MaxSpeed = 5; //Max targeted speed in M/S (15 NORMALLY)
         // public final static double MaxAngularRate = 1.5 * Math.PI * 3; //Max targeted rotations / second -- 3/4ths of a rotation for now
         public final static double MaxAcceleration = 2; //Max acceleration in M/s/s;
         public final static double MaxAngularAcceleration = 2 * Math.PI;
@@ -70,6 +70,8 @@ public class Constants {
     }
 
     public static final class shooterConstants {
+        public final static double maxRPMShooter = 6000;
+        public final static double maxRPMFeeder = 6000;
         public final static double ShootSpeed = 1.15;
         public final static double DistanceToShootSpeedMultiplier = .2;
         public final static double AngleOfShooter = 65; //Degrees

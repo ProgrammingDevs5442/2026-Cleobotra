@@ -5,6 +5,11 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+
+import java.nio.channels.Channel;
+
+import javax.crypto.ShortBufferException;
+
 import edu.wpi.first.math.MathUtil;
 
 public class LinearServo extends Servo implements Subsystem{
@@ -13,6 +18,7 @@ public class LinearServo extends Servo implements Subsystem{
     double setPos;
     double curPos;
     double lastTime = 0;
+    double shooterAngle = 75;
     
     final double microsecondsPerMillisecond = 1000;
     int millisecondsToMicroseconds(double milliseconds){
@@ -24,6 +30,12 @@ public class LinearServo extends Servo implements Subsystem{
         updateCurPos();
         lastTime = Timer.getFPGATimestamp();
 
+        
+        double setpoint = angleToPosition(shooterAngle);//angleToPosition(angle);
+        SmartDashboard.putNumber("servo angle", shooterAngle);
+        SmartDashboard.putNumber("servoTargetPos", setpoint);
+        setPos = MathUtil.clamp(setpoint*m_length, 0, m_length);
+        setSpeed( (setPos/m_length *2)-1);
         SmartDashboard.putNumber("Servo Position", curPos);
     }
 
@@ -50,9 +62,6 @@ public class LinearServo extends Servo implements Subsystem{
     
 
     public void setPosition(double angle){
-        double setpoint = angleToPosition(angle);
-        setPos = MathUtil.clamp(setpoint*m_length, 0, m_length);
-        setSpeed( (setPos/m_length *2)-1);
     }
 
     /**
@@ -68,6 +77,11 @@ public class LinearServo extends Servo implements Subsystem{
             curPos = setPos;
         }
     }
+
+    public void modifyAngle(double angle) {
+    shooterAngle += angle;
+    SmartDashboard.putNumber("Shoot Angle", shooterAngle);
+  }
 
     public double angleToPosition(double angle) {
         return (2.57572 * (90 - angle) - 24.15736 - 5) / 100;

@@ -13,6 +13,7 @@ import org.photonvision.PhotonCamera;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
 // import com.ctre.phoenix6.motorcontrol.can.WPI_VictorSPX;
@@ -45,6 +46,8 @@ import frc.robot.subsystems.LinearServo;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Pivort;
 import frc.robot.subsystems.Vision.Vision;
+
+import com.ctre.phoenix6.Orchestra.*;
 
 public class RobotContainer {
     private double MaxSpeed = driveConstants.MaxSpeed;
@@ -87,8 +90,8 @@ public class RobotContainer {
     public static TalonFX shootMotorMiddle = new TalonFX(14);
     public static TalonFX shootMotorRight = new TalonFX(13);
     public static TalonFX feedMotorLeft = new TalonFX(18);
-    public static TalonFX feedMotorMiddle = new TalonFX(17);
-    public static TalonFX feedMotorRight = new TalonFX(16);
+    // public static TalonFX feedMotorMiddle = new TalonFX(17);
+    public static TalonFX ExtraShootMotor = new TalonFX(16);
     public static TalonFX beltMotor = new TalonFX(19);
     
     public static Intake intake = new Intake();
@@ -97,12 +100,15 @@ public class RobotContainer {
     public static TalonFX intakeExtendMotor = new TalonFX(22);
 
     
-    public static LinearServo linearServo = new LinearServo(0, 100, 40);
-    public static LinearServo linearServo2 = new LinearServo(1, 100, 40);
+    public static LinearServo linearServo = new LinearServo(8, 100, 40);
+    public static LinearServo linearServo2 = new LinearServo(9, 100, 40);
     public static LinearServoCommand linearServoCommand = new LinearServoCommand();
 
     public static Shooter Shooter = new Shooter();
     public static ShootCommand shootCommand = new ShootCommand();
+
+    Orchestra m_orchestra = new Orchestra();
+
 
     
     /* Path follower */
@@ -114,6 +120,23 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
         SmartDashboard.putBoolean("Is low battery", !isLowBattery);
+
+
+    m_orchestra.addInstrument(shootMotorLeft);
+    m_orchestra.addInstrument(intakeMotor);
+    m_orchestra.addInstrument(shootMotorMiddle);
+    m_orchestra.addInstrument(shootMotorRight);
+    m_orchestra.addInstrument(ExtraShootMotor);
+    m_orchestra.addInstrument(feedMotorLeft);
+    m_orchestra.addInstrument(beltMotor);
+
+    var status = m_orchestra.loadMusic("output.chrp");
+    // var status = m_orchestra.loadMusic("Jeoprody.chrp");
+
+if (!status.isOK()) {
+   System.out.println("Failed to load music: " + status.toString());
+}
+m_orchestra.play();
 
         configureBindings();
 
@@ -135,7 +158,7 @@ public class RobotContainer {
                 DriveModes.driveField
                     .withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                     .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(pivort.findRotateSpeed(Deadzone(-joystick.getRightX()) * driveConstants.MaxAngularRate)) // Drive counterclockwise with negative X (left)
+                    .withRotationalRate(pivort.findRotateSpeed(-Deadzone(joystick.getRightX()) * driveConstants.MaxAngularRate)) // Drive counterclockwise with negative X (left)
             )
         );
 
@@ -171,6 +194,9 @@ public class RobotContainer {
         if (isLowBattery) {
             SmartDashboard.putBoolean("Is low battery", isLowBattery);
         }
+
+        
+    
     }
 
     /** Function that returns a given speed, as long as it is above the deadzone set in Constants. */

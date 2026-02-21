@@ -28,7 +28,7 @@ public class ShootCommand extends Command {
 
 
     if (RobotContainer.xbox2.getAButton()) { //&& Math.abs(RobotContainer.pivort.getDifference()) <= Constants.shooterConstants.ShootDifferenceThreshold) {
-      RobotContainer.Shooter.shootAtPosition(4, 6/Constants.measurementConstants.MetersToFeet,12,1);
+      RobotContainer.Shooter.shootAtPosition(4, 6/Constants.measurementConstants.MetersToFeet,12,5000);
     // } else if (true) {
       // RobotContainer.Shooter.shootSpeed(.7);
     } else {
@@ -36,10 +36,10 @@ public class ShootCommand extends Command {
     }
 
     if (RobotContainer.xbox2.getBButton()) {
-      RobotContainer.Shooter.feedSpeed(.95);
+      RobotContainer.Shooter.feedSpeed(-5500);
     } else if (RobotContainer.xbox2.getYButton()) {
       // RobotContainer.Shooter.shootSpeed(.7);
-      RobotContainer.Shooter.feedSpeed(-.5);
+      RobotContainer.Shooter.feedSpeed(2000);
     } else {
       RobotContainer.Shooter.feedSpeed(0);
     }

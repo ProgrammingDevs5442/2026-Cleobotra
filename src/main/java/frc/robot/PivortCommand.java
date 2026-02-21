@@ -31,7 +31,7 @@ public class PivortCommand extends Command {
     //Send the value from the angle of the controller in radians, coverted to degrees
     if (Math.sqrt(Math.pow(RobotContainer.xbox2.getLeftY(),2) + Math.pow(RobotContainer.xbox2.getLeftX(),2)) > pivotConstants.ShooterDeadzone) {
       RobotContainer.pivort.manualMode(true);
-      RobotContainer.pivort.setTargetAngle(Math.toDegrees(Math.atan2(RobotContainer.xbox2.getLeftY(), RobotContainer.xbox2.getLeftX())));
+      // RobotContainer.pivort.setTargetAngle(Math.toDegrees(Math.atan2(RobotContainer.xbox2.getLeftY(), RobotContainer.xbox2.getLeftX())));
     // } else if (RobotContainer.turretVision.hasTarget(RobotContainer.turretVision.turretCameras)) {
     } 
     else {

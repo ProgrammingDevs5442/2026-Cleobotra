@@ -4,12 +4,13 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.configs.AudioConfigs;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import com.ctre.phoenix6.*;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -21,7 +22,10 @@ public class Robot extends TimedRobot {
   public Robot() {
     enableLiveWindowInTest(true);
     m_robotContainer = new RobotContainer();
+    SignalLogger.enableAutoLogging(false);
+    // AudioConfigs.withAllowMusicDurDisable(true);
   }
+  
 
   @Override
   public void robotPeriodic() {
@@ -35,6 +39,13 @@ public class Robot extends TimedRobot {
      * This example is sufficient to show that vision integration is possible, though exact implementation
      * of how to use vision should be tuned per-robot and to the team's specification.
      */
+
+//     public final AudioConfigs withAllowMusicDurDisable(boolean newAllowMusicDurDisable)
+// 114    {
+// 115        AllowMusicDurDisable = newAllowMusicDurDisable;
+// 116        return this;
+// 117    }
+
     if (kUseLimelight) {
       var driveState = m_robotContainer.drivetrain.getState();
       double headingDeg = driveState.Pose.getRotation().getDegrees();

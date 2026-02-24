@@ -17,7 +17,7 @@ import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
 // import com.ctre.phoenix6.motorcontrol.can.WPI_VictorSPX;
-
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkFlex;
@@ -46,6 +46,7 @@ import frc.robot.subsystems.LinearServo;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Pivort;
 import frc.robot.subsystems.Vision.Vision;
+import com.ctre.phoenix6.controls.Follower;
 
 import com.ctre.phoenix6.Orchestra.*;
 
@@ -86,10 +87,12 @@ public class RobotContainer {
     public static PivortCommand pivortCommand = new PivortCommand();
 
     //From back of robot.
-    public static TalonFX shootMotorLeft = new TalonFX(15);
+    public static TalonFX shootMotorLeft = new TalonFX(15); //Leader
     public static TalonFX shootMotorMiddle = new TalonFX(14);
     public static TalonFX shootMotorRight = new TalonFX(13);
     public static TalonFX feedMotorLeft = new TalonFX(18);
+
+
     // public static TalonFX feedMotorMiddle = new TalonFX(17);
     public static TalonFX ExtraShootMotor = new TalonFX(16);
     public static TalonFX beltMotor = new TalonFX(19);
@@ -121,22 +124,31 @@ public class RobotContainer {
         SmartDashboard.putData("Auto Mode", autoChooser);
         SmartDashboard.putBoolean("Is low battery", !isLowBattery);
 
+        shootMotorMiddle.setControl(new Follower(shootMotorLeft.getDeviceID(), MotorAlignmentValue.Aligned));
+        shootMotorRight.setControl(new Follower(shootMotorLeft.getDeviceID(), MotorAlignmentValue.Aligned));
+        ExtraShootMotor.setControl(new Follower(shootMotorLeft.getDeviceID(), MotorAlignmentValue.Opposed));
+        
+        // m_orchestra.addInstrument(shootMotorLeft);
+        // m_orchestra.addInstrument(intakeMotor);
+        // m_orchestra.addInstrument(shootMotorMiddle);
+        // m_orchestra.addInstrument(shootMotorRight);
+        // m_orchestra.addInstrument(ExtraShootMotor);
+        // m_orchestra.addInstrument(feedMotorLeft);
+        // m_orchestra.addInstrument(beltMotor);
 
-    m_orchestra.addInstrument(shootMotorLeft);
-    m_orchestra.addInstrument(intakeMotor);
-    m_orchestra.addInstrument(shootMotorMiddle);
-    m_orchestra.addInstrument(shootMotorRight);
-    m_orchestra.addInstrument(ExtraShootMotor);
-    m_orchestra.addInstrument(feedMotorLeft);
-    m_orchestra.addInstrument(beltMotor);
+        // var status = m_orchestra.loadMusic("funkytown.chrp");
+        // var status = m_orchestra.loadMusic("jeopardy.chrp");
+        // var status = m_orchestra.loadMusic("terraria.chrp");
+        // var status = m_orchestra.loadMusic("mario.chrp");
+        // var status = m_orchestra.loadMusic("minecraft.chrp");
+        // var status = m_orchestra.loadMusic("imblue.chrp");
+        // var status = m_orchestra.loadMusic("freddyfazbear.chrp");
+        // var status = m_orchestra.loadMusic("ducksong.chrp");
+        // var status = m_orchestra.loadMusic("america.chrp");
+        // var status = m_orchestra.loadMusic("nfl.chrp");
+        // var status = m_orchestra.loadMusic("iforgot.chrp");
 
-    var status = m_orchestra.loadMusic("output.chrp");
-    // var status = m_orchestra.loadMusic("Jeoprody.chrp");
-
-if (!status.isOK()) {
-   System.out.println("Failed to load music: " + status.toString());
-}
-m_orchestra.play();
+        // m_orchestra.play();
 
         configureBindings();
 

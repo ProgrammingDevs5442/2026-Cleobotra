@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.ShootCommand.Shot;
+
 import com.ctre.phoenix6.hardware.TalonFX;
 import java.util.List;
 import static edu.wpi.first.units.Units.Amps;
@@ -32,24 +34,53 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
+import edu.wpi.first.math.interpolation.Interpolator;
+import edu.wpi.first.math.interpolation.InverseInterpolator;
+
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Feet;
+
+import edu.wpi.first.units.measure.Distance;
+
 
 public class Shooter extends SubsystemBase {
+  private static final InterpolatingTreeMap<Distance, Shot> distanceToShotMap = new InterpolatingTreeMap<>(
+        (startValue, endValue, q) -> 
+            InverseInterpolator.forDouble()
+                .inverseInterpolate(startValue.in(Meters), endValue.in(Meters), q.in(Meters)),
+        (startValue, endValue, t) ->
+            new Shot(
+                Interpolator.forDouble()
+                    .interpolate(startValue.shooterRPM, endValue.shooterRPM, t),
+                Interpolator.forDouble()
+                    .interpolate(startValue.hoodAngle, endValue.hoodAngle, t)
+            )
+    );
+
+    static {
+        // distanceToShotMap.put(Inches.of(52.0), new Shot(2800, 0.19));
+        // distanceToShotMap.put(Inches.of(114.4), new Shot(3275, 0.40));
+        // distanceToShotMap.put(Inches.of(165.5), new Shot(3650, 0.48));
+    }
+  
   /** Creates a new Shooter. */
   public Shooter() {}
   double calculatedShootVelocity = 0;
   double calcMotorAngVelo = 0;
   double shootSpeed;
   double feedSpeed;
-  double shooterEfficiency = 0.8;
+  public double shooterEfficiency = 0.8;
   AngularVelocity kVelocityTolerance = RPM.of(100);
   
   Pose2d pose = RobotContainer.vision.getFieldPose();
 
-  TalonFX leftMotor = RobotContainer.shootMotorLeft;
-  TalonFX middleMotor = RobotContainer.shootMotorMiddle;
-  TalonFX rightMotor = RobotContainer.shootMotorRight;
-  TalonFX fourthMotor = RobotContainer.ExtraShootMotor;
-  List<TalonFX> shootMotors = List.of(leftMotor, middleMotor, rightMotor, fourthMotor);
+  TalonFX leftMotor = RobotContainer.shootMotorLeft;//3
+  // TalonFX middleMotor = RobotContainer.shootMotorMiddle;//2
+  // TalonFX rightMotor = RobotContainer.shootMotorRight;//1
+  // TalonFX fourthMotor = RobotContainer.ExtraShootMotor;//4
+  // List<TalonFX> shootMotors = List.of(leftMotor, middleMotor, rightMotor, fourthMotor);
   
   private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
   private final VoltageOut voltageRequest = new VoltageOut(0);
@@ -71,17 +102,16 @@ public class Shooter extends SubsystemBase {
     // RobotContainer.shootMotorMiddle.set(shootSpeed);
     // RobotContainer.shootMotorRight.set(shootSpeed);
     if (shootSpeed != 0) {
-      for (final TalonFX motor : shootMotors) {
-        motor.setControl(
-          velocityRequest
-            .withVelocity(RPM.of(shootSpeed))
-        );
-      }
+      leftMotor.setControl(velocityRequest.withVelocity(RPM.of(shootSpeed)));
+      // middleMotor.setControl(velocityRequest.withVelocity(RPM.of(shootSpeed)));
+      // rightMotor.setControl(velocityRequest.withVelocity(RPM.of(shootSpeed)));
+      // fourthMotor.setControl(velocityRequest.withVelocity(RPM.of(shootSpeed * .9)));
     }
     else {
-      for (final TalonFX motor : shootMotors) {
-        motor.set(0);
-      }
+      // for (final TalonFX motor : shootMotors) {
+      //   motor.set(0);
+      // }
+      leftMotor.set(0);
     }
     // RobotContainer.ExtraShootMotor.setControl(
     //   // voltageRequest.withOutput(Volts.of(feedSpeed * 11.0))
@@ -110,11 +140,7 @@ public class Shooter extends SubsystemBase {
     // shootSpeed = speed * Constants.pivotConstants.DistanceToShootSpeedMultiplier;
     double xs = RobotContainer.turretVision.getDistanceToTag() * Constants.measurementConstants.MetersToFeet;
     double ys = Constants.shooterConstants.HeightOfShooter;
-    double theta = Math.toRadians(Constants.shooterConstants.AngleOfShooter);
-    calculatedShootVelocity = speed * ((4*xs))/(Math.sqrt(-(Math.cos(theta)*((Constants.fieldConstants.HeightOfHub-ys)*Math.cos(theta)-Math.sin(theta)*xs))));
     
-    calcMotorAngVelo = calculatedShootVelocity/(Constants.shooterConstants.DiameterOfWheel/2);
-    // shootSpeed = calcMotorAngVelo/(Constants.pivotConstants.MaxRPMPivot * Constants.measurementConstants.RPMToRadPS * Constants.pivotConstants.MotorTransferEfficency);
     shootSpeed = speed;
     SmartDashboard.putNumber("shootSpeed", shootSpeed);
     SmartDashboard.putNumber("Calculated Shoot Speed", calculatedShootVelocity);
@@ -130,15 +156,20 @@ public class Shooter extends SubsystemBase {
     Pose2d pose = RobotContainer.vision.getFieldPose();
     pose = new Pose2d(pose.getX() * Constants.measurementConstants.MetersToFeet, pose.getY() * Constants.measurementConstants.MetersToFeet, pose.getRotation());
 
-    double dist = Math.sqrt(Math.pow(x - pose.getX(),2) + Math.pow(z - pose.getY(),2));
-    SmartDashboard.putNumber("Distance to target", dist);
-    double ys = Constants.shooterConstants.HeightOfShooter;
-    double theta = Math.toRadians(65);
+    // double dist = Math.sqrt(Math.pow(x - pose.getX(),2) + Math.pow(z - pose.getY(),2));
+    // SmartDashboard.putNumber("Distance to target", dist);
+    // double ys = Constants.shooterConstants.HeightOfShooter;
+    // double theta = Math.toRadians(65);
+    Distance dist = Feet.of(Math.sqrt(Math.pow(x - pose.getX(),2) + Math.pow(z - pose.getY(),2)));
+    SmartDashboard.putNumber("Distance to target", dist.in(Feet));
+    final Shot shot = distanceToShotMap.get(dist);
+
+    calculatedShootVelocity = 1;
     // double theta = RobotContainer.linearServo.positionToAngle(RobotContainer.linearServo.getPosition());
     // double theta = Math.toRadians(Constants.shooterConstants.AngleOfShooter);
-    calculatedShootVelocity = speed * ((4*dist))/(Math.sqrt(-(Math.cos(theta)*((y-ys)*Math.cos(theta)-Math.sin(theta)*dist))));
+    // calculatedShootVelocity = speed * ((4*dist))/(Math.sqrt(-(Math.cos(theta)*((y-ys)*Math.cos(theta)-Math.sin(theta)*dist))));
     
-    calcMotorAngVelo = calculatedShootVelocity/(Constants.shooterConstants.DiameterOfWheel/2);
+    // calcMotorAngVelo = calculatedShootVelocity/(Constants.shooterConstants.DiameterOfWheel/2);
     shootSpeed = shooterEfficiency * speed;//calcMotorAngVelo/(Constants.pivotConstants.MaxRPMPivot * Constants.measurementConstants.RPMToRadPS * shooterEfficiency);
   SmartDashboard.putNumber("shootSpeed", shootSpeed);
     SmartDashboard.putNumber("Calculated Shoot Speed", calculatedShootVelocity);

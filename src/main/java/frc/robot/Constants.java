@@ -38,7 +38,7 @@ public class Constants {
 
         public final static double Linearity = 3; // How steep the response curve is (typically cubic, meaning 50% on stick = 12.5% speed)
 
-        public final static double ControllerDeadzone = 0.2;
+        public final static double ControllerDeadzone = 0.1;
 
         public final static PIDController chassisPID = new PIDController(01, 0, 0);
         public final static double ChassisPidTolerence = Math.PI/180;

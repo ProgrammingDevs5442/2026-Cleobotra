@@ -56,7 +56,7 @@ public class Pivort extends SubsystemBase {
     // SendableRegistry.setName(RobotContainer.rotateMotor, "Rotate speed");
 
     //double difference =  trackedDifference;
-    double difference = rotateToPosition(4, 12);
+    double difference = rotateToPosition(4, 4.6);//TODO make flip with sides
    
     rotateSpeed = rotate(difference);
   }

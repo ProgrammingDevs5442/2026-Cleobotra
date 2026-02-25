@@ -6,10 +6,14 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.lang.reflect.Array;
+
 import com.pathplanner.lib.config.PIDConstants;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import frc.robot.generated.TunerConstants;
@@ -89,5 +93,8 @@ public class Constants {
 
     public static final class fieldConstants {
         public final static double HeightOfHub = 6; //Feet
+        public final static Pose2d BlueFieldHub = new Pose2d(4.0 , 4.6 , new Rotation2d(0.0));
+        public final static Pose2d RedFieldHub = new Pose2d(4.0 , 12 , new Rotation2d(180.0));
+
     }
 }

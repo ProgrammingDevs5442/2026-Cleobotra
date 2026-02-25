@@ -26,6 +26,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.SendableRegistry;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.XboxController;
@@ -40,6 +41,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.driveConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.subsystems.DriveModes;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LinearServo;
@@ -109,6 +112,8 @@ public class RobotContainer {
 
     public static Shooter Shooter = new Shooter();
     public static ShootCommand shootCommand = new ShootCommand();
+
+    public static boolean isRedAlliance = DriverStation.getAlliance().get().equals(Alliance.Red);
 
     Orchestra m_orchestra = new Orchestra();
 

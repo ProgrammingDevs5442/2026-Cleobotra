@@ -60,9 +60,9 @@ public class Shooter extends SubsystemBase {
     );
 
     static {
-        // distanceToShotMap.put(Inches.of(52.0), new Shot(2800, 0.19));
-        // distanceToShotMap.put(Inches.of(114.4), new Shot(3275, 0.40));
-        // distanceToShotMap.put(Inches.of(165.5), new Shot(3650, 0.48));
+        // distanceToShotMap.put(Feet.of(52.0), new Shot(2800, 0.19));
+        // distanceToShotMap.put(Feet.of(114.4), new Shot(3275, 0.40));
+        // distanceToShotMap.put(Feet.of(165.5), new Shot(3650, 0.48));
     }
   
   /** Creates a new Shooter. */
@@ -71,7 +71,7 @@ public class Shooter extends SubsystemBase {
   double calcMotorAngVelo = 0;
   double shootSpeed;
   double feedSpeed;
-  public double shooterEfficiency = 0.8;
+  public double shooterEfficiency = 1;
   AngularVelocity kVelocityTolerance = RPM.of(100);
   
   Pose2d pose = RobotContainer.vision.getFieldPose();
@@ -113,14 +113,10 @@ public class Shooter extends SubsystemBase {
       // }
       leftMotor.set(0);
     }
-    // RobotContainer.ExtraShootMotor.setControl(
-    //   // voltageRequest.withOutput(Volts.of(feedSpeed * 11.0))
-    //   velocityRequest.withVelocity(RPM.of(shootSpeed))// * Constants.shooterConstants.maxRPMFeeder))
-    // );
     if (feedSpeed != 0) {    
       RobotContainer.beltMotor.setControl(
         // velocityRequest.withVelocity(RPM.of(feedSpeed))
-        new VoltageOut(-feedSpeed/5000 * 11)
+        new VoltageOut(0)//-feedSpeed/5000 * 11)
       );
       
       RobotContainer.feedMotorLeft.setControl(
@@ -147,10 +143,13 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shoot Motor Angular Velocity", RobotContainer.shootMotorLeft.getVelocity().getValueAsDouble());
   }
 
-  public void shootAtPosition(double x, double y, double z, double speed) {
-    x *= Constants.measurementConstants.MetersToFeet;
-    y *= Constants.measurementConstants.MetersToFeet;
-    z *= Constants.measurementConstants.MetersToFeet;
+  public void shootAtPosition(Pose2d targetPose, double speed) {
+    double x = targetPose.getX();
+    double z = targetPose.getY(); 
+    //double x, double y, double z, double speed) {
+    // x *= Constants.measurementConstants.MetersToFeet;
+    // y *= Constants.measurementConstants.MetersToFeet;
+    // z *= Constants.measurementConstants.MetersToFeet;
     //x,y,z is target position; y is vertical
     //speed is a constant factor, 1.15 (might want to change)
     Pose2d pose = RobotContainer.vision.getFieldPose();
@@ -171,7 +170,7 @@ public class Shooter extends SubsystemBase {
     
     // calcMotorAngVelo = calculatedShootVelocity/(Constants.shooterConstants.DiameterOfWheel/2);
     shootSpeed = shooterEfficiency * speed;//calcMotorAngVelo/(Constants.pivotConstants.MaxRPMPivot * Constants.measurementConstants.RPMToRadPS * shooterEfficiency);
-  SmartDashboard.putNumber("shootSpeed", shootSpeed);
+    SmartDashboard.putNumber("shootSpeed", shootSpeed);
     SmartDashboard.putNumber("Calculated Shoot Speed", calculatedShootVelocity);
     SmartDashboard.putNumber("Shoot Motor Angular Velocity", RobotContainer.shootMotorLeft.getVelocity().getValueAsDouble());
   }

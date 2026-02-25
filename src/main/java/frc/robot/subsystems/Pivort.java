@@ -56,7 +56,7 @@ public class Pivort extends SubsystemBase {
     // SendableRegistry.setName(RobotContainer.rotateMotor, "Rotate speed");
 
     //double difference =  trackedDifference;
-    double difference = rotateToPosition(4, 4.6);//TODO make flip with sides
+    double difference = rotateToPosition(RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub);//TODO make flip with sides
    
     rotateSpeed = rotate(difference);
   }
@@ -119,7 +119,9 @@ public class Pivort extends SubsystemBase {
     return 0;//(RobotContainer.rotateMotor.getPosition().getValueAsDouble() * pivotConstants.PivotTableRatio * pivotConstants.PivotMotorRatio * 2 * Math.PI);
   }
 
-  public double rotateToPosition(double x, double z) {
+  public double rotateToPosition(Pose2d targetPose) {
+    double x = targetPose.getX();
+    double z = targetPose.getY(); 
     //x,y,z is target position; y is vertical
     //speed is a constant factor, 1.15 (might want to change)
     Pose2d pose = RobotContainer.vision.getFieldPose();

@@ -146,6 +146,9 @@ public class Shooter extends SubsystemBase {
   public void shootAtPosition(Pose2d targetPose, double speed) {
     double x = targetPose.getX();
     double z = targetPose.getY(); 
+
+    SmartDashboard.putNumber("tarX", x);
+    SmartDashboard.putNumber("tarY", z);
     //double x, double y, double z, double speed) {
     // x *= Constants.measurementConstants.MetersToFeet;
     // y *= Constants.measurementConstants.MetersToFeet;
@@ -153,14 +156,17 @@ public class Shooter extends SubsystemBase {
     //x,y,z is target position; y is vertical
     //speed is a constant factor, 1.15 (might want to change)
     Pose2d pose = RobotContainer.vision.getFieldPose();
-    pose = new Pose2d(pose.getX() * Constants.measurementConstants.MetersToFeet, pose.getY() * Constants.measurementConstants.MetersToFeet, pose.getRotation());
+    SmartDashboard.putNumber("delX", x - pose.getX());
+    SmartDashboard.putNumber("delY", z - pose.getY());
+    pose = new Pose2d(pose.getX(), pose.getY(), pose.getRotation());
 
     // double dist = Math.sqrt(Math.pow(x - pose.getX(),2) + Math.pow(z - pose.getY(),2));
     // SmartDashboard.putNumber("Distance to target", dist);
     // double ys = Constants.shooterConstants.HeightOfShooter;
     // double theta = Math.toRadians(65);
-    Distance dist = Feet.of(Math.sqrt(Math.pow(x - pose.getX(),2) + Math.pow(z - pose.getY(),2)));
-    SmartDashboard.putNumber("Distance to target", dist.in(Feet));
+    Distance dist = Meters.of(Math.sqrt(Math.pow(x - pose.getX(),2) + Math.pow(z - pose.getY(),2)));
+    SmartDashboard.putNumber("Distance to target (M)", dist.in(Meters));
+    SmartDashboard.putNumber("Distance to target (Ft)", dist.in(Feet));
     final Shot shot = distanceToShotMap.get(dist);
 
     calculatedShootVelocity = 1;

@@ -15,8 +15,8 @@ public class ShootCommand extends Command {
   private boolean pressed;
   private double increment = .01;
 
-  private double shootRPM = 3700;
-  private double initialRPM = shootRPM + 400;
+  private double shootRPM = 3800;
+  private double initialRPM = shootRPM ;//+ 400;
   private double shootStage = 0; //1 = just started shooting, 0 = shooting
 
   /** Creates a new ShootCommand. */
@@ -44,7 +44,7 @@ public class ShootCommand extends Command {
     }
 
     if (RobotContainer.xbox2.getBButton()) {
-      RobotContainer.Shooter.feedSpeed(-3000);
+      RobotContainer.Shooter.feedSpeed(-3750);
       shootStage = 2;
     } else if (RobotContainer.xbox2.getYButton()) {
       // RobotContainer.Shooter.shootSpeed(.7);

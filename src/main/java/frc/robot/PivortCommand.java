@@ -38,11 +38,11 @@ public class PivortCommand extends Command {
 
       RobotContainer.pivort.manualMode(false);
       
-      if (RobotContainer.turretVision.hasTarget(RobotContainer.turretVision.cameras)) {
-        RobotContainer.pivort.setAutoRotate(RobotContainer.turretVision.TagTracking());
-      } else {
-        RobotContainer.pivort.setAutoRotate(0);
-      }
+    //   if (RobotContainer.turretVision.hasTarget(RobotContainer.turretVision.cameras)) {
+    //     RobotContainer.pivort.setAutoRotate(RobotContainer.turretVision.TagTracking());
+    //   } else {
+    //     RobotContainer.pivort.setAutoRotate(0);
+    //   }
     }
 
     

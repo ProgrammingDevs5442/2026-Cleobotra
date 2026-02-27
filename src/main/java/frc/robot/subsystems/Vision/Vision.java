@@ -68,8 +68,8 @@ public class Vision extends SubsystemBase {
     return new Pose2d(fX,fY, new Rotation2d(fR));
   }
 
-  public boolean hasTarget(ArrayList<CalculatedCamera> List) {
-    for (CalculatedCamera camera : List) {
+  public boolean hasTarget() {
+    for (CalculatedCamera camera : cameras) {
       if (camera.hasTarget()) return true;
     }
     return false;

@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.ctre.phoenix6.configs.AudioConfigs;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,6 +31,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+
+    if (!RobotContainer.hasFieldOriented && RobotContainer.vision.hasTarget()) {
+      RobotContainer.drivetrain.resetRotation(RobotContainer.isRedAlliance ? new Rotation2d(RobotContainer.vision.getFieldPose().getRotation().getRadians() + Math.PI) : RobotContainer.vision.getFieldPose().getRotation());
+
+      RobotContainer.hasFieldOriented = true;
+    }
 
     /*
      * This example of adding Limelight is very simple and may not be sufficient for on-field use.

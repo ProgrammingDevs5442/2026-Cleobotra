@@ -77,12 +77,15 @@ public class RobotContainer {
     
     public static final CANBus Rio = new CANBus("Rio", "./logs/example.hoot");
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     public final static PhotonCamera camera = new PhotonCamera("PC_Camera");
 
     public static final Vision vision = new Vision();
     public static final Vision turretVision = new Vision();
+
+    
+    public static boolean hasFieldOriented = false;
 
 
     // // Ballz Launcher

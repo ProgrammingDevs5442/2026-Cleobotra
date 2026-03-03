@@ -97,6 +97,7 @@ public class RobotContainer {
     public static TalonFX shootMotorMiddle = new TalonFX(14);
     public static TalonFX shootMotorRight = new TalonFX(13);
     public static TalonFX feedMotorLeft = new TalonFX(18);
+    
 
 
     // public static TalonFX feedMotorMiddle = new TalonFX(17);
@@ -132,9 +133,10 @@ public class RobotContainer {
         SmartDashboard.putData("Auto Mode", autoChooser);
         SmartDashboard.putBoolean("Is low battery", !isLowBattery);
 
+        shootMotorLeft.getVelocity().setUpdateFrequency(50);
         shootMotorMiddle.setControl(new Follower(shootMotorLeft.getDeviceID(), MotorAlignmentValue.Aligned));
         shootMotorRight.setControl(new Follower(shootMotorLeft.getDeviceID(), MotorAlignmentValue.Aligned));
-        ExtraShootMotor.setControl(new Follower(shootMotorLeft.getDeviceID(), MotorAlignmentValue.Opposed));
+        // ExtraShootMotor.setControl(new Follower(shootMotorLeft.getDeviceID(), MotorAlignmentValue.Opposed));
         
         // m_orchestra.addInstrument(shootMotorLeft);
         // m_orchestra.addInstrument(intakeMotor);

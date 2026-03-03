@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+
 
 
 
@@ -14,10 +18,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ShootCommand extends Command {
   private boolean pressed;
   private double increment = .01;
+  private double shootRPM = 5000;
+  private double initialRPM = shootRPM + 400;
+  WaitCommand spinUpDelay = new WaitCommand(0.5);
 
-  private double shootRPM = 3800;
-  private double initialRPM = shootRPM ;//+ 400;
-  private double shootStage = 0; //1 = just started shooting, 0 = shooting
+  /**1 = spinning up, 0 = shooting, 2 = Shooting at initial speed */
+  private double shootStage = 0; 
 
   /** Creates a new ShootCommand. */
   public ShootCommand() {
@@ -33,24 +39,44 @@ public class ShootCommand extends Command {
   @Override
   public void execute() {
 
-    if (RobotContainer.xbox2.getAButtonPressed()) shootStage = 1;
-    if (RobotContainer.shootMotorLeft.getVelocity().getValueAsDouble() <= shootRPM * RobotContainer.Shooter.shooterEfficiency && shootStage == 2) shootStage = 0;
-    if (RobotContainer.xbox2.getAButton()) { //&& Math.abs(RobotContainer.pivort.getDifference()) <= Constants.shooterConstants.ShootDifferenceThreshold) {
-      RobotContainer.Shooter.shootAtPosition(RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, shootStage >= 1 ? initialRPM : shootRPM);
-    // } else if (true) {
-      // RobotContainer.Shooter.shootSpeed(.7);
-    } else {
-      RobotContainer.Shooter.shootAtPosition(RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 0);
+    // if (RobotContainer.xbox2.getAButtonPressed()) shootStage = 1;
+    // if (RobotContainer.shootMotorLeft.getVelocity().getValueAsDouble() <= shootRPM * RobotContainer.Shooter.shooterEfficiency && shootStage == 2) shootStage = 0;
+    // if (RobotContainer.xbox2.getAButton()) { //&& Math.abs(RobotContainer.pivort.getDifference()) <= Constants.shooterConstants.ShootDifferenceThreshold) {
+    //   RobotContainer.Shooter.shootAtPosition(RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, shootStage >= 1 ? initialRPM : shootRPM);
+    // // } else if (true) {
+    //   // RobotContainer.Shooter.shootSpeed(.7);
+    // } else {
+    //   RobotContainer.Shooter.shootAtPosition(RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 0);
+    // }
+
+    if (RobotContainer.xbox1.getRightBumperButton()) {
+      if (!spinUpDelay.isScheduled()) {
+        prepareShot();
+        spinUpDelay.schedule();//If the timer isn't already running, start it and prepare the shot
+        shootStage = 1;
+      } else if (spinUpDelay.isFinished()) {
+        shootStage = 2;
+        shooting();
+      } }
+    else {
+      if (spinUpDelay.isScheduled()) {
+        spinUpDelay.cancel();
+      }
+      endShot();
     }
 
+
+
     if (RobotContainer.xbox2.getBButton()) {
-      RobotContainer.Shooter.feedSpeed(-3750);
-      shootStage = 2;
-    } else if (RobotContainer.xbox2.getYButton()) {
-      // RobotContainer.Shooter.shootSpeed(.7);
-      RobotContainer.Shooter.feedSpeed(2000);
-    } else {
-      RobotContainer.Shooter.feedSpeed(0);
+      intake();
+    }
+    //   RobotContainer.Shooter.feedSpeed(-3750);
+    //   shootStage = 2;
+    // } else if (RobotContainer.xbox2.getYButton()) {
+    //   // RobotContainer.Shooter.shootSpeed(.7);
+    //   RobotContainer.Shooter.feedSpeed(2000);
+    else {
+    //   RobotContainer.Shooter.feedSpeed(0);
     }
     
 
@@ -75,6 +101,41 @@ public class ShootCommand extends Command {
     else {
       RobotContainer.Shooter.modifyEfficiency(0);
     }
+  }
+
+  public void prepareShot() {
+    RobotContainer.Shooter.shootAtPosition(
+      RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 
+      shootStage >= 1 ? initialRPM : shootRPM);
+    RobotContainer.Shooter.feedSpeed(2000);
+    spinUpDelay.schedule();
+  }
+
+  public void shooting() {
+     RobotContainer.Shooter.shootAtPosition(
+      RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 
+      shootStage >= 1 ? initialRPM : shootRPM); 
+    RobotContainer.Shooter.feedSpeed(-3750);
+  }
+
+  public void endShot() {
+    RobotContainer.Shooter.shootAtPosition(
+      RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 
+      0); 
+    RobotContainer.Shooter.feedSpeed(0);
+  }
+
+  public void reverseFeed() {
+    RobotContainer.Shooter.feedSpeed(2000);
+    RobotContainer.Shooter.setIntakeSpeed(-.5);
+  }
+
+  public void intake() {
+    RobotContainer.Shooter.setIntakeSpeed(.7);
+  }
+
+  public void stopIntake() {
+    RobotContainer.Shooter.setIntakeSpeed(0);
   }
   
 

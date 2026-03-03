@@ -71,8 +71,9 @@ public class Shooter extends SubsystemBase {
   double calcMotorAngVelo = 0;
   double shootSpeed;
   double feedSpeed;
-  public double shooterEfficiency = 1;
-  AngularVelocity kVelocityTolerance = RPM.of(100);
+  public double shooterEfficiency = .8;
+  double kVelocityTolerance = 100;
+  double intakeSpeed = 0;
   
   Pose2d pose = RobotContainer.vision.getFieldPose();
 
@@ -116,7 +117,7 @@ public class Shooter extends SubsystemBase {
     if (feedSpeed != 0) {    
       RobotContainer.beltMotor.setControl(
         // velocityRequest.withVelocity(RPM.of(feedSpeed))
-        new VoltageOut(0)//-feedSpeed/5000 * 11)
+        new VoltageOut(-feedSpeed/5000 * 11)
       );
       
       RobotContainer.feedMotorLeft.setControl(
@@ -129,6 +130,7 @@ public class Shooter extends SubsystemBase {
       RobotContainer.feedMotorLeft.set(0);
       // RobotContainer.ExtraShootMotor.set(0);
     }
+    RobotContainer.intakeMotor.set(intakeSpeed);
 
   }
 
@@ -147,34 +149,16 @@ public class Shooter extends SubsystemBase {
     double x = targetPose.getX();
     double z = targetPose.getY(); 
 
-    SmartDashboard.putNumber("tarX", x);
-    SmartDashboard.putNumber("tarY", z);
-    //double x, double y, double z, double speed) {
-    // x *= Constants.measurementConstants.MetersToFeet;
-    // y *= Constants.measurementConstants.MetersToFeet;
-    // z *= Constants.measurementConstants.MetersToFeet;
     //x,y,z is target position; y is vertical
     //speed is a constant factor, 1.15 (might want to change)
     Pose2d pose = RobotContainer.vision.getFieldPose();
-    SmartDashboard.putNumber("delX", x - pose.getX());
-    SmartDashboard.putNumber("delY", z - pose.getY());
     pose = new Pose2d(pose.getX(), pose.getY(), pose.getRotation());
 
-    // double dist = Math.sqrt(Math.pow(x - pose.getX(),2) + Math.pow(z - pose.getY(),2));
-    // SmartDashboard.putNumber("Distance to target", dist);
-    // double ys = Constants.shooterConstants.HeightOfShooter;
-    // double theta = Math.toRadians(65);
     Distance dist = Meters.of(Math.sqrt(Math.pow(x - pose.getX(),2) + Math.pow(z - pose.getY(),2)));
     SmartDashboard.putNumber("Distance to target (M)", dist.in(Meters));
     SmartDashboard.putNumber("Distance to target (Ft)", dist.in(Feet));
     final Shot shot = distanceToShotMap.get(dist);
-
-    calculatedShootVelocity = 1;
-    // double theta = RobotContainer.linearServo.positionToAngle(RobotContainer.linearServo.getPosition());
-    // double theta = Math.toRadians(Constants.shooterConstants.AngleOfShooter);
-    // calculatedShootVelocity = speed * ((4*dist))/(Math.sqrt(-(Math.cos(theta)*((y-ys)*Math.cos(theta)-Math.sin(theta)*dist))));
-    
-    // calcMotorAngVelo = calculatedShootVelocity/(Constants.shooterConstants.DiameterOfWheel/2);
+    calculatedShootVelocity = 
     shootSpeed = shooterEfficiency * speed;//calcMotorAngVelo/(Constants.pivotConstants.MaxRPMPivot * Constants.measurementConstants.RPMToRadPS * shooterEfficiency);
     SmartDashboard.putNumber("shootSpeed", shootSpeed);
     SmartDashboard.putNumber("Calculated Shoot Speed", calculatedShootVelocity);
@@ -184,6 +168,14 @@ public class Shooter extends SubsystemBase {
   public double getVoltage() {
     return RobotContainer.shootMotorLeft.getMotorVoltage().getValueAsDouble();
   }
+
+  public double getVelocity() {
+    return RobotContainer.shootMotorLeft.getVelocity().getValueAsDouble();
+  }
+
+  public boolean isAtSpeed() {
+    return Math.abs(RobotContainer.shootMotorLeft.getVelocity().getValueAsDouble() - shootSpeed) < (shootSpeed * .1); // 10% RPM tolerance
+  }
   
   public void feedSpeed(double speed){
     feedSpeed = speed;
@@ -192,5 +184,9 @@ public class Shooter extends SubsystemBase {
   public void modifyEfficiency(double efficiency) {
     shooterEfficiency += efficiency;
     SmartDashboard.putNumber("Shoot Efficiency", shooterEfficiency);
+  }
+
+  public void setIntakeSpeed(double intakeSpeed) {
+    this.intakeSpeed = intakeSpeed;
   }
 }

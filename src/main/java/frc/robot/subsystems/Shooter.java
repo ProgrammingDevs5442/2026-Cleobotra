@@ -60,9 +60,9 @@ public class Shooter extends SubsystemBase {
     );
 
     static {
-        // distanceToShotMap.put(Feet.of(52.0), new Shot(2800, 0.19));
-        // distanceToShotMap.put(Feet.of(114.4), new Shot(3275, 0.40));
-        // distanceToShotMap.put(Feet.of(165.5), new Shot(3650, 0.48));
+        distanceToShotMap.put(Feet.of(5.9), new Shot(4000, 75));
+        distanceToShotMap.put(Feet.of(10.5), new Shot(4700, 72));
+        // distanceToShotMap.put(Feet.of(165.5), new Shot(3650, ));
     }
   
   /** Creates a new Shooter. */
@@ -120,9 +120,9 @@ public class Shooter extends SubsystemBase {
         new VoltageOut(-feedSpeed/5000 * 11)
       );
       
-      RobotContainer.feedMotorLeft.setControl(
+      RobotContainer.feedMotorLeft.set(feedSpeed/6000//Control(
         // voltageRequest.withOutput(Volts.of(feedSpeed * 11.0))
-        velocityRequest.withVelocity(RPM.of(feedSpeed))// * Constants.shooterConstants.maxRPMFeeder))
+        // velocityRequest.withVelocity(RPM.of(feedSpeed))// * Constants.shooterConstants.maxRPMFeeder))
       );
     }
     else {
@@ -158,7 +158,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Distance to target (M)", dist.in(Meters));
     SmartDashboard.putNumber("Distance to target (Ft)", dist.in(Feet));
     final Shot shot = distanceToShotMap.get(dist);
-    calculatedShootVelocity = 
+    calculatedShootVelocity = shot.shooterRPM;
     shootSpeed = shooterEfficiency * speed;//calcMotorAngVelo/(Constants.pivotConstants.MaxRPMPivot * Constants.measurementConstants.RPMToRadPS * shooterEfficiency);
     SmartDashboard.putNumber("shootSpeed", shootSpeed);
     SmartDashboard.putNumber("Calculated Shoot Speed", calculatedShootVelocity);

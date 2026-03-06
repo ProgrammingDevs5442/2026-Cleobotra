@@ -26,12 +26,12 @@ public class IntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (RobotContainer.xbox2.getXButton()) {
-      RobotContainer.intake.setIntakeSpeed(Constants.intakeConstants.IntakeSpeed);
-    } 
-    else {
-      RobotContainer.intake.setIntakeSpeed(0);
-    }
+    // if (RobotContainer.xbox2.getXButton()) {
+    //   RobotContainer.intake.setIntakeSpeed(Constants.intakeConstants.IntakeSpeed);
+    // } 
+    // else {
+    //   RobotContainer.intake.setIntakeSpeed(0);
+    // }
   }
 
 

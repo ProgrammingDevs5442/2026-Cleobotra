@@ -29,24 +29,11 @@ public class PivortCommand extends Command {
   @Override
   public void execute() {
     //Send the value from the angle of the controller in radians, coverted to degrees
-    if (Math.sqrt(Math.pow(RobotContainer.xbox2.getLeftY(),2) + Math.pow(RobotContainer.xbox2.getLeftX(),2)) > pivotConstants.ShooterDeadzone) {
-      RobotContainer.pivort.manualMode(true);
-      // RobotContainer.pivort.setTargetAngle(Math.toDegrees(Math.atan2(RobotContainer.xbox2.getLeftY(), RobotContainer.xbox2.getLeftX())));
-    // } else if (RobotContainer.turretVision.hasTarget(RobotContainer.turretVision.turretCameras)) {
-    } 
-    else {
-
-      RobotContainer.pivort.manualMode(false);
-      
-    //   if (RobotContainer.turretVision.hasTarget(RobotContainer.turretVision.cameras)) {
-    //     RobotContainer.pivort.setAutoRotate(RobotContainer.turretVision.TagTracking());
-    //   } else {
-    //     RobotContainer.pivort.setAutoRotate(0);
-    //   }
+    RobotContainer.pivort.manualMode(false);
+    if (RobotContainer.xbox1.getBButtonPressed()) {
+      targeting = !targeting;
     }
-
-    
-     RobotContainer.pivort.setAutoTarget(RobotContainer.xbox2.getRightBumperButton());
+    RobotContainer.pivort.setAutoTarget(targeting);
     
     
   }

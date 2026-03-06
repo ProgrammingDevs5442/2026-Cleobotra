@@ -45,12 +45,12 @@ public class Pivort extends SubsystemBase {
   public void periodic() {
 
     // SmartDashboard.putNumber("Pivot Raw Encoder", RobotContainer.rotateMotor.getPosition().getValueAsDouble());
-    SmartDashboard.putNumber("Pivot Degrees", Math.toDegrees(getAngle()));
-    SmartDashboard.putNumber("Pivot Target Angle", targetAngle);
-    SmartDashboard.putBoolean("Continuing", continuing);
-    SmartDashboard.putStringArray("output", output.toArray(new String[0]));
-    SendableRegistry.setName(rotatePID, "Pivot", "PivotPID");
-    SmartDashboard.putBoolean("Auto target", autoTarget);
+    // SmartDashboard.putNumber("Pivot Degrees", Math.toDegrees(getAngle()));
+    // SmartDashboard.putNumber("Pivot Target Angle", targetAngle);
+    // SmartDashboard.putBoolean("Continuing", continuing);
+    // SmartDashboard.putStringArray("output", output.toArray(new String[0]));
+    // SendableRegistry.setName(rotatePID, "Pivot", "PivotPID");
+    // SmartDashboard.putBoolean("Auto target", autoTarget);
     
     
     // SendableRegistry.setName(RobotContainer.rotateMotor, "Rotate speed");
@@ -66,8 +66,8 @@ public class Pivort extends SubsystemBase {
   }
 
   public double findRotateSpeed(double manualSpeed){
-    SmartDashboard.putNumber("Pivot Speed", rotateSpeed);
-    SmartDashboard.putNumber("manualRotateSpeed", manualSpeed);
+    // SmartDashboard.putNumber("Pivot Speed", rotateSpeed);
+    // SmartDashboard.putNumber("manualRotateSpeed", manualSpeed);
     if (autoTarget) {
       return RobotContainer.Deadzone(rotateSpeed, .1);
     }
@@ -109,8 +109,8 @@ public class Pivort extends SubsystemBase {
       targetAngle=0;
     }
     this.targetAngle = targetAngle;
-    SmartDashboard.putNumber("Pivot Target Angle", targetAngle);
-    SmartDashboard.putNumber("Pivot Speed", rotateSpeed);
+    // SmartDashboard.putNumber("Pivot Target Angle", targetAngle);
+    // SmartDashboard.putNumber("Pivot Speed", rotateSpeed);
    
   }
 
@@ -126,8 +126,8 @@ public class Pivort extends SubsystemBase {
     //speed is a constant factor, 1.15 (might want to change)
     Pose2d pose = RobotContainer.vision.getFieldPose();
     
-    SmartDashboard.putNumber("Field Angle to hub", Math.toDegrees(Math.atan2(x - pose.getX(),z - pose.getY())));
-    SmartDashboard.putNumber("Relative Angle to hub", pose.getRotation().getDegrees() - Math.toDegrees(Math.atan2(x - pose.getX(),z - pose.getY())));
+    // SmartDashboard.putNumber("Field Angle to hub", Math.toDegrees(Math.atan2(x - pose.getX(),z - pose.getY())));
+    // SmartDashboard.putNumber("Relative Angle to hub", pose.getRotation().getDegrees() - Math.toDegrees(Math.atan2(x - pose.getX(),z - pose.getY())));
     
     return(pose.getRotation().getDegrees() - Math.toDegrees(Math.atan2(x - pose.getX(),z - pose.getY())));
   }

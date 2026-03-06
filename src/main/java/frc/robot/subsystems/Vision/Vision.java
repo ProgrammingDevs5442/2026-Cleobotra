@@ -36,6 +36,9 @@ public class Vision extends SubsystemBase {
   
     // public final static CalculatedLimelight Limelight2 = new CalculatedLimelight("limelight-right");//visionConstants.cameraOffset);
     public final static CalculatedLimelight LimelightTurret = new CalculatedLimelight("limelight-mason");//visionConstants.cameraOffset);
+    public final static CalculatedLimelight LimelightRight = new CalculatedLimelight("limelight-right");
+    public final static CalculatedLimelight LimelightLeft = new CalculatedLimelight("limelight-left");
+
 
     // PhotonPoseEstimator microsoftPoseEstimator = new PhotonPoseEstimator(AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape), PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(0,0,0), new Rotation3d(0,0,0)));
     // PhotonPoseEstimator thriftyPoseEstimator = new PhotonPoseEstimator(AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape), PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(0,0,0), new Rotation3d(0,0,0)));
@@ -45,6 +48,8 @@ public class Vision extends SubsystemBase {
   public Vision() {
     // cameras.add(Limelight2);
     cameras.add(LimelightTurret);
+    cameras.add(LimelightRight);
+    cameras.add(LimelightLeft);
   }
   
 

@@ -107,11 +107,10 @@ public class RobotContainer {
     public static Intake intake = new Intake();
     public static IntakeCommand intakeCommand = new IntakeCommand();
     public static TalonFX intakeMotor = new TalonFX(21);
-    public static TalonFX intakeExtendMotor = new TalonFX(22);
 
     
-    public static LinearServo linearServo = new LinearServo(8, 100, 40);
-    public static LinearServo linearServo2 = new LinearServo(9, 100, 40);
+    public static LinearServo linearServo = new LinearServo(8, 100, 20);
+    public static LinearServo linearServo2 = new LinearServo(9, 100, 20);
     public static LinearServoCommand linearServoCommand = new LinearServoCommand();
 
     public static Shooter Shooter = new Shooter();
@@ -136,7 +135,7 @@ public class RobotContainer {
         shootMotorLeft.getVelocity().setUpdateFrequency(50);
         shootMotorMiddle.setControl(new Follower(shootMotorLeft.getDeviceID(), MotorAlignmentValue.Aligned));
         shootMotorRight.setControl(new Follower(shootMotorLeft.getDeviceID(), MotorAlignmentValue.Aligned));
-        // ExtraShootMotor.setControl(new Follower(shootMotorLeft.getDeviceID(), MotorAlignmentValue.Opposed));
+        ExtraShootMotor.setControl(new Follower(shootMotorLeft.getDeviceID(), MotorAlignmentValue.Opposed));
         
         // m_orchestra.addInstrument(shootMotorLeft);
         // m_orchestra.addInstrument(intakeMotor);

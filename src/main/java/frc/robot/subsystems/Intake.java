@@ -26,9 +26,4 @@ public class Intake extends SubsystemBase {
     intakeSpeed = speed;
   }
 
-  public void extendIntake(){
-    if (!isExtended && RobotContainer.intakeExtendMotor.getPosition().getValueAsDouble() < Constants.intakeConstants.limit){
-      
-    }
-  }
 }

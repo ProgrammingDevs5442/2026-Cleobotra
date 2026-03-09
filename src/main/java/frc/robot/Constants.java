@@ -20,7 +20,7 @@ public class Constants {
 
     public static final class driveConstants {
 
-        public final static double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+        public final static double MaxSpeed = 3;//TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
         public final static double MaxAngularRate = RotationsPerSecond.of(4.5).in(RadiansPerSecond); // 4.5 rotations per second max angular velocity
 
         /** Deadzone value to control when to start using joystick input values */
@@ -53,8 +53,11 @@ public class Constants {
 
     public static final class pivotConstants {
         public final static double ShooterDeadzone = .5;
-        public final static double PivotPIDkp = .008; //TODO Tune these
-        public final static double PivotPIDki = 0;
+        public final static double PivotShootPIDkp = 0; //TODO Tune these
+        public final static double PivotShootPIDki = 0;
+        public final static double PivotShootPIDkd = 0;
+        public final static double PivotPIDkp = 0.02; //TODO Tune these
+        public final static double PivotPIDki = 0.15;
         public final static double PivotPIDkd = 0;
         public final static double PivotMotorRatio = .2;
         public final static double PivotTableRatio = 30/(88.66*3);
@@ -69,6 +72,8 @@ public class Constants {
         public final static double RPMToRadPS = ((2*Math.PI) / 60);
         public final static double MaxPivotAngularRate = MaxRPMPivot * PivotMotorRatio * PivotTableRatio * RPMToRadPS;
         public final static double MotorTransferEfficency = .55;
+        public final static double PivotLowLimit = -360;
+        public final static double PivotHighLimit = 360;
     }
 
     public static final class fieldConstants {

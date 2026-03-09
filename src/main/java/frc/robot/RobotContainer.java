@@ -10,7 +10,7 @@ import org.photonvision.PhotonCamera;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
 // import com.ctre.phoenix6.motorcontrol.can.WPI_VictorSPX;
@@ -21,6 +21,8 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkClosedLoopController;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -41,6 +43,9 @@ import frc.robot.subsystems.DriveModes;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Pivort;
 import frc.robot.subsystems.Vision.Vision;
+import frc.robot.Constants.pivotConstants;
+
+import com.ctre.phoenix6.*;
 
 public class RobotContainer {
     private double MaxSpeed = driveConstants.MaxSpeed;
@@ -79,19 +84,33 @@ public class RobotContainer {
     public static PivortCommand pivortCommand = new PivortCommand();
     // public static SparkMax rotateMotor = new SparkMax(22, MotorType.kBrushless);
     public static TalonFXS rotateMotor = new TalonFXS(14, Rio);
-    public static TalonFX shootMotor = new TalonFX(15, Driveloop);
+    public static TalonFX shootMotor = new TalonFX(15, Rio);
 
     public static TalonFX climbMotor = new TalonFX(16, Driveloop);
     public static Climber climber = new Climber();
     public static ClimberCommand climberCommand = new ClimberCommand();
     public static DutyCycleEncoder climberEncoder = new DutyCycleEncoder(1);
 
-
     public static Intake intake = new Intake();
     public static IntakeCommand intakeCommand = new IntakeCommand();
+
+    public static PIDController rotatePID = new PIDController(pivotConstants.PivotPIDkp, pivotConstants.PivotPIDki, pivotConstants.PivotPIDkd);
+    public static SlewRateLimiter rotateLimiter = new SlewRateLimiter(16);
     // public static PWMVictorSPX intakeMotor = new PWMVictorSPX(16);
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
+        
+    Orchestra m_Orchestra = new Orchestra();
+
+    public void Orchestra(){
+        m_Orchestra.addInstrument(rotateMotor);
+        m_Orchestra.addInstrument(shootMotor);
+        m_Orchestra.addInstrument(climbMotor);
+
+        m_Orchestra.loadMusic("C:\\Users\\Mechanical Monarchy\\Documents\\2026-Cleobotra-1\\src\\main\\deploy\\funkyTown");
+        m_Orchestra.play();
+    }
+    
 
     public RobotContainer() {
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
@@ -104,6 +123,12 @@ public class RobotContainer {
         climber.setDefaultCommand(climberCommand);
     }
 
+    public double Deadzone(double input){
+        if (Math.abs(input) > Constants.pivotConstants.ShooterDeadzone){
+            return input;
+        }
+        return 0;
+    }
 
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
@@ -114,11 +139,17 @@ public class RobotContainer {
                 DriveModes.driveField
                     .withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                     .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * driveConstants.MaxAngularRate) // Drive counterclockwise with negative X (left)
+                    .withRotationalRate(Deadzone(pivort.isDriveRotate(-joystick.getRightX() * driveConstants.MaxAngularRate))) // Drive counterclockwise with negative X (left)
             )
         );
-
+        
         joystick.a().whileTrue(drivetrain.applyRequest(() -> DriveModes.brake));
+        // joystick.b().whileTrue(drivetrain.applyRequest(() -> DriveModes.driveFieldBall
+        // .withRotationalRate(RobotContainer.rotateLimiter.calculate(RobotContainer.rotatePID.calculate(RobotContainer.vision.getHorizontalAngle("limelight-color"))) * driveConstants.MaxAngularAcceleration) // Drive counterclockwise with negative X (left)
+        //     .withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+        //     .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+        // ));
+        // joystick.rightTrigger().whileTrue(drivetrain.applyRequest(() -> DriveModes.driveRobot.withRotationalRate(rotateLimiter.calculate(rotatePID.calculate(RobotContainer.vision.getHorizontalAngle("limelight-color"))))));
         // joystick.b().whileTrue(drivetrain.applyRequest(() ->
         //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
         // ));

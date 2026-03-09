@@ -27,6 +27,18 @@ public class CalculatedCamera {
     return false;
   }
 
+  public boolean hasColorTarget(String Name) {
+    return false;
+  }
+
+  public double getHorizontalAngle(String Name) {
+    return 0;
+  }
+
+  public double getTotalArea(String Name) {
+    return 0;
+  }
+
   /** Returns the ID of the currently visible target, or -1 if none are present. */
   public long getTargetID() {
     return 0;

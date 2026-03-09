@@ -15,6 +15,7 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -26,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Telemetry;
 import frc.robot.Constants.visionConstants;
+import frc.robot.LimelightHelpers;
 
 
 public class Vision extends SubsystemBase {
@@ -33,20 +35,32 @@ public class Vision extends SubsystemBase {
   public ArrayList<CalculatedCamera> cameras = new ArrayList<CalculatedCamera>();
   public ArrayList<CalculatedCamera> turretCameras = new ArrayList<CalculatedCamera>();
 
-  
-    public final static CalculatedLimelight Limelight1 = new CalculatedLimelight("Limelight-left");//visionConstants.cameraOffset);
-    public final static CalculatedLimelight Limelight2 = new CalculatedLimelight("limelight-right");//visionConstants.cameraOffset);
-    public final static CalculatedLimelight LimelightTurret = new CalculatedLimelight("limelight-turret");//visionConstants.cameraOffset);
+    public final static CalculatedLimelight LimelightTurret = new CalculatedLimelight("limelight-color");
+    // public final static CalculatedLimelight Limelight1 = new CalculatedLimelight("Limelight-left");//visionConstants.cameraOffset);
+    // public final static CalculatedLimelight Limelight2 = new CalculatedLimelight("limelight-right");//visionConstants.cameraOffset);
+    //visionConstants.cameraOffset);
 
     // PhotonPoseEstimator microsoftPoseEstimator = new PhotonPoseEstimator(AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape), PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(0,0,0), new Rotation3d(0,0,0)));
     // PhotonPoseEstimator thriftyPoseEstimator = new PhotonPoseEstimator(AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape), PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(0,0,0), new Rotation3d(0,0,0)));
 
     Telemetry logger = RobotContainer.logger;
 
+  public boolean hasColorTarget(String Name) {
+    return LimelightHelpers.getTV(Name);
+  }
+  
+  public double getHorizontalAngle(String Name) {
+    return LimelightHelpers.getTX(Name);
+  }
+
+  public double getTotalArea(String Name) {
+    return LimelightHelpers.getTA(Name);
+  }
+
   public Vision() {
-    cameras.add(Limelight1);
-    cameras.add(Limelight2);
-    turretCameras.add(LimelightTurret);
+    // cameras.add(Limelight1);
+    // cameras.add(Limelight2);
+    cameras.add(LimelightTurret);
   }
   
 
@@ -120,15 +134,22 @@ public class Vision extends SubsystemBase {
       camera.updateResult();
     }
 
-    SmartDashboard.putNumber("FR Camera X", Limelight1.getTargetPose().getX());
-    SmartDashboard.putNumber("FR Camera Y", Limelight1.getTargetPose().getY());
-    SmartDashboard.putNumber("FR Camera R", Limelight1.getTargetPose().getRotation().getDegrees());
-    SmartDashboard.putNumber("FR Camera Trust", Limelight1.getTrust());
+    // SmartDashboard.putNumber("FR Camera X", Limelight1.getTargetPose().getX());
+    // SmartDashboard.putNumber("FR Camera Y", Limelight1.getTargetPose().getY());
+    // SmartDashboard.putNumber("FR Camera R", Limelight1.getTargetPose().getRotation().getDegrees());
+    // SmartDashboard.putNumber("FR Camera Trust", Limelight1.getTrust());
     
-    SmartDashboard.putNumber("FL Camera X", Limelight2.getTargetPose().getX());
-    SmartDashboard.putNumber("FL Camera Y", Limelight2.getTargetPose().getY());
-    SmartDashboard.putNumber("FL Camera R", Limelight2.getTargetPose().getRotation().getDegrees());
-    SmartDashboard.putNumber("FL Camera Trust", Limelight2.getTrust());
+    // SmartDashboard.putNumber("FL Camera X", Limelight2.getTargetPose().getX());
+    // SmartDashboard.putNumber("FL Camera Y", Limelight2.getTargetPose().getY());
+    // SmartDashboard.putNumber("FL Camera R", Limelight2.getTargetPose().getRotation().getDegrees());
+    // SmartDashboard.putNumber("FL Camera Trust", Limelight2.getTrust());
     
-  }
+    SmartDashboard.putNumber("FL Camera X", LimelightTurret.getTargetPose().getX());
+    SmartDashboard.putNumber("FL Camera Y", LimelightTurret.getTargetPose().getY());
+    SmartDashboard.putNumber("FL Camera R", LimelightTurret.getTargetPose().getRotation().getDegrees());
+    SmartDashboard.putNumber("FL Camera Trust", LimelightTurret.getTrust());
+    SmartDashboard.putBoolean("has target", hasColorTarget("limelight-color"));
+    SmartDashboard.putNumber("TX", getHorizontalAngle("limelight-color"));
+    SmartDashboard.putNumber("TA", getTotalArea("limelight-color"));
+}
 }

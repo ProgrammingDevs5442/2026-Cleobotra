@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.pivotConstants;
 
+
 import java.lang.Math;
 import java.math.RoundingMode;
 
@@ -33,7 +34,7 @@ public class PivortCommand extends Command {
       RobotContainer.pivort.manualMode(true);
       RobotContainer.pivort.setTargetAngle(Math.toDegrees(Math.atan2(RobotContainer.xbox2.getLeftY(), RobotContainer.xbox2.getLeftX())));
     // } else if (RobotContainer.turretVision.hasTarget(RobotContainer.turretVision.turretCameras)) {
-    } 
+    }
     else {
       RobotContainer.pivort.manualMode(false);
       // if (targeting) { //TODO TEST THIS
@@ -41,16 +42,19 @@ public class PivortCommand extends Command {
       // } else {
       //   RobotContainer.pivort.setAutoRotate(0);
       // }
-      if (RobotContainer.turretVision.hasTarget(RobotContainer.turretVision.turretCameras)) {
-        RobotContainer.pivort.setAutoRotate(RobotContainer.turretVision.TagTracking() + 6);
+      if (RobotContainer.vision.hasColorTarget("limelight-color") && RobotContainer.vision.getTotalArea("limelight-color") > 0.1) {
+        RobotContainer.pivort.setAutoRotate(0);
+        // RobotContainer.pivort.setAutoRotate(RobotContainer.vision.getHorizontalAngle("limelight-color"));
       } else {
         RobotContainer.pivort.setAutoRotate(0);
       }
     }
 
     
-    if (RobotContainer.xbox2.getRightBumperButton()) {
-      targeting = true;
+    if (RobotContainer.xbox2.getRightTriggerAxis() > 0.5) {
+      RobotContainer.pivort.driveBaseRotating(true);
+    } else {
+      RobotContainer.pivort.driveBaseRotating(false);
     }
 
 

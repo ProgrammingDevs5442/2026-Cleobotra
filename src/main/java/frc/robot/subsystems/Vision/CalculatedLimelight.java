@@ -4,12 +4,15 @@
 
 package frc.robot.subsystems.Vision;
 
+import java.util.jar.Attributes.Name;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants.visionConstants;
+import frc.robot.LimelightHelpers;
 
 /** Converts most of the important NetworkTables values to more friendly formats. */
 public class CalculatedLimelight extends CalculatedCamera{
@@ -35,6 +38,21 @@ public class CalculatedLimelight extends CalculatedCamera{
   @Override
   public boolean hasTarget() {
     return getNetworkTable().getEntry("tid").getInteger(-1) >= 0;
+  }
+
+  @Override
+  public boolean hasColorTarget(String Name) {
+    return LimelightHelpers.getTV(Name);
+  }
+
+  @Override
+  public double getHorizontalAngle(String Name) {
+    return LimelightHelpers.getTX(Name);
+  }
+
+  @Override
+  public double getTotalArea(String Name) {
+    return LimelightHelpers.getTA(Name);
   }
 
   /** Returns the ID of the currently visible target, or -1 if none are present. */

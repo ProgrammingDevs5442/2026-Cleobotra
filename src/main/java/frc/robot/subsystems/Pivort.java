@@ -5,6 +5,8 @@
 
 package frc.robot.subsystems;
 import java.lang.Math;
+import java.util.ArrayList;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -25,15 +27,25 @@ public class Pivort extends SubsystemBase {
   boolean manualRotateMode = false;
   double targetAngle = 0;  // Should be overwritten by manual mode on startup
   double rotateSpeed;
+
   double calculatedShootVelocity = 0;
   double calcMotorAngVelo = 0;
   double shootSpeed;
   double targetAutoRotate = 0;
   double robotRotation = 0;
+  double manualDifference;
+  double trackedDifference;
+  boolean continuing = false;
+  boolean autoTarget = false;
+  double continueAngle = 0;
+  boolean isDriveBaseRotate = false;
+  ArrayList<String> output = new ArrayList<>();
 
    //Initiallizing the PIDs
-  PIDController rotatePID = new PIDController(pivotConstants.PivotPIDkp, pivotConstants.PivotPIDki, pivotConstants.PivotPIDkd);
+  PIDController rotatePID = new PIDController(pivotConstants.PivotShootPIDkp, pivotConstants.PivotShootPIDki, pivotConstants.PivotShootPIDkd);
+  PIDController rotateTargetPID = new PIDController(pivotConstants.PivotPIDkp, pivotConstants.PivotPIDki, pivotConstants.PivotPIDkd);
   SlewRateLimiter rotateLimiter = new SlewRateLimiter(16);
+  SlewRateLimiter continueRotateLimiter = new SlewRateLimiter(0.5);
 
   @Override
   public void periodic() {
@@ -44,6 +56,9 @@ public class Pivort extends SubsystemBase {
     SmartDashboard.putNumber("Pivot Speed", rotateSpeed);
     SmartDashboard.putNumber("dX", RobotContainer.turretVision.TagTracking());
     SmartDashboard.putNumber("dz", RobotContainer.turretVision.getDistanceToTag());
+    SmartDashboard.putBoolean("Continuing", continuing);
+    SmartDashboard.putStringArray("output", output.toArray(new String[0]));
+    SmartDashboard.putBoolean("Auto target", autoTarget);
 
 
     SendableRegistry.setName(rotatePID, "Pivot", "PivotPID");
@@ -143,6 +158,19 @@ public class Pivort extends SubsystemBase {
 
   }
 
+  public void driveBaseRotating(boolean isDriveBaseRotate) {
+    this.isDriveBaseRotate = isDriveBaseRotate;
+  }
+  public double isDriveRotate(double value) {
+    double driveCalculation = isDriveBaseRotate ? -rotateTargetPID.calculate(RobotContainer.vision.getHorizontalAngle("limelight-color")) * 2.5 : value;
+    System.out.println(driveCalculation);
+    return driveCalculation;
+    //rotateLimiter.calculate(rotatePID.calculate(RobotContainer.vision.getHorizontalAngle("limelight-color")))*500 : value;
+    // return isDriveBaseRotate ? rotateLimiter.calculate(rotatePID.calculate(RobotContainer.vision.getHorizontalAngle("limelight-color"))) : value;
+  }
+  
+
+  
   public void manualMode(boolean manualRotateMode) {
     this.manualRotateMode = manualRotateMode;
   }

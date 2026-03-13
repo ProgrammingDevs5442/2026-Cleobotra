@@ -96,21 +96,21 @@ public class Vision extends SubsystemBase {
   //   return Math.atan2(tY, tX);
   // }
 
-  public double TagTracking() {
-    double dX = 0;
-    if (LimelightTurret.getTargetID() == 10) {
-      dX =  LimelightTurret.getTagAngle();
-    }
-    return dX;
-  }
+  // public double TagTracking() {
+  //   double dX = 0;
+  //   if (LimelightTurret.getTargetID() == 10) {
+  //     dX =  LimelightTurret.getTagAngle();
+  //   }
+  //   return dX;
+  // }
 
-  public double getDistanceToTag() {
-    double dZ = 0;
-    if (LimelightTurret.getTargetID() == 10) {
-      dZ = LimelightTurret.getDistanceToTag();
-    }
-    return dZ;
-  };
+  // public double getDistanceToTag() {
+  //   double dZ = 0;
+  //   if (LimelightTurret.getTargetID() == 10) {
+  //     dZ = LimelightTurret.getDistanceToTag();
+  //   }
+  //   return dZ;
+  // };
 
   @Override
   public void periodic() {

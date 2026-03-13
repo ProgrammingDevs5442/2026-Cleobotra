@@ -19,6 +19,7 @@ public class Robot extends TimedRobot {
   private final RobotContainer m_robotContainer;
 
   private final boolean kUseLimelight = false;
+  public static boolean isAutonomous;
 
   public Robot() {
     enableLiveWindowInTest(true);
@@ -77,6 +78,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    // isAutonomous();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {
@@ -85,7 +87,9 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    isAutonomous = true;
+  }
 
   @Override
   public void autonomousExit() {}
@@ -98,7 +102,9 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    isAutonomous = false;
+  }
 
   @Override
   public void teleopExit() {}

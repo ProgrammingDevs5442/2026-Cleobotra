@@ -14,16 +14,19 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.Orchestra;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
 // import com.ctre.phoenix6.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkClosedLoopController;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -107,6 +110,7 @@ public class RobotContainer {
     public static Intake intake = new Intake();
     public static IntakeCommand intakeCommand = new IntakeCommand();
     public static TalonFX intakeMotor = new TalonFX(21);
+    public static TalonFX intakeExtendMotor = new TalonFX(23);
 
     
     public static LinearServo linearServo = new LinearServo(8, 100, 20);
@@ -115,6 +119,8 @@ public class RobotContainer {
 
     public static Shooter Shooter = new Shooter();
     public static ShootCommand shootCommand = new ShootCommand();
+
+    // public static CANcoder shootCaNcoder = new CANcoder(22);
 
     public static boolean isRedAlliance = DriverStation.getAlliance().get().equals(Alliance.Red);
 
@@ -126,16 +132,13 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
     public boolean isLowBattery = false;
 
-
     public RobotContainer() {
-        autoChooser = AutoBuilder.buildAutoChooser("Tests");
-        SmartDashboard.putData("Auto Mode", autoChooser);
+        RobotContainer.intakeExtendMotor.setPosition(0);
         SmartDashboard.putBoolean("Is low battery", !isLowBattery);
-
         shootMotorLeft.getVelocity().setUpdateFrequency(50);
-        shootMotorMiddle.setControl(new Follower(shootMotorLeft.getDeviceID(), MotorAlignmentValue.Aligned));
-        shootMotorRight.setControl(new Follower(shootMotorLeft.getDeviceID(), MotorAlignmentValue.Aligned));
-        ExtraShootMotor.setControl(new Follower(shootMotorLeft.getDeviceID(), MotorAlignmentValue.Opposed));
+        // shootMotorMiddle.setControl(new Follower(shootMotorLeft.getDeviceID(), MotorAlignmentValue.Aligned));
+        // shootMotorRight.setControl(new Follower(shootMotorLeft.getDeviceID(), MotorAlignmentValue.Aligned));
+        // ExtraShootMotor.setControl(new Follower(shootMotorLeft.getDeviceID(), MotorAlignmentValue.Opposed));
         
         // m_orchestra.addInstrument(shootMotorLeft);
         // m_orchestra.addInstrument(intakeMotor);
@@ -144,29 +147,29 @@ public class RobotContainer {
         // m_orchestra.addInstrument(ExtraShootMotor);
         // m_orchestra.addInstrument(feedMotorLeft);
         // m_orchestra.addInstrument(beltMotor);
-
+        
         // var status = m_orchestra.loadMusic("funkytown.chrp");
-        // var status = m_orchestra.loadMusic("jeopardy.chrp");
-        // var status = m_orchestra.loadMusic("terraria.chrp");
-        // var status = m_orchestra.loadMusic("mario.chrp");
-        // var status = m_orchestra.loadMusic("minecraft.chrp");
-        // var status = m_orchestra.loadMusic("imblue.chrp");
-        // var status = m_orchestra.loadMusic("freddyfazbear.chrp");
-        // var status = m_orchestra.loadMusic("ducksong.chrp");
-        // var status = m_orchestra.loadMusic("america.chrp");
-        // var status = m_orchestra.loadMusic("nfl.chrp");
-        // var status = m_orchestra.loadMusic("iforgot.chrp");
-
+        
         // m_orchestra.play();
-
-        configureBindings();
-
+        
+        
         pivort.setDefaultCommand(pivortCommand);
         intake.setDefaultCommand(intakeCommand);
         Shooter.setDefaultCommand(shootCommand);
         linearServo.setDefaultCommand(linearServoCommand);
         linearServo2.setDefaultCommand(linearServoCommand);
         
+        NamedCommands.registerCommand("Intake", AutoCommands.test);
+        NamedCommands.registerCommand("Line Up Shot", AutoCommands.lineUpShot);
+        NamedCommands.registerCommand("Shoot", AutoCommands.Shoot);
+        NamedCommands.registerCommand("Intake On", AutoCommands.IntakeOn);
+        NamedCommands.registerCommand("Intake Off", AutoCommands.IntakeOff);
+
+        
+        autoChooser = AutoBuilder.buildAutoChooser("Tests");
+        SmartDashboard.putData("Auto Mode", autoChooser);
+
+        configureBindings();
     }
 
 
@@ -184,14 +187,14 @@ public class RobotContainer {
         );
 
 
-        joystick.leftBumper().whileTrue(drivetrain.applyRequest(() -> 
+        joystick.a().whileTrue(drivetrain.applyRequest(() -> 
             DriveModes.driveRobot
                 .withVelocityX(-Sine(RobotContainer.joystick.getLeftX(), RobotContainer.joystick.getLeftY()) * driveConstants.MaxSpeed) // Drive forward with negative Y (forward)
                 .withVelocityY(-Cosine(RobotContainer.joystick.getLeftX(), RobotContainer.joystick.getLeftY()) * driveConstants.MaxSpeed) // Drive left with negative X (left)
                 .withRotationalRate(-Math.pow(Deadzone(RobotContainer.joystick.getRightX()), driveConstants.Linearity) * driveConstants.MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
 
-        joystick.a().whileTrue(drivetrain.applyRequest(() -> DriveModes.brake));
+        joystick.x().whileTrue(drivetrain.applyRequest(() -> DriveModes.brake));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
@@ -201,21 +204,9 @@ public class RobotContainer {
         joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // reset the field-centric heading on left bumper press
-        joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        joystick.povDown().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
-
-
-
-        
-        SmartDashboard.putBoolean("Is low battery", !isLowBattery);
-        if (shootMotorLeft.getSupplyVoltage().getValueAsDouble() < 7) {
-            isLowBattery = true;
-        }
-        if (isLowBattery) {
-            SmartDashboard.putBoolean("Is low battery", isLowBattery);
-        }
-
         
     
     }

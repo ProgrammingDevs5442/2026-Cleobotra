@@ -4,16 +4,22 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.controls.PositionVoltage;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   double intakeSpeed;
   boolean isExtended = false;
+
   public Intake() {}
+
+    
 
   @Override
   public void periodic() {
@@ -24,6 +30,11 @@ public class Intake extends SubsystemBase {
   }
   public void setIntakeSpeed(double speed){
     intakeSpeed = speed;
+  }
+
+  public void extendIntake(double position){ 
+    RobotContainer.intakeExtendMotor.setControl( new PositionVoltage(position));
+    SmartDashboard.putNumber("Intake Target Pos", position);
   }
 
 }

@@ -26,7 +26,7 @@ public class Pivort extends SubsystemBase {
   //3 variables to control the movement of the spinner
   boolean manualRotateMode = false;
   double targetAngle = 0;  // Should be overwritten by manual mode on startup
-  double rotateSpeed;
+  public double rotateSpeed;
   double targetAutoRotate = 0;
   double robotRotation = 0;
   double manualDifference;
@@ -35,6 +35,7 @@ public class Pivort extends SubsystemBase {
   boolean autoTarget = false;
   double continueAngle = 0;
   ArrayList<String> output = new ArrayList<>();
+  public double difference;
 
    //Initiallizing the PIDs
   PIDController rotatePID = new PIDController(pivotConstants.PivotPIDkp, pivotConstants.PivotPIDki, pivotConstants.PivotPIDkd);
@@ -56,7 +57,7 @@ public class Pivort extends SubsystemBase {
     // SendableRegistry.setName(RobotContainer.rotateMotor, "Rotate speed");
 
     //double difference =  trackedDifference;
-    double difference = rotateToPosition(RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub);//TODO make flip with sides
+    this.difference = rotateToPosition(RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub);//TODO make flip with sides
    
     rotateSpeed = rotate(difference);
   }
@@ -143,5 +144,9 @@ public class Pivort extends SubsystemBase {
 
   public void manualMode(boolean manualRotateMode) {
     this.manualRotateMode = manualRotateMode;
+  }
+
+  public double getDifferenceToTarget() {
+    return this.difference;
   }
 }

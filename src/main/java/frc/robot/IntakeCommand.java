@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IntakeCommand extends Command {
   XboxController Xbox2 = RobotContainer.xbox2;
+  boolean intakeExtended = false;
+  boolean pressed = false;
   /** Creates a new IntakeCommand. */
   public IntakeCommand() {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -26,12 +28,18 @@ public class IntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // if (RobotContainer.xbox2.getXButton()) {
-    //   RobotContainer.intake.setIntakeSpeed(Constants.intakeConstants.IntakeSpeed);
-    // } 
-    // else {
-    //   RobotContainer.intake.setIntakeSpeed(0);
+    if (RobotContainer.xbox1.getLeftBumperButtonPressed()) {
+      intakeExtended = !intakeExtended;
+    }
+    // else if (RobotContainer.xbox1.getRightBumperButton() == false) {
+    //   pressed = false;
     // }
+    if (intakeExtended) {
+      RobotContainer.intake.extendIntake(Constants.intakeConstants.limit);
+    }
+    else {
+      RobotContainer.intake.extendIntake(0);
+    }
   }
 
 

@@ -36,11 +36,11 @@ public class LinearServoCommand extends Command {
     //   RobotContainer.linearServo.setPosition(90);
     //   RobotContainer.linearServo2.setPosition(90);
     // }
-    if (RobotContainer.xbox1.getPOV() == 90 && !pressed) {
+    if (RobotContainer.xbox1.getPOV() == 270 && !pressed) {
       RobotContainer.linearServo.modifyAngle(2);
       RobotContainer.linearServo2.modifyAngle(2);
       pressed = true;
-    } else if (RobotContainer.xbox1.getPOV() == 270 && !pressed) {
+    } else if (RobotContainer.xbox1.getPOV() == 90 && !pressed) {
       RobotContainer.linearServo.modifyAngle(-2);
       RobotContainer.linearServo2.modifyAngle(-2);
       pressed = true;

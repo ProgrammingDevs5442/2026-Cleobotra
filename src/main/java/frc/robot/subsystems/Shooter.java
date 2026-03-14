@@ -70,7 +70,6 @@ public class Shooter extends SubsystemBase {
   List<TalonFX> shootMotors = List.of(leftMotor, middleMotor, rightMotor, fourthMotor);
   
   private final VelocityDutyCycle velocityRequest = new VelocityDutyCycle(0).withSlot(0).withEnableFOC(false);
-  private final VoltageOut voltageRequest = new VoltageOut(0);
 
   // This method will be called once per scheduler run
   @Override
@@ -102,9 +101,8 @@ public class Shooter extends SubsystemBase {
 
     // Set speed of feed and belt motors
     if (feedSpeed != 0) {    
-      RobotContainer.beltMotor.set(.8);
-      
-      RobotContainer.feedMotorLeft.set(1);
+      RobotContainer.beltMotor.setControl(velocityRequest.withVelocity(RPM.of(feedSpeed * 0.8)));
+      RobotContainer.feedMotorLeft.setControl(velocityRequest.withVelocity(RPM.of(feedSpeed)));
     }
     else {
       RobotContainer.beltMotor.set(0);

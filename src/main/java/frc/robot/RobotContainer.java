@@ -56,6 +56,7 @@ import frc.robot.subsystems.Vision.Vision;
 import com.ctre.phoenix6.controls.Follower;
 
 import com.ctre.phoenix6.Orchestra.*;
+import com.ctre.phoenix6.configs.Slot0Configs;
 
 public class RobotContainer {
     private double MaxSpeed = driveConstants.MaxSpeed;
@@ -102,7 +103,11 @@ public class RobotContainer {
     public static TalonFX shootMotorRight = new TalonFX(13);
     public static TalonFX feedMotorLeft = new TalonFX(18);
     
-
+    public static Slot0Configs shootMotorConfigs = new Slot0Configs()
+        .withKP(0.0095)
+        .withKI(0.0)
+        .withKD(0.0)
+        .withKV(.06);
 
     // public static TalonFX feedMotorMiddle = new TalonFX(17);
     public static TalonFX ExtraShootMotor = new TalonFX(16);
@@ -138,6 +143,10 @@ public class RobotContainer {
     public boolean isLowBattery = false;
 
     public RobotContainer() {
+        shootMotorLeft.getConfigurator().apply(shootMotorConfigs);
+        shootMotorMiddle.getConfigurator().apply(shootMotorConfigs);
+        shootMotorRight.getConfigurator().apply(shootMotorConfigs);
+        ExtraShootMotor.getConfigurator().apply(shootMotorConfigs);
         RobotContainer.intakeExtendMotor.setPosition(0);
         RobotContainer.hoodMotor.setPosition(0);
         SmartDashboard.putBoolean("Is low battery", !isLowBattery);

@@ -55,19 +55,19 @@ public class Robot extends TimedRobot {
 // 116        return this;
 // 117    }
 
-    if (kUseLimelight) {
-      var driveState = m_robotContainer.drivetrain.getState();
-      double headingDeg = driveState.Pose.getRotation().getDegrees();
-      double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
+    // if (kUseLimelight) {
+    //   var driveState = m_robotContainer.drivetrain.getState();
+    //   double headingDeg = driveState.Pose.getRotation().getDegrees();
+    //   double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
 
-      LimelightHelpers.SetRobotOrientation("limelight-mason", headingDeg, 0, 0, 0, 0, 0);
+    //   LimelightHelpers.SetRobotOrientation("limelight-mason", headingDeg, 0, 0, 0, 0, 0);
 
-      var llMeasurement = RobotContainer.vision.getFieldPose();
-      var llTimeMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-mason");
-      if (llMeasurement != null && RobotContainer.vision.hasTarget() && omegaRps < 2.0) {
-        m_robotContainer.drivetrain.addVisionMeasurement(RobotContainer.vision.getFieldPose(), Utils.fpgaToCurrentTime(llTimeMeasurement.timestampSeconds));
-      }
-    }
+    //   var llMeasurement = RobotContainer.vision.getFieldPose();
+    //   var llTimeMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-mason");
+    //   if (llMeasurement != null && RobotContainer.vision.hasTarget() && omegaRps < 2.0) {
+    //     m_robotContainer.drivetrain.addVisionMeasurement(RobotContainer.vision.getFieldPose(), Utils.fpgaToCurrentTime(llTimeMeasurement.timestampSeconds));
+    //   }
+    // }
   }
 
   @Override

@@ -35,7 +35,7 @@ public class Constants {
         public final static double RotationalDeadband = MaxAngularRate * 0.1; // Add a 10% deadband
 
         //TODO CHANGE AFTER ROBOT REVEAL
-        public final static double MaxSpeed = 1; //Max targeted speed in M/S (15 NORMALLY)
+        public final static double MaxSpeed = 3; //Max targeted speed in M/S (15 NORMALLY)
         // public final static double MaxAngularRate = 1.5 * Math.PI * 3; //Max targeted rotations / second -- 3/4ths of a rotation for now
         public final static double MaxAcceleration = 2; //Max acceleration in M/s/s;
         public final static double MaxAngularAcceleration = 2 * Math.PI;
@@ -90,7 +90,7 @@ public class Constants {
 
     public static final class intakeConstants {
         public final static double IntakeSpeed = .6;
-        public final static double limit = 19.6; //Limit for extending intake TODO: find actual limit
+        public final static double limit = 25; //Limit for extending intake TODO: find actual limit
     }
 
     public static final class fieldConstants {

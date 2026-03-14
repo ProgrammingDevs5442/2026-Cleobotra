@@ -16,8 +16,8 @@ public class LinearServoCommand extends Command {
 
   /** Creates a new LinearServoCommand. */
   public LinearServoCommand() {
-    addRequirements(RobotContainer.linearServo);
-    addRequirements(RobotContainer.linearServo2);
+    // addRequirements(RobotContainer.linearServo);
+    // addRequirements(RobotContainer.linearServo2);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -36,21 +36,21 @@ public class LinearServoCommand extends Command {
     //   RobotContainer.linearServo.setPosition(90);
     //   RobotContainer.linearServo2.setPosition(90);
     // }
-    if (RobotContainer.xbox1.getPOV() == 270 && !pressed) {
-      RobotContainer.linearServo.modifyAngle(2);
-      RobotContainer.linearServo2.modifyAngle(2);
-      pressed = true;
-    } else if (RobotContainer.xbox1.getPOV() == 90 && !pressed) {
-      RobotContainer.linearServo.modifyAngle(-2);
-      RobotContainer.linearServo2.modifyAngle(-2);
-      pressed = true;
-    } else if (RobotContainer.xbox1.getPOV() != 0 && RobotContainer.xbox1.getPOV() != 180 && RobotContainer.xbox1.getPOV() != 90 && RobotContainer.xbox1.getPOV() != 270) {
-      pressed = false;
-    }
-    else {
-      RobotContainer.linearServo.modifyAngle(0);
-      RobotContainer.linearServo2.modifyAngle(0);
-    }
+    // if (RobotContainer.xbox1.getPOV() == 270 && !pressed) {
+    //   RobotContainer.linearServo.modifyAngle(2);
+    //   RobotContainer.linearServo2.modifyAngle(2);
+    //   pressed = true;
+    // } else if (RobotContainer.xbox1.getPOV() == 90 && !pressed) {
+    //   RobotContainer.linearServo.modifyAngle(-2);
+    //   RobotContainer.linearServo2.modifyAngle(-2);
+    //   pressed = true;
+    // } else if (RobotContainer.xbox1.getPOV() != 0 && RobotContainer.xbox1.getPOV() != 180 && RobotContainer.xbox1.getPOV() != 90 && RobotContainer.xbox1.getPOV() != 270) {
+    //   pressed = false;
+    // }
+    // else {
+    //   RobotContainer.linearServo.modifyAngle(0);
+    //   RobotContainer.linearServo2.modifyAngle(0);
+    // }
   }
 
   // Called once the command ends or is interrupted.

@@ -4,22 +4,17 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.Intake;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IntakeCommand extends Command {
-  XboxController Xbox2 = RobotContainer.xbox2;
-  boolean intakeExtended = false;
-  boolean pressed = false;
-  /** Creates a new IntakeCommand. */
-  public IntakeCommand() {
+public class HoodCommand extends Command {
+  /** Creates a new HoodCommand. */
+  public HoodCommand() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.intake);
+    addRequirements(RobotContainer.hood);
   }
+
+  boolean pressed = false;
 
   // Called when the command is initially scheduled.
   @Override
@@ -28,20 +23,19 @@ public class IntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (RobotContainer.xbox1.getLeftBumperButtonPressed()) {
-      intakeExtended = !intakeExtended;
+    if (RobotContainer.xbox1.getPOV() == 270 && !pressed) {
+      RobotContainer.hood.modifyAngle(2);
+      pressed = true;
+    } else if (RobotContainer.xbox1.getPOV() == 90 && !pressed) {
+      RobotContainer.hood.modifyAngle(-2);
+      pressed = true;
+    } else if (RobotContainer.xbox1.getPOV() != 0 && RobotContainer.xbox1.getPOV() != 180 && RobotContainer.xbox1.getPOV() != 90 && RobotContainer.xbox1.getPOV() != 270) {
+      pressed = false;
     }
-    // else if (RobotContainer.xbox1.getRightBumperButton() == false) {
-    //   pressed = false;
-    // }
-    if (intakeExtended) {
-      RobotContainer.intake.extendIntake(Constants.intakeConstants.limit);
-    }
-    else if (!Robot.isAutonomous){
-      RobotContainer.intake.extendIntake(0);
+    else {
+      RobotContainer.hood.modifyAngle(0);
     }
   }
-
 
   // Called once the command ends or is interrupted.
   @Override

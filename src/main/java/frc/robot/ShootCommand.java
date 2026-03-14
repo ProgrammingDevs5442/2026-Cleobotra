@@ -76,7 +76,7 @@ public class ShootCommand extends Command {
 
 
 
-    if (RobotContainer.xbox1.getLeftTriggerAxis() > .5) {
+    if (RobotContainer.xbox1.getLeftTriggerAxis() > .2) {
       intake();
     }
     //   RobotContainer.Shooter.feedSpeed(-3750);
@@ -116,15 +116,15 @@ public class ShootCommand extends Command {
   public void prepareShot() {
     RobotContainer.Shooter.shootAtPosition(
       RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 
-      shootStage >= 1 ? 1 : 1);//initialRPM : shootRPM);
-    RobotContainer.Shooter.feedSpeed(2000);
+      1);//initialRPM : shootRPM);
+    RobotContainer.Shooter.feedSpeed(-2000);
     // System.out.println("Preparing Shot");
   }
 
   public void shooting() {
      RobotContainer.Shooter.shootAtPosition(
       RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 
-      shootStage >= 1 ? 1 : 1);//initialRPM : shootRPM); 
+      1);//initialRPM : shootRPM); 
     // if(RobotContainer.shootMotorLeft.getVelocity().getValueAsDouble() * 60 >= shootRPM * .3)
      RobotContainer.Shooter.feedSpeed(6000);
     // else RobotContainer.Shooter.feedSpeed(0);
@@ -139,6 +139,14 @@ public class ShootCommand extends Command {
     RobotContainer.Shooter.feedSpeed(0);
     // System.out.println("Ending Shot");
     shooting = false;
+  }
+
+  public void cycling() {
+    RobotContainer.Shooter.shootAtPosition(
+      RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 
+      0.1);
+    RobotContainer.Shooter.feedSpeed(6000);
+    // System.out.println("Cycling");
   }
 
   public void reverseFeed() {

@@ -42,17 +42,42 @@ public class AutoCommands {
     }
   };
 
+  public static Command ExtendIntake = new Command() {
+    WaitCommand intakeWait = new WaitCommand(1);
+    @Override
+    public void initialize() {
+      intakeWait.schedule();
+      RobotContainer.intake.extendIntake(Constants.intakeConstants.limit);
+    }
+
+    @Override
+    public void execute() {
+   
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+    }
+
+    @Override
+    public boolean isFinished() {
+      return intakeWait.isFinished();
+    }
+  };
+
 
   public static Command IntakeOn = new Command() {
     WaitCommand intakeWait = new WaitCommand(.15);
     @Override
     public void initialize() {
       intakeWait.schedule();
-      RobotContainer.intake.setIntakeSpeed(-Constants.intakeConstants.IntakeSpeed);
+      RobotContainer.Shooter.setIntakeSpeed(-1);
     }
 
     @Override
     public void execute() {
+      RobotContainer.Shooter.setIntakeSpeed(-1);
+   
     }
 
     @Override
@@ -69,7 +94,7 @@ public class AutoCommands {
     @Override
     public void initialize() {
       intakeWait.schedule();
-      RobotContainer.intake.setIntakeSpeed(0);
+      RobotContainer.Shooter.setIntakeSpeed(0);
     }
 
     @Override
@@ -91,26 +116,27 @@ public class AutoCommands {
     WaitCommand shotDelay = new WaitCommand(.5);
     @Override
     public void initialize() {
+      RobotContainer.disableDefaultCommand();
       shotDelay.schedule();
       RobotContainer.pivort.setAutoTarget(true);
     }
 
     @Override
     public void execute() {
+      RobotContainer.drivetrain.setControl(
       DriveModes.driveRobot
-       .withRotationalRate(RobotContainer.pivort.findRotateSpeed(0)); // Drive counterclockwise with negative X (left)
-  
+       .withRotationalRate(RobotContainer.pivort.findRotateSpeed(0)) // Drive counterclockwise with negative X (left)
+      );
     }
 
     @Override
     public void end(boolean interrupted) {
       RobotContainer.intake.setIntakeSpeed(0);
-      DriveModes.driveRobot.withVelocityX(0);
     }
 
     @Override
     public boolean isFinished() {
-      return shotDelay.isFinished() || ((Math.abs(RobotContainer.pivort.difference) < 3) && (Math.abs(RobotContainer.pivort.rotateSpeed)) < .5);
+      return shotDelay.isFinished();// || ((Math.abs(RobotContainer.pivort.difference) < 3) && (Math.abs(RobotContainer.pivort.rotateSpeed)) < .5);
     }
   };
 

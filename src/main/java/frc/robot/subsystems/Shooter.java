@@ -120,7 +120,7 @@ public class Shooter extends SubsystemBase {
     if (feedSpeed != 0) {    
       RobotContainer.beltMotor.setControl(
         // velocityRequest.withVelocity(RPM.of(feedSpeed))
-        new VoltageOut(feedSpeed/5000 * 11)
+        new VoltageOut(feedSpeed/5000 * 10.5)
       );
       
       RobotContainer.feedMotorLeft.set(feedSpeed/6000//Control(

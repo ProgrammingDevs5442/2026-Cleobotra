@@ -47,6 +47,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.subsystems.DriveModes;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LinearServo;
 import frc.robot.subsystems.Shooter;
@@ -113,9 +114,13 @@ public class RobotContainer {
     public static TalonFX intakeExtendMotor = new TalonFX(23);
 
     
-    public static LinearServo linearServo = new LinearServo(8, 100, 20);
-    public static LinearServo linearServo2 = new LinearServo(9, 100, 20);
-    public static LinearServoCommand linearServoCommand = new LinearServoCommand();
+    // public static LinearServo linearServo = new LinearServo(8, 100, 20);
+    // public static LinearServo linearServo2 = new LinearServo(9, 100, 20);
+    // public static LinearServoCommand linearServoCommand = new LinearServoCommand();
+
+    public static Hood hood = new Hood();
+    public static HoodCommand hoodCommand = new HoodCommand();
+    public static TalonFX hoodMotor = new TalonFX(22);
 
     public static Shooter Shooter = new Shooter();
     public static ShootCommand shootCommand = new ShootCommand();
@@ -134,6 +139,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         RobotContainer.intakeExtendMotor.setPosition(0);
+        RobotContainer.hoodMotor.setPosition(0);
         SmartDashboard.putBoolean("Is low battery", !isLowBattery);
         shootMotorLeft.getVelocity().setUpdateFrequency(50);
         // shootMotorMiddle.setControl(new Follower(shootMotorLeft.getDeviceID(), MotorAlignmentValue.Aligned));
@@ -156,20 +162,36 @@ public class RobotContainer {
         pivort.setDefaultCommand(pivortCommand);
         intake.setDefaultCommand(intakeCommand);
         Shooter.setDefaultCommand(shootCommand);
-        linearServo.setDefaultCommand(linearServoCommand);
-        linearServo2.setDefaultCommand(linearServoCommand);
+        hood.setDefaultCommand(hoodCommand);
+        // linearServo.setDefaultCommand(linearServoCommand);
+        // linearServo2.setDefaultCommand(linearServoCommand);
         
         NamedCommands.registerCommand("Intake", AutoCommands.test);
         NamedCommands.registerCommand("Line Up Shot", AutoCommands.lineUpShot);
         NamedCommands.registerCommand("Shoot", AutoCommands.Shoot);
         NamedCommands.registerCommand("Intake On", AutoCommands.IntakeOn);
         NamedCommands.registerCommand("Intake Off", AutoCommands.IntakeOff);
+        NamedCommands.registerCommand("Extend Intake", AutoCommands.ExtendIntake);
 
-        
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
         configureBindings();
+    }
+
+    public static void disableDefaultCommand() {
+        drivetrain.setDefaultCommand(null);
+    }
+    public static void enableDefaultCommand() {
+        drivetrain.setDefaultCommand(
+            // Drivetrain will execute this command periodically
+            drivetrain.applyRequest(() ->
+                DriveModes.driveField
+                    .withVelocityX(0) // Drive forward with negative Y (forward)
+                    .withVelocityY(0) // Drive left with negative X (left)
+                    .withRotationalRate(-Math.pow(Deadzone(joystick.getRightX()), driveConstants.Linearity) * driveConstants.MaxAngularRate) // Drive counterclockwise with negative X (left)
+            )
+        );
     }
 
 

@@ -82,6 +82,7 @@ public class Pivort extends SubsystemBase {
   }
 
   public double rotate(double difference) {
+    
     // Positive difference means a more negative pivot angle
     // if (difference == 0) return 0;
     if (!continuing) {

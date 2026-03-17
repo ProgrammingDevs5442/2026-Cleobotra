@@ -29,12 +29,12 @@ public class PivortCommand extends Command {
   @Override
   public void execute() {
     //Send the value from the angle of the controller in radians, coverted to degrees
-    RobotContainer.pivort.manualMode(false);
     if (RobotContainer.xbox1.getBButtonPressed()) {
       targeting = !targeting;
     }
+    if (!Robot.isAutonomous) {
     RobotContainer.pivort.setAutoTarget(targeting);
-    
+    }
     
   }
 

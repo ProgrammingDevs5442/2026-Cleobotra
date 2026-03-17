@@ -113,10 +113,9 @@ public class AutoCommands {
 
 
   public static Command lineUpShot = new Command() {
-    WaitCommand shotDelay = new WaitCommand(.5);
+    WaitCommand shotDelay = new WaitCommand(2);
     @Override
     public void initialize() {
-      RobotContainer.disableDefaultCommand();
       shotDelay.schedule();
       RobotContainer.pivort.setAutoTarget(true);
     }
@@ -124,8 +123,8 @@ public class AutoCommands {
     @Override
     public void execute() {
       RobotContainer.drivetrain.setControl(
-      DriveModes.driveRobot
-       .withRotationalRate(RobotContainer.pivort.findRotateSpeed(0)) // Drive counterclockwise with negative X (left)
+        DriveModes.driveRobot
+          .withRotationalRate(RobotContainer.pivort.findRotateSpeed(0)) // Drive counterclockwise with negative X (left)
       );
     }
 

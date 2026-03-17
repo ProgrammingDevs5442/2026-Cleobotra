@@ -5,15 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Extend Intake"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Drive out"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Extend Intake"
           }
         },
         {
@@ -38,6 +38,12 @@
           "type": "path",
           "data": {
             "pathName": "Drive in"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Line Up Shot"
           }
         },
         {

@@ -40,6 +40,19 @@ public class IntakeCommand extends Command {
     else if (!Robot.isAutonomous){
       RobotContainer.intake.extendIntake(0);
     }
+
+    if (RobotContainer.xbox2.getPOV() == 270 && !pressed) {
+      RobotContainer.intake.AdjustIntakeLimit(-.5);
+      pressed = true;
+    } else if (RobotContainer.xbox2.getPOV() == 90 && !pressed) {
+      RobotContainer.intake.AdjustIntakeLimit(.5);
+      pressed = true;
+    } else if (RobotContainer.xbox2.getPOV() != 0 && RobotContainer.xbox2.getPOV() != 180 && RobotContainer.xbox2.getPOV() != 90 && RobotContainer.xbox2.getPOV() != 270) {
+      pressed = false;
+    }
+    else {
+      RobotContainer.intake.AdjustIntakeLimit(0);
+    }
   }
 
 

@@ -34,7 +34,6 @@ public class Constants {
         /** Deadzone value to control when to start using joystick input values */
         public final static double RotationalDeadband = MaxAngularRate * 0.1; // Add a 10% deadband
 
-        //TODO CHANGE AFTER ROBOT REVEAL
         public final static double MaxSpeed = 3; //Max targeted speed in M/S (15 NORMALLY)
         // public final static double MaxAngularRate = 1.5 * Math.PI * 3; //Max targeted rotations / second -- 3/4ths of a rotation for now
         public final static double MaxAcceleration = 2; //Max acceleration in M/s/s;
@@ -61,36 +60,19 @@ public class Constants {
     }
 
     public static final class pivotConstants {
-        public final static double ShooterDeadzone = .5;
         public final static double PivotPIDkp = .15;
         public final static double PivotPIDki = 0;
         public final static double PivotPIDkd = 0;
-        public final static double PivotMotorRatio = .2;
-        public final static double PivotTableRatio = 30/(88.66*3);
-        public final static double MaxRPMPivot = 7700; //Motor type dependent
-        public final static double MaxPivotAngularRate = MaxRPMPivot * PivotMotorRatio * PivotTableRatio * measurementConstants.RPMToRadPS;
-        public final static double MotorTransferEfficency = .55;
-        public final static double PivotLowLimit = -360;
-        public final static double PivotHighLimit = 360;
     }
 
     public static final class shooterConstants {
-        public final static double maxRPMShooter = 6000;
-        public final static double maxRPMFeeder = 6000;
-        public final static double ShootSpeed = 1.15;
-        public final static double DistanceToShootSpeedMultiplier = .2;
-        public final static double AngleOfShooter = 65; //Degrees
         public final static double HeightOfShooter = 2;//Feet
-        public final static double VelocityToMotorPower = 0;
-        public final static double DiameterOfWheel = .1148; //Meters
-        public final static double ShootRPSThreshold = 40; //RPS needed to be at to feed balls
         public final static double ShootDifferenceThreshold = 3; // Degrees between orientation and target needed to shoot
-        public final static double shootToMotorRatio = 1.5;
     }
 
     public static final class intakeConstants {
         public final static double IntakeSpeed = .6;
-        public final static double limit = 25; //Limit for extending intake TODO: find actual limit
+        public final static double limit = 25; //Limit for extending intake
     }
 
     public static final class fieldConstants {

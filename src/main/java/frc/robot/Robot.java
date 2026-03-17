@@ -27,6 +27,7 @@ public class Robot extends TimedRobot {
     enableLiveWindowInTest(true);
     m_robotContainer = new RobotContainer();
     SignalLogger.enableAutoLogging(false);
+    SignalLogger.stop();
     // AudioConfigs.withAllowMusicDurDisable(true);
   }
   
@@ -35,10 +36,10 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    if (!RobotContainer.hasFieldOriented && RobotContainer.vision.hasTarget()) {
-      RobotContainer.drivetrain.resetRotation(RobotContainer.vision.getFieldPose().getRotation());
-      RobotContainer.hasFieldOriented = true;
-    }
+    // if (!RobotContainer.hasFieldOriented && RobotContainer.vision.hasTarget()) {
+    //   RobotContainer.drivetrain.resetRotation(RobotContainer.vision.getFieldPose().getRotation());
+    //   RobotContainer.hasFieldOriented = true;
+    // }
 
     /*
      * This example of adding Limelight is very simple and may not be sufficient for on-field use.
@@ -55,19 +56,19 @@ public class Robot extends TimedRobot {
 // 116        return this;
 // 117    }
 
-    // if (kUseLimelight) {
-    //   var driveState = m_robotContainer.drivetrain.getState();
-    //   double headingDeg = driveState.Pose.getRotation().getDegrees();
-    //   double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
+    if (kUseLimelight) {
+      var driveState = m_robotContainer.drivetrain.getState();
+      double headingDeg = driveState.Pose.getRotation().getDegrees();
+      double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
 
-    //   LimelightHelpers.SetRobotOrientation("limelight-mason", headingDeg, 0, 0, 0, 0, 0);
+      LimelightHelpers.SetRobotOrientation("limelight-mason", headingDeg, 0, 0, 0, 0, 0);
 
-    //   var llMeasurement = RobotContainer.vision.getFieldPose();
-    //   var llTimeMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-mason");
-    //   if (llMeasurement != null && RobotContainer.vision.hasTarget() && omegaRps < 2.0) {
-    //     m_robotContainer.drivetrain.addVisionMeasurement(RobotContainer.vision.getFieldPose(), Utils.fpgaToCurrentTime(llTimeMeasurement.timestampSeconds));
-    //   }
-    // }
+      var llMeasurement = RobotContainer.vision.getFieldPose();
+      var llTimeMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-mason");
+      if (llMeasurement != null && RobotContainer.vision.hasTarget() && omegaRps < 2.0) {
+        m_robotContainer.drivetrain.addVisionMeasurement(llTimeMeasurement.pose, Utils.fpgaToCurrentTime(llTimeMeasurement.timestampSeconds));
+      }
+    }
   }
 
   @Override

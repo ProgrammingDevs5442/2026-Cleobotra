@@ -12,7 +12,7 @@ public class Hood extends SubsystemBase {
   /** Creates a new Hood. */
   public Hood() {}
 
-  double angle = 73;
+  double angle = 74;
   double position = 0;
 
   @Override

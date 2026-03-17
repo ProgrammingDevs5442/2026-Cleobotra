@@ -16,6 +16,7 @@ public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   double intakeSpeed;
   boolean isExtended = false;
+  double intakeOffset = 0;
 
   public Intake() {}
 
@@ -33,8 +34,11 @@ public class Intake extends SubsystemBase {
   }
 
   public void extendIntake(double position){ 
-    RobotContainer.intakeExtendMotor.setControl( new PositionVoltage(position));
+    RobotContainer.intakeExtendMotor.setControl( new PositionVoltage(intakeOffset + position));
     SmartDashboard.putNumber("Intake Target Pos", position);
   }
 
+  public void AdjustIntakeLimit(double Adjust){
+    intakeOffset += Adjust;
+  }
 }

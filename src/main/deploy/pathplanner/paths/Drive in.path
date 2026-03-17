@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 4.0
+        "x": 6.6827499999999995,
+        "y": 2.5817386363636365
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.843369579085601,
-        "y": 2.596255033408945
+        "x": 5.798061848382329,
+        "y": 2.0939072487714623
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Pickup End"
     },
     {
       "anchor": {
@@ -20,15 +20,24 @@
         "y": 2.9321704545454543
       },
       "prevControl": {
-        "x": 2.2451456162408343,
-        "y": 3.726089709291678
+        "x": 4.091138190435501,
+        "y": 2.7690421257934776
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9166666666666693,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 0.97,
+      "rotationDegrees": 180.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -38,7 +47,7 @@
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": false
+    "unlimited": true
   },
   "goalEndState": {
     "velocity": 0,
@@ -50,5 +59,5 @@
     "velocity": 1.0,
     "rotation": -90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

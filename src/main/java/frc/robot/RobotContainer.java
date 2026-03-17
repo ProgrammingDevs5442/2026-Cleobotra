@@ -49,7 +49,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.subsystems.DriveModes;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.LinearServo;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Pivort;
 import frc.robot.subsystems.Vision.Vision;
@@ -80,15 +79,12 @@ public class RobotContainer {
     
     public static final CANBus Driveloop = new CANBus("DriveLoop", "./logs/example.hoot");
     
-    public static final CANBus Rio = new CANBus("Rio", "./logs/example.hoot");
+    // public static final CANBus Rio = new CANBus("Rio", "./logs/example.hoot");
 
     public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-    public final static PhotonCamera camera = new PhotonCamera("PC_Camera");
 
     public static final Vision vision = new Vision();
-    public static final Vision turretVision = new Vision();
-
     
     public static boolean hasFieldOriented = false;
 
@@ -118,19 +114,12 @@ public class RobotContainer {
     public static TalonFX intakeMotor = new TalonFX(21);
     public static TalonFX intakeExtendMotor = new TalonFX(23);
 
-    
-    // public static LinearServo linearServo = new LinearServo(8, 100, 20);
-    // public static LinearServo linearServo2 = new LinearServo(9, 100, 20);
-    // public static LinearServoCommand linearServoCommand = new LinearServoCommand();
-
     public static Hood hood = new Hood();
     public static HoodCommand hoodCommand = new HoodCommand();
     public static TalonFX hoodMotor = new TalonFX(22);
 
     public static Shooter Shooter = new Shooter();
     public static ShootCommand shootCommand = new ShootCommand();
-
-    // public static CANcoder shootCaNcoder = new CANcoder(22);
 
     public static boolean isRedAlliance = DriverStation.getAlliance().get().equals(Alliance.Red);
 
@@ -172,8 +161,6 @@ public class RobotContainer {
         intake.setDefaultCommand(intakeCommand);
         Shooter.setDefaultCommand(shootCommand);
         hood.setDefaultCommand(hoodCommand);
-        // linearServo.setDefaultCommand(linearServoCommand);
-        // linearServo2.setDefaultCommand(linearServoCommand);
         
         NamedCommands.registerCommand("Intake", AutoCommands.test);
         NamedCommands.registerCommand("Line Up Shot", AutoCommands.lineUpShot);
@@ -182,7 +169,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Intake Off", AutoCommands.IntakeOff);
         NamedCommands.registerCommand("Extend Intake", AutoCommands.ExtendIntake);
 
-        autoChooser = AutoBuilder.buildAutoChooser("Tests");
+        autoChooser = AutoBuilder.buildAutoChooser("Intake and Shoot");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
         configureBindings();
@@ -191,6 +178,23 @@ public class RobotContainer {
     public static void disableDefaultCommand() {
         drivetrain.setDefaultCommand(null);
     }
+
+    public static Command AutoTarget = new Command() {
+        @Override public void initialize() {
+
+        };
+        @Override
+        public void execute() {
+            drivetrain.setControl(
+                DriveModes.driveRobot
+                    .withVelocityX(0) // Drive forward with negative Y (forward)
+                    .withVelocityY(0) // Drive left with negative X (left)
+                    .withRotationalRate(pivort.findRotateSpeed(-Deadzone(joystick.getRightX()) * driveConstants.MaxAngularRate)) // Drive counterclockwise with negative X (left)
+            );
+        }
+    };
+        
+    
     public static void enableDefaultCommand() {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
@@ -222,7 +226,7 @@ public class RobotContainer {
             DriveModes.driveRobot
                 .withVelocityX(-Sine(RobotContainer.joystick.getLeftX(), RobotContainer.joystick.getLeftY()) * driveConstants.MaxSpeed) // Drive forward with negative Y (forward)
                 .withVelocityY(-Cosine(RobotContainer.joystick.getLeftX(), RobotContainer.joystick.getLeftY()) * driveConstants.MaxSpeed) // Drive left with negative X (left)
-                .withRotationalRate(-Math.pow(Deadzone(RobotContainer.joystick.getRightX()), driveConstants.Linearity) * driveConstants.MaxAngularRate) // Drive counterclockwise with negative X (left)
+                .withRotationalRate(pivort.findRotateSpeed(-Deadzone(RobotContainer.joystick.getRightX()) * driveConstants.MaxAngularRate)) // Drive counterclockwise with negative X (left)
         ));
 
         joystick.x().whileTrue(drivetrain.applyRequest(() -> DriveModes.brake));

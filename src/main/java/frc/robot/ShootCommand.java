@@ -21,14 +21,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 public class ShootCommand extends Command {
   private boolean pressed;
   private double increment = .01;
-  private double shootRPM = 16000;
-  private double initialRPM = shootRPM;
   WaitCommand spinUpDelay = new WaitCommand(.25);
   boolean shooting = false;
-  boolean revving = false;
-
-  /**1 = spinning up, 0 = shooting, 2 = Shooting at initial speed */
-  private double shootStage = 0; 
 
   /** Creates a new ShootCommand. */
   public ShootCommand() {
@@ -44,17 +38,6 @@ public class ShootCommand extends Command {
   @Override
   public void execute() {
 
-    // if (RobotContainer.xbox2.getAButtonPressed()) shootStage = 1;
-    // if (RobotContainer.shootMotorLeft.getVelocity().getValueAsDouble() <= shootRPM * RobotContainer.Shooter.shooterEfficiency && shootStage == 2) shootStage = 0;
-    // if (RobotContainer.xbox2.getAButton()) { //&& Math.abs(RobotContainer.pivort.getDifference()) <= Constants.shooterConstants.ShootDifferenceThreshold) {
-    //   RobotContainer.Shooter.shootAtPosition(RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, shootStage >= 1 ? initialRPM : shootRPM);
-    // // } else if (true) {
-    //   // RobotContainer.Shooter.shootSpeed(.7);
-    // } else {
-    //   RobotContainer.Shooter.shootAtPosition(RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 0);
-    // }
-    
-
     if (RobotContainer.xbox1.getRightTriggerAxis() > .5) {
       if (!spinUpDelay.isScheduled() && !shooting) {
         prepareShot();
@@ -62,10 +45,12 @@ public class ShootCommand extends Command {
       } else if (spinUpDelay.isFinished() || shooting) {
         shooting();
       }
-      // shooting(); 
     }
     else if(RobotContainer.xbox1.getRightBumperButton()) {
       reverseFeed();
+    }
+    else if (RobotContainer.xbox2.getAButton()) {
+      cycling();
     }
     else if (!Robot.isAutonomous) {
       endShot();
@@ -74,19 +59,15 @@ public class ShootCommand extends Command {
       }
     }
 
+    
+
 
 
     if (RobotContainer.xbox1.getLeftTriggerAxis() > .2) {
       intake();
     }
-    //   RobotContainer.Shooter.feedSpeed(-3750);
-    //   shootStage = 2;
-    // } else if (RobotContainer.xbox2.getYButton()) {
-    //   // RobotContainer.Shooter.shootSpeed(.7);
-    //   RobotContainer.Shooter.feedSpeed(2000);
     else if (!Robot.isAutonomous){
       stopIntake();
-    //   RobotContainer.Shooter.feedSpeed(0);
     }
     
 
@@ -116,7 +97,7 @@ public class ShootCommand extends Command {
   public void prepareShot() {
     RobotContainer.Shooter.shootAtPosition(
       RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 
-      1);//initialRPM : shootRPM);
+      1);
     RobotContainer.Shooter.feedSpeed(-2000);
     // System.out.println("Preparing Shot");
   }
@@ -124,10 +105,8 @@ public class ShootCommand extends Command {
   public void shooting() {
      RobotContainer.Shooter.shootAtPosition(
       RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 
-      1);//initialRPM : shootRPM); 
-    // if(RobotContainer.shootMotorLeft.getVelocity().getValueAsDouble() * 60 >= shootRPM * .3)
+      1);
      RobotContainer.Shooter.feedSpeed(6000);
-    // else RobotContainer.Shooter.feedSpeed(0);
     // System.out.println("Shooting");
     shooting = true;
   }
@@ -142,9 +121,7 @@ public class ShootCommand extends Command {
   }
 
   public void cycling() {
-    RobotContainer.Shooter.shootAtPosition(
-      RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 
-      0.1);
+    RobotContainer.Shooter.setShootSpeed(350);
     RobotContainer.Shooter.feedSpeed(6000);
     // System.out.println("Cycling");
   }

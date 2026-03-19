@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.476613636363636,
-        "y": 5.11721590909091
+        "x": 6.52156626506024,
+        "y": 5.4
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.476613636363636,
-        "y": 4.104932526865424
+        "x": 6.52156626506024,
+        "y": 4.387716617774514
       },
       "isLocked": false,
       "linkedName": "Pickup Start"
     },
     {
       "anchor": {
-        "x": 6.6827499999999995,
-        "y": 2.5817386363636365
+        "x": 6.52156626506024,
+        "y": 2.3958433734939764
       },
       "prevControl": {
-        "x": 6.689181818181818,
-        "y": 2.0663977272727267
+        "x": 6.52156626506024,
+        "y": 3.532798036526695
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.5,
+    "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 1.0,
-    "rotation": -92.56377021146501
+    "rotation": -90.0
   },
   "useDefaultConstraints": false
 }

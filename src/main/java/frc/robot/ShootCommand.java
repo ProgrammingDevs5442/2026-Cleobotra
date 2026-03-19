@@ -98,7 +98,7 @@ public class ShootCommand extends Command {
     RobotContainer.Shooter.shootAtPosition(
       RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 
       1);
-    RobotContainer.Shooter.feedSpeed(-2000);
+    RobotContainer.Shooter.feedSpeed(-1);
     // System.out.println("Preparing Shot");
   }
 
@@ -106,7 +106,7 @@ public class ShootCommand extends Command {
      RobotContainer.Shooter.shootAtPosition(
       RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 
       1);
-     RobotContainer.Shooter.feedSpeed(6000);
+     RobotContainer.Shooter.feedSpeed(1);
     // System.out.println("Shooting");
     shooting = true;
   }
@@ -122,12 +122,12 @@ public class ShootCommand extends Command {
 
   public void cycling() {
     RobotContainer.Shooter.setShootSpeed(350);
-    RobotContainer.Shooter.feedSpeed(6000);
+    RobotContainer.Shooter.feedSpeed(1);
     // System.out.println("Cycling");
   }
 
   public void reverseFeed() {
-    RobotContainer.Shooter.feedSpeed(-2000);
+    RobotContainer.Shooter.feedSpeed(-1);
     RobotContainer.Shooter.setIntakeSpeed(-.5);
     // System.out.println("Reversing Feed");
   }

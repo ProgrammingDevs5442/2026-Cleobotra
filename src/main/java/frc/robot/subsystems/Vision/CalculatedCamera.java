@@ -32,6 +32,10 @@ public class CalculatedCamera {
     return 0;
   }
 
+  public double getLatency() {
+    return 0;
+  }
+
   /** Returns a value of how accurate we think the camera is at a given moment (higher value = more accurate). */
   public double getTrust() {
     return 0;
@@ -47,6 +51,9 @@ public class CalculatedCamera {
 
   /** Returns the field-relative Pose2d. */
   public Pose2d getFieldPose() {
+    return new Pose2d();
+  }
+  public Pose2d getPathFieldPose() {
     return new Pose2d();
   }
   

@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -15,6 +16,8 @@ public class IntakeCommand extends Command {
   XboxController Xbox2 = RobotContainer.xbox2;
   boolean intakeExtended = false;
   boolean pressed = false;
+  WaitCommand intakeExtendTimer = new WaitCommand(1);
+  boolean intakeAtPose = false;
   /** Creates a new IntakeCommand. */
   public IntakeCommand() {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -30,6 +33,7 @@ public class IntakeCommand extends Command {
   public void execute() {
     if (RobotContainer.xbox1.getLeftBumperButtonPressed()) {
       intakeExtended = !intakeExtended;
+      intakeAtPose = false;
     }
     // else if (RobotContainer.xbox1.getRightBumperButton() == false) {
     //   pressed = false;
@@ -39,6 +43,10 @@ public class IntakeCommand extends Command {
     }
     else if (!Robot.isAutonomous){
       RobotContainer.intake.extendIntake(0);
+    }
+
+    if (intakeAtPose) {
+      RobotContainer.intake.coastIntake();
     }
 
     if (RobotContainer.xbox2.getPOV() == 270 && !pressed) {
@@ -52,6 +60,10 @@ public class IntakeCommand extends Command {
     }
     else {
       RobotContainer.intake.AdjustIntakeLimit(0);
+    }
+
+    if (RobotContainer.intake.inPosition() && !intakeAtPose) {
+      intakeAtPose = true;
     }
   }
 

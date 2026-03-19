@@ -21,12 +21,16 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.Telemetry;
 import frc.robot.Constants.visionConstants;
-
+import edu.wpi.first.wpilibj.Timer;
+import com.ctre.phoenix6.Utils;
 
 public class Vision extends SubsystemBase {
   
@@ -34,7 +38,7 @@ public class Vision extends SubsystemBase {
 
   
     public final static CalculatedLimelight LimelightCenter = new CalculatedLimelight("limelight-mason");
-    public final static CalculatedLimelight LimelightRight = new CalculatedLimelight("limelight-right");
+    // public final static CalculatedLimelight LimelightRight = new CalculatedLimelight("limelight-right");
     // public final static CalculatedLimelight LimelightLeft = new CalculatedLimelight("limelight-left");
 
 
@@ -45,7 +49,7 @@ public class Vision extends SubsystemBase {
 
   public Vision() {
     cameras.add(LimelightCenter);
-    cameras.add(LimelightRight);
+    // cameras.add(LimelightRight);
     // cameras.add(LimelightLeft);
   }
   
@@ -69,7 +73,7 @@ public class Vision extends SubsystemBase {
     fR /= tot;
     return new Pose2d(fX,fY, new Rotation2d(fR));
   }
-
+  
   public boolean hasTarget() {
     for (CalculatedCamera camera : cameras) {
       if (camera.hasTarget()) return true;
@@ -82,7 +86,23 @@ public class Vision extends SubsystemBase {
     // Update camera readings to be in sync with the robot
     for (CalculatedCamera camera: cameras) {
       camera.updateResult();
+
+      ///// Add to Odometry \\\\\
+      if (camera.hasTarget()) {
+        double now = Timer.getFPGATimestamp();
+        double timestamp = Utils.fpgaToCurrentTime(now);
+
+        // Update drivetrain odometry
+        if(!Robot.isAutonomous) {
+        RobotContainer.drivetrain.addVisionMeasurement(
+          camera.getPathFieldPose(),
+          timestamp
+        );
+        }
+      }
     }
+
+    
 
     SmartDashboard.putNumber("Field pose X", getFieldPose().getX());
     SmartDashboard.putNumber("Field pose Y", getFieldPose().getY());

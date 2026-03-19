@@ -60,7 +60,7 @@ public class Constants {
     }
 
     public static final class pivotConstants {
-        public final static double PivotPIDkp = .15;
+        public final static double PivotPIDkp = .1;
         public final static double PivotPIDki = 0;
         public final static double PivotPIDkd = 0;
     }

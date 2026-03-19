@@ -20,7 +20,7 @@ public class Robot extends TimedRobot {
 
   private final RobotContainer m_robotContainer;
 
-  private final boolean kUseLimelight = true;
+  private final boolean kUseLimelight = false;
   public static boolean isAutonomous;
 
   public Robot() {
@@ -36,10 +36,15 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    // if (!RobotContainer.hasFieldOriented && RobotContainer.vision.hasTarget()) {
-    //   RobotContainer.drivetrain.resetRotation(RobotContainer.vision.getFieldPose().getRotation());
-    //   RobotContainer.hasFieldOriented = true;
-    // }
+    if (!RobotContainer.hasFieldOriented && RobotContainer.vision.hasTarget()) {
+      RobotContainer.drivetrain.resetRotation(RobotContainer.vision.getFieldPose().getRotation());
+      RobotContainer.hasFieldOriented = true;
+    } 
+    
+    var driveState = m_robotContainer.drivetrain.getState();
+    double headingDeg = driveState.Pose.getRotation().getDegrees();
+    LimelightHelpers.SetRobotOrientation("limelight-mason", headingDeg, 0, 0, 0, 0, 0);
+  
 
     /*
      * This example of adding Limelight is very simple and may not be sufficient for on-field use.
@@ -54,15 +59,14 @@ public class Robot extends TimedRobot {
 // 114    {
 // 115        AllowMusicDurDisable = newAllowMusicDurDisable;
 // 116        return this;
-// 117    }
+// // 117    }
 
     if (kUseLimelight) {
-      var driveState = m_robotContainer.drivetrain.getState();
-      double headingDeg = driveState.Pose.getRotation().getDegrees();
+      // var driveState = m_robotContainer.drivetrain.getState();
+      // double headingDeg = driveState.Pose.getRotation().getDegrees();
       double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
 
       LimelightHelpers.SetRobotOrientation("limelight-mason", headingDeg, 0, 0, 0, 0, 0);
-
       var llMeasurement = RobotContainer.vision.getFieldPose();
       var llTimeMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-mason");
       if (llMeasurement != null && RobotContainer.vision.hasTarget() && omegaRps < 2.0) {

@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.PositionVoltage;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,6 +18,7 @@ public class Intake extends SubsystemBase {
   double intakeSpeed;
   boolean isExtended = false;
   double intakeOffset = 0;
+  double targetPose;
 
   public Intake() {}
 
@@ -33,12 +35,26 @@ public class Intake extends SubsystemBase {
     intakeSpeed = speed;
   }
 
-  public void extendIntake(double position){ 
-    RobotContainer.intakeExtendMotor.setControl( new PositionVoltage(intakeOffset + position));
-    SmartDashboard.putNumber("Intake Target Pos", position);
+  public void extendIntake(double targetPosition){ 
+    targetPose = targetPosition;
+    RobotContainer.intakeExtendMotor.setControl( new PositionDutyCycle(intakeOffset + targetPosition));
+    SmartDashboard.putNumber("Intake Target Pos", intakeOffset + targetPosition);
+    SmartDashboard.putNumber("Intake Actual Pos", RobotContainer.intakeExtendMotor.getPosition().getValueAsDouble()
+    );
+    SmartDashboard.putNumber("Intake Offset", intakeOffset);
+
+  }
+
+
+  public void coastIntake(){
+    RobotContainer.intakeExtendMotor.set(0);
   }
 
   public void AdjustIntakeLimit(double Adjust){
     intakeOffset += Adjust;
+  }
+
+  public boolean inPosition(){
+    return(Math.abs(intakeOffset + targetPose - RobotContainer.intakeExtendMotor.getPosition().getValueAsDouble()) < 1);
   }
 }

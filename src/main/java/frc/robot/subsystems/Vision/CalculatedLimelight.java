@@ -64,6 +64,19 @@ public class CalculatedLimelight extends CalculatedCamera{
       Rotation2d.fromDegrees(fieldTable[5]) 
     );
   }
+  /** Returns the field-relative Pose2d. */
+  @Override
+  public Pose2d getPathFieldPose() {
+    double[] fieldTable = getNetworkTable().getEntry("botpose_wpiblue").getDoubleArray(new double[7]);
+
+    return new Pose2d(
+      new Translation2d(
+        fieldTable[0], // Z position (forward/back from camera perspective) in WPILIB coordinate system, x is forward back
+        fieldTable[1]  // X position (right/left from camera perspective) in WPILIB coordinate system, y is right/left
+      ),
+      Rotation2d.fromDegrees(fieldTable[5]) 
+    );
+  }
 
   @Override
   public double getTagAngle() {

@@ -30,6 +30,12 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run
     RobotContainer.intakeMotor.set(intakeSpeed);
     SmartDashboard.putNumber("Intake Speed", intakeSpeed);
+
+    
+    SmartDashboard.putNumber("Intake Target Pos", intakeOffset + targetPose);
+    SmartDashboard.putNumber("Intake Actual Pos", RobotContainer.intakeExtendMotor.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("Intake Offset", intakeOffset);
+
   }
   public void setIntakeSpeed(double speed){
     intakeSpeed = speed;
@@ -37,12 +43,8 @@ public class Intake extends SubsystemBase {
 
   public void extendIntake(double targetPosition){ 
     targetPose = targetPosition;
-    RobotContainer.intakeExtendMotor.setControl( new PositionDutyCycle(intakeOffset + targetPosition));
-    SmartDashboard.putNumber("Intake Target Pos", intakeOffset + targetPosition);
-    SmartDashboard.putNumber("Intake Actual Pos", RobotContainer.intakeExtendMotor.getPosition().getValueAsDouble()
-    );
-    SmartDashboard.putNumber("Intake Offset", intakeOffset);
-
+    
+    RobotContainer.intakeExtendMotor.setControl( new PositionDutyCycle(intakeOffset + targetPose));
   }
 
 

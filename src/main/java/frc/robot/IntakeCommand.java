@@ -16,7 +16,7 @@ public class IntakeCommand extends Command {
   XboxController Xbox2 = RobotContainer.xbox2;
   boolean intakeExtended = false;
   boolean pressed = false;
-  WaitCommand intakeExtendTimer = new WaitCommand(1);
+  WaitCommand intakeExtendTimer = new WaitCommand(.5);
   boolean intakeAtPose = false;
   /** Creates a new IntakeCommand. */
   public IntakeCommand() {
@@ -31,30 +31,40 @@ public class IntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (RobotContainer.xbox1.getLeftBumperButtonPressed()) {
-      intakeExtended = !intakeExtended;
+    if (RobotContainer.xbox2.getLeftBumperButtonPressed()) {
+      intakeExtended = false;
       intakeAtPose = false;
+      intakeExtendTimer.schedule();
+    }
+    if (RobotContainer.xbox2.getRightBumperButtonPressed()) {
+      intakeExtended = true;
+      intakeAtPose = false;
+      intakeExtendTimer.schedule();
     }
     // else if (RobotContainer.xbox1.getRightBumperButton() == false) {
     //   pressed = false;
     // }
-    if (intakeExtended) {
+    if ((intakeAtPose || intakeExtendTimer.isFinished()) && !Robot.isAutonomous) {
+      RobotContainer.intake.coastIntake();
+    }
+    else if (intakeExtended) {
       RobotContainer.intake.extendIntake(Constants.intakeConstants.limit);
     }
     else if (!Robot.isAutonomous){
       RobotContainer.intake.extendIntake(0);
     }
 
-    if (intakeAtPose) {
-      RobotContainer.intake.coastIntake();
-    }
 
     if (RobotContainer.xbox2.getPOV() == 270 && !pressed) {
-      RobotContainer.intake.AdjustIntakeLimit(-.5);
+      RobotContainer.intake.AdjustIntakeLimit(-1);
       pressed = true;
+      intakeAtPose = false;
+      intakeExtendTimer.schedule();
     } else if (RobotContainer.xbox2.getPOV() == 90 && !pressed) {
-      RobotContainer.intake.AdjustIntakeLimit(.5);
+      RobotContainer.intake.AdjustIntakeLimit(1);
       pressed = true;
+      intakeAtPose = false;
+      intakeExtendTimer.schedule();
     } else if (RobotContainer.xbox2.getPOV() != 0 && RobotContainer.xbox2.getPOV() != 180 && RobotContainer.xbox2.getPOV() != 90 && RobotContainer.xbox2.getPOV() != 270) {
       pressed = false;
     }
@@ -64,6 +74,7 @@ public class IntakeCommand extends Command {
 
     if (RobotContainer.intake.inPosition() && !intakeAtPose) {
       intakeAtPose = true;
+      intakeExtendTimer.cancel();
     }
   }
 

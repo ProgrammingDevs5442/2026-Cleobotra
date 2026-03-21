@@ -11,6 +11,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.util.sendable.SendableRegistry;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -44,9 +45,11 @@ public class Pivort extends SubsystemBase {
   //Takes in the controller input and decides whether to just return that or whether to return the pid values to point it towards hub
   public double findRotateSpeed(double manualSpeed){
     if (autoTarget) {
+      RobotContainer.xbox1.setRumble(RumbleType.kBothRumble, 1);
       return RobotContainer.Deadzone(rotateSpeed, .1);
     }
     else {
+      RobotContainer.xbox1.setRumble(RumbleType.kBothRumble, 0);
       return RobotContainer.Deadzone(manualSpeed);
     }
   }
@@ -75,7 +78,7 @@ public class Pivort extends SubsystemBase {
     //x,y,z is target position; z is vertical(depending on coord system it might be different)
     Pose2d pose = RobotContainer.vision.getFieldPose();
     
-    return(pose.getRotation().getDegrees() - Math.toDegrees(Math.atan2(x - pose.getX(),y - pose.getY())));
+    return(pose.getRotation().getDegrees() - Math.toDegrees(Math.atan2(x - pose.getX(),y - pose.getY())) + 3);
   }
 
   public void setAutoTarget(boolean autoTarget) {

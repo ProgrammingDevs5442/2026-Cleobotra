@@ -16,7 +16,7 @@ public class AutoCommands {
   /** Creates a new AutoCommands. */
   
   
-  public static Command test = new Command() {
+  public static Command Intake = new Command() {
     WaitCommand wait = new WaitCommand(1);
     @Override
     public void initialize() {
@@ -33,7 +33,7 @@ public class AutoCommands {
     @Override
     public void end(boolean interrupted) {
       RobotContainer.Shooter.setIntakeSpeed(0);
-      DriveModes.driveRobot.withVelocityX(0);
+      // DriveModes.driveRobot.withVelocityX(0);
     }
 
     @Override
@@ -62,6 +62,31 @@ public class AutoCommands {
     @Override
     public boolean isFinished() {
       return intakeWait.isFinished();
+    }
+  };
+
+
+  public static Command FluffIntake = new Command() {
+    WaitCommand intakeFluffIn = new WaitCommand(0.25);
+    WaitCommand intakeFluffOut = new WaitCommand(0.25);
+    @Override
+    public void initialize() {
+      intakeFluffIn.schedule();
+      RobotContainer.intake.extendIntake(0);
+    }
+
+    @Override 
+    public void execute() {
+      if (intakeFluffIn.isFinished()) {
+        intakeFluffOut.schedule();
+        RobotContainer.intake.extendIntake(Constants.intakeConstants.limit);
+        intakeFluffIn.cancel();
+      }
+    }
+
+    @Override
+    public boolean isFinished() {
+      return intakeFluffOut.isFinished();
     }
   };
 
@@ -130,6 +155,10 @@ public class AutoCommands {
 
     @Override
     public void end(boolean interrupted) {
+       RobotContainer.drivetrain.setControl(
+        DriveModes.driveRobot
+          .withRotationalRate(0) // Drive counterclockwise with negative X (left)
+      );
       RobotContainer.intake.setIntakeSpeed(0);
     }
 
@@ -146,7 +175,7 @@ public class AutoCommands {
       shotDelay.schedule();
       RobotContainer.Shooter.shootAtPosition(
         RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 
-        1);
+        .85);
     }
 
     @Override

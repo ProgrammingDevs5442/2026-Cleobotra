@@ -12,16 +12,16 @@
         "y": 5.4
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Startin Point"
     },
     {
       "anchor": {
-        "x": 6.52156626506024,
-        "y": 5.4
+        "x": 7.778253012048193,
+        "y": 5.41189156626506
       },
       "prevControl": {
-        "x": 6.27156626506024,
-        "y": 5.4
+        "x": 7.528253012048193,
+        "y": 5.41189156626506
       },
       "nextControl": null,
       "isLocked": false,
@@ -68,7 +68,7 @@
     "rotation": -90.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "left intake",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -90.0

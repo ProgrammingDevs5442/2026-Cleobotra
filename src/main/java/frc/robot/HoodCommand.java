@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -23,18 +24,7 @@ public class HoodCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (RobotContainer.xbox1.getPOV() == 270 && !pressed) {
-      RobotContainer.hood.modifyAngle(2);
-      pressed = true;
-    } else if (RobotContainer.xbox1.getPOV() == 90 && !pressed) {
-      RobotContainer.hood.modifyAngle(-2);
-      pressed = true;
-    } else if (RobotContainer.xbox1.getPOV() != 0 && RobotContainer.xbox1.getPOV() != 180 && RobotContainer.xbox1.getPOV() != 90 && RobotContainer.xbox1.getPOV() != 270) {
-      pressed = false;
-    }
-    else {
-      RobotContainer.hood.modifyAngle(0);
-    }
+    
   }
 
   // Called once the command ends or is interrupted.

@@ -28,6 +28,7 @@ public class ShootCommand extends Command {
   public ShootCommand() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.Shooter);
+    addRequirements(RobotContainer.hood);
   }
 
   // Called when the command is initially scheduled.
@@ -38,7 +39,10 @@ public class ShootCommand extends Command {
   @Override
   public void execute() {
 
-    if (RobotContainer.xbox1.getRightTriggerAxis() > .5) {
+    if (RobotContainer.xbox2.getRightTriggerAxis() > .25) {
+      passing();
+    }
+    else if (RobotContainer.xbox1.getRightTriggerAxis() > .5) {
       if (!spinUpDelay.isScheduled() && !shooting) {
         prepareShot();
         spinUpDelay.schedule();//If the timer isn't already running, start it and prepare the shot
@@ -57,18 +61,44 @@ public class ShootCommand extends Command {
       if (spinUpDelay.isScheduled()) {
         spinUpDelay.cancel();
       }
+      stopPassing();
     }
 
-    
+    if (RobotContainer.xbox1.getPOV() == 270 && !pressed) {
+      RobotContainer.hood.modifyAngle(2);
+      pressed = true;
+    } else if (RobotContainer.xbox1.getPOV() == 90 && !pressed) {
+      RobotContainer.hood.modifyAngle(-2);
+      pressed = true;
+    } else if (RobotContainer.xbox1.getPOV() != 0 && RobotContainer.xbox1.getPOV() != 180 && RobotContainer.xbox1.getPOV() != 90 && RobotContainer.xbox1.getPOV() != 270) {
+      pressed = false;
+
+    }
+    else {
+      RobotContainer.hood.modifyAngle(0);
+    }
+
+    // if (RobotContainer.xbox1.getPOV() == -1) {
+    //   pressed = false;
+    // }
 
 
 
-    if (RobotContainer.xbox1.getLeftTriggerAxis() > .2) {
+    if (RobotContainer.xbox2.getLeftTriggerAxis() > .2) {
       intake();
     }
     else if (!Robot.isAutonomous){
       stopIntake();
     }
+
+    if (RobotContainer.xbox2.getRightTriggerAxis() > .25) {
+      passing();
+    }
+    else {
+      stopPassing();
+    }
+
+
     
 
 
@@ -124,6 +154,16 @@ public class ShootCommand extends Command {
     RobotContainer.Shooter.setShootSpeed(350);
     RobotContainer.Shooter.feedSpeed(1);
     // System.out.println("Cycling");
+  }
+
+  public void passing() {
+    RobotContainer.Shooter.feedSpeed(1);
+    RobotContainer.Shooter.setShootSpeed(6000);
+    RobotContainer.hood.setPassing(true);
+  }
+
+  public void stopPassing() {
+    RobotContainer.hood.setPassing(false);
   }
 
   public void reverseFeed() {

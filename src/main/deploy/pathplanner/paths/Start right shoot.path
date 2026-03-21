@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.778253012048193,
-        "y": 5.41189156626506
+        "x": 3.5929397590361445,
+        "y": 3.029650602409638
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.778253012048193,
-        "y": 4.399608184039574
+        "x": 3.276036144578313,
+        "y": 3.2154216867469883
       },
       "isLocked": false,
-      "linkedName": "Pickup Start"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.778253012048193,
-        "y": 2.363060240963856
+        "x": 2.052132530120482,
+        "y": 3.466759036144578
       },
       "prevControl": {
-        "x": 7.778253012048193,
-        "y": 3.5000149039965747
+        "x": 2.7733614457831326,
+        "y": 3.2809879518072296
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Pickup End"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
-    "rotation": -90.0
+    "velocity": 0,
+    "rotation": 13.458684608615021
   },
   "reversed": false,
-  "folder": "left intake",
+  "folder": null,
   "idealStartingState": {
-    "velocity": 1.0,
-    "rotation": -90.0
+    "velocity": 0,
+    "rotation": 0.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

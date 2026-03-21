@@ -48,9 +48,9 @@ public class Shooter extends SubsystemBase {
         //This is where you can include calibration points
         //If you want it to actually interpolate instead of just choosing the nearest point then make your data type just a double instead of a custom data type
         distanceToShotMap.put(Feet.of(14), new Shot(6000, 72));
-        distanceToShotMap.put(Feet.of(11.2), new Shot(5400, 55));
-        distanceToShotMap.put(Feet.of(7.5), new Shot(5400, 75));
-        distanceToShotMap.put(Meters.of(2), new Shot(5600, 75));
+        distanceToShotMap.put(Feet.of(11.2), new Shot(5500, 55));
+        distanceToShotMap.put(Feet.of(7.5), new Shot(5200, 75));
+        distanceToShotMap.put(Meters.of(2), new Shot(5300, 75));
     }
   
   /** Creates a new Shooter. */
@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase {
   TalonFX middleMotor = RobotContainer.shootMotorMiddle;//2
   TalonFX rightMotor = RobotContainer.shootMotorRight;//1
   TalonFX fourthMotor = RobotContainer.ExtraShootMotor;//4
-  List<TalonFX> shootMotors = List.of(leftMotor, middleMotor, rightMotor, fourthMotor);
+  List<TalonFX> shootMotors = List.of( middleMotor, rightMotor, fourthMotor, leftMotor);
   
   private final VelocityDutyCycle velocityRequest = new VelocityDutyCycle(0).withSlot(0).withEnableFOC(false);
 
@@ -136,6 +136,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("shootSpeed", shootSpeed);
     SmartDashboard.putNumber("Calculated Shoot Speed", calculatedShootVelocity);
     
+    RobotContainer.hood.setAngle(distanceToShotMap.get(dist).hoodAngle);
   }
 
   public double getVelocity() {

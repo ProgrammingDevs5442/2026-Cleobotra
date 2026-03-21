@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Drive out"
+            "pathName": "depot drive"
           }
         },
         {
@@ -25,7 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Intake Drive"
+            "pathName": "Depot pickup"
           }
         },
         {
@@ -37,7 +37,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Drive in"
+            "pathName": "Depot shoot"
           }
         },
         {
@@ -53,9 +53,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Fluff Intake"
+            "pathName": "Depot drive to middle"
           }
         }
       ]

@@ -114,9 +114,9 @@ public class RobotContainer {
     public static TalonFX intakeMotor = new TalonFX(21);
     public static TalonFX intakeExtendMotor = new TalonFX(23);
 
+    public static TalonFX hoodMotor = new TalonFX(22);
     public static Hood hood = new Hood();
     public static HoodCommand hoodCommand = new HoodCommand();
-    public static TalonFX hoodMotor = new TalonFX(22);
 
     public static Shooter Shooter = new Shooter();
     public static ShootCommand shootCommand = new ShootCommand();
@@ -159,15 +159,16 @@ public class RobotContainer {
         
         pivort.setDefaultCommand(pivortCommand);
         intake.setDefaultCommand(intakeCommand);
-        Shooter.setDefaultCommand(shootCommand);
         hood.setDefaultCommand(hoodCommand);
+        Shooter.setDefaultCommand(shootCommand);
         
-        NamedCommands.registerCommand("Intake", AutoCommands.test);
+        NamedCommands.registerCommand("Intake", AutoCommands.Intake);
         NamedCommands.registerCommand("Line Up Shot", AutoCommands.lineUpShot);
         NamedCommands.registerCommand("Shoot", AutoCommands.Shoot);
         NamedCommands.registerCommand("Intake On", AutoCommands.IntakeOn);
         NamedCommands.registerCommand("Intake Off", AutoCommands.IntakeOff);
         NamedCommands.registerCommand("Extend Intake", AutoCommands.ExtendIntake);
+        NamedCommands.registerCommand("Fluff Intake", AutoCommands.FluffIntake);
 
         autoChooser = AutoBuilder.buildAutoChooser("Intake and Shoot");
         SmartDashboard.putData("Auto Mode", autoChooser);

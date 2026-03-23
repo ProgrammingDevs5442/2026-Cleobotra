@@ -55,22 +55,22 @@ public class IntakeCommand extends Command {
     }
 
 
-    if (RobotContainer.xbox2.getPOV() == 270 && !pressed) {
-      RobotContainer.intake.AdjustIntakeLimit(-1);
-      pressed = true;
-      intakeAtPose = false;
-      intakeExtendTimer.schedule();
-    } else if (RobotContainer.xbox2.getPOV() == 90 && !pressed) {
-      RobotContainer.intake.AdjustIntakeLimit(1);
-      pressed = true;
-      intakeAtPose = false;
-      intakeExtendTimer.schedule();
-    } else if (RobotContainer.xbox2.getPOV() != 0 && RobotContainer.xbox2.getPOV() != 180 && RobotContainer.xbox2.getPOV() != 90 && RobotContainer.xbox2.getPOV() != 270) {
-      pressed = false;
-    }
-    else {
-      RobotContainer.intake.AdjustIntakeLimit(0);
-    }
+    // if (RobotContainer.xbox2.getPOV() == 270 && !pressed) {
+    //   RobotContainer.intake.AdjustIntakeLimit(-1);
+    //   pressed = true;
+    //   intakeAtPose = false;
+    //   intakeExtendTimer.schedule();
+    // } else if (RobotContainer.xbox2.getPOV() == 90 && !pressed) {
+    //   RobotContainer.intake.AdjustIntakeLimit(1);
+    //   pressed = true;
+    //   intakeAtPose = false;
+    //   intakeExtendTimer.schedule();
+    // } else if (RobotContainer.xbox2.getPOV() != 0 && RobotContainer.xbox2.getPOV() != 180 && RobotContainer.xbox2.getPOV() != 90 && RobotContainer.xbox2.getPOV() != 270) {
+    //   pressed = false;
+    // }
+    // else {
+    //   RobotContainer.intake.AdjustIntakeLimit(0);
+    // }
 
     if (RobotContainer.intake.inPosition() && !intakeAtPose) {
       intakeAtPose = true;

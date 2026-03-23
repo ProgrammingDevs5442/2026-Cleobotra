@@ -20,8 +20,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ShootCommand extends Command {
   private boolean pressed;
+  private boolean pressed2;
   private double increment = .01;
-  WaitCommand spinUpDelay = new WaitCommand(.25);
+  WaitCommand spinUpDelay = new WaitCommand(1);
   boolean shooting = false;
 
   /** Creates a new ShootCommand. */
@@ -64,14 +65,14 @@ public class ShootCommand extends Command {
       stopPassing();
     }
 
-    if (RobotContainer.xbox1.getPOV() == 270 && !pressed) {
+    if (RobotContainer.xbox1.getPOV() == 270 && !pressed2) {
       RobotContainer.hood.modifyAngle(2);
-      pressed = true;
-    } else if (RobotContainer.xbox1.getPOV() == 90 && !pressed) {
+      pressed2 = true;
+    } else if (RobotContainer.xbox1.getPOV() == 90 && !pressed2) {
       RobotContainer.hood.modifyAngle(-2);
-      pressed = true;
+      pressed2 = true;
     } else if (RobotContainer.xbox1.getPOV() != 0 && RobotContainer.xbox1.getPOV() != 180 && RobotContainer.xbox1.getPOV() != 90 && RobotContainer.xbox1.getPOV() != 270) {
-      pressed = false;
+      pressed2 = false;
 
     }
     else {
@@ -102,26 +103,26 @@ public class ShootCommand extends Command {
     
 
 
-    // if (RobotContainer.xbox2.getPOV() == 0 && !pressed) {
-    //   RobotContainer.Shooter.modifyEfficiency(increment);
-    //   pressed = true;
-    // } else if (RobotContainer.xbox2.getPOV() == 180 && !pressed) {
-    //   RobotContainer.Shooter.modifyEfficiency(-increment);
-    //   pressed = true;
-    // } else if (RobotContainer.xbox2.getPOV() == 90 && !pressed) {
-    //   increment *= 2;
-    //   SmartDashboard.putNumber("Increment", increment);
-    //   pressed = true;
-    // } else if (RobotContainer.xbox2.getPOV() == 270 && !pressed) {
-    //   increment /= 2;
-    //   SmartDashboard.putNumber("Increment", increment);
-    //   pressed = true;
-    // } else if (RobotContainer.xbox2.getPOV() != 0 && RobotContainer.xbox2.getPOV() != 180 && RobotContainer.xbox2.getPOV() != 90 && RobotContainer.xbox2.getPOV() != 270) {
-    //   pressed = false;
-    // }
-    // else {
-    //   RobotContainer.Shooter.modifyEfficiency(0);
-    // }
+    if (RobotContainer.xbox2.getPOV() == 0 && !pressed) {
+      RobotContainer.Shooter.modifyEfficiency(increment);
+      pressed = true;
+    } else if (RobotContainer.xbox2.getPOV() == 180 && !pressed) {
+      RobotContainer.Shooter.modifyEfficiency(-increment);
+      pressed = true;
+    } else if (RobotContainer.xbox2.getPOV() == 90 && !pressed) {
+      increment *= 2;
+      SmartDashboard.putNumber("Increment", increment);
+      pressed = true;
+    } else if (RobotContainer.xbox2.getPOV() == 270 && !pressed) {
+      increment /= 2;
+      SmartDashboard.putNumber("Increment", increment);
+      pressed = true;
+    } else if (RobotContainer.xbox2.getPOV() != 0 && RobotContainer.xbox2.getPOV() != 180 && RobotContainer.xbox2.getPOV() != 90 && RobotContainer.xbox2.getPOV() != 270) {
+      pressed = false;
+    }
+    else {
+      RobotContainer.Shooter.modifyEfficiency(0);
+    }
   }
 
   public void prepareShot() {

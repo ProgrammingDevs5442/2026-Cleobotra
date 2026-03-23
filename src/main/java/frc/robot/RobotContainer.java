@@ -99,11 +99,16 @@ public class RobotContainer {
     public static TalonFX shootMotorRight = new TalonFX(13);
     public static TalonFX feedMotorLeft = new TalonFX(18);
     
-    public static Slot0Configs shootMotorConfigs = new Slot0Configs()
-        .withKP(0.0095)
-        .withKI(0.0)
+    public static Slot0Configs innerShootMotorConfigs = new Slot0Configs()
+        .withKP(1.25)
+        .withKI(0.5)
         .withKD(0.0)
-        .withKV(.06);
+        .withKV(0.117);
+    public static Slot0Configs outerShootMotorConfigs = new Slot0Configs()
+        .withKP(1.1)
+        .withKI(0.5)
+        .withKD(0.0)
+        .withKV(0.117);
 
     // public static TalonFX feedMotorMiddle = new TalonFX(17);
     public static TalonFX ExtraShootMotor = new TalonFX(16);
@@ -132,10 +137,10 @@ public class RobotContainer {
     public boolean isLowBattery = false;
 
     public RobotContainer() {
-        shootMotorLeft.getConfigurator().apply(shootMotorConfigs);
-        shootMotorMiddle.getConfigurator().apply(shootMotorConfigs);
-        shootMotorRight.getConfigurator().apply(shootMotorConfigs);
-        ExtraShootMotor.getConfigurator().apply(shootMotorConfigs);
+        shootMotorLeft.getConfigurator().apply(outerShootMotorConfigs);
+        shootMotorMiddle.getConfigurator().apply(innerShootMotorConfigs);
+        shootMotorRight.getConfigurator().apply(innerShootMotorConfigs);
+        ExtraShootMotor.getConfigurator().apply(outerShootMotorConfigs);
         RobotContainer.intakeExtendMotor.setPosition(0);
         RobotContainer.hoodMotor.setPosition(0);
         SmartDashboard.putBoolean("Is low battery", !isLowBattery);

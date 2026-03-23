@@ -114,6 +114,7 @@ public class AutoCommands {
       return intakeWait.isFinished();
     }
   };
+  
   public static Command IntakeOff = new Command() {
     WaitCommand intakeWait = new WaitCommand(.15);
     @Override

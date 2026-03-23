@@ -46,11 +46,11 @@ public class Shooter extends SubsystemBase {
 
     static {
         //This is where you can include calibration points
-        //If you want it to actually interpolate instead of just choosing the nearest point then make your data type just a double instead of a custom data type
-        distanceToShotMap.put(Feet.of(14), new Shot(6000, 72));
-        distanceToShotMap.put(Feet.of(11.2), new Shot(5500, 55));
-        distanceToShotMap.put(Feet.of(7.5), new Shot(5200, 75));
-        distanceToShotMap.put(Meters.of(2), new Shot(5300, 75));
+        distanceToShotMap.put(Feet.of(7.3), new Shot(4100, 75));
+        distanceToShotMap.put(Feet.of(9.7), new Shot(4200, 75));
+        distanceToShotMap.put(Feet.of(10.7), new Shot(5100, 72));
+        distanceToShotMap.put(Feet.of(12.1), new Shot(5500, 68));
+
     }
   
   /** Creates a new Shooter. */
@@ -68,9 +68,10 @@ public class Shooter extends SubsystemBase {
   TalonFX middleMotor = RobotContainer.shootMotorMiddle;//2
   TalonFX rightMotor = RobotContainer.shootMotorRight;//1
   TalonFX fourthMotor = RobotContainer.ExtraShootMotor;//4
-  List<TalonFX> shootMotors = List.of( middleMotor, rightMotor, fourthMotor, leftMotor);
+  List<TalonFX> shootMotors = List.of(middleMotor, rightMotor, fourthMotor, leftMotor);
   
   private final VelocityDutyCycle velocityRequest = new VelocityDutyCycle(0).withSlot(0).withEnableFOC(false);
+  private final VelocityVoltage velocityVoltageRequest = new VelocityVoltage(0).withSlot(0).withEnableFOC(false);
 
   // This method will be called once per scheduler run
   @Override
@@ -87,7 +88,7 @@ public class Shooter extends SubsystemBase {
     // Set speed of shoot motors to a specific velocity and maintain that. To actually use this you need to have pid values, duty cycle doesn't
     if (shootSpeed != 0) {
       for (final TalonFX motor : shootMotors) {
-        motor.setControl(velocityRequest.withVelocity(RPM.of(shootSpeed)));
+        motor.setControl(velocityVoltageRequest.withVelocity(RPM.of(shootSpeed)));
       }
     }
     else { //This is here so that when we don't need the motors running, they coast out instead of agressively stopping
@@ -125,17 +126,19 @@ public class Shooter extends SubsystemBase {
 
     //Distance formula from robot pose on field to pose of target on field in meters
     Distance dist = Meters.of(Math.sqrt(Math.pow(x - pose.getX(),2) + Math.pow(y - pose.getY(),2)));
-    final Shot shot = distanceToShotMap.get(dist);
-    calculatedShootVelocity = shot.shooterRPM;
+    final Shot shot = distanceToShotMap.get(dist);//TODO Turn back on
+    calculatedShootVelocity = shot.shooterRPM;//TODO Turn back on
+    // speed = shooterEfficiency;
     
-    shootSpeed = (calculatedShootVelocity) * speed;
+    shootSpeed = (calculatedShootVelocity) * speed;// * shooterEfficiency/100;//TODO get rid of shooterEfficiency
 
     SmartDashboard.putNumber("Calced Hood Angle", shot.hoodAngle);
     SmartDashboard.putNumber("Distance to target (M)", dist.in(Meters));
     SmartDashboard.putNumber("Distance to target (Ft)", dist.in(Feet));
     SmartDashboard.putNumber("shootSpeed", shootSpeed);
-    SmartDashboard.putNumber("Calculated Shoot Speed", calculatedShootVelocity);
+    SmartDashboard.putNumber("Calculated Shoot Speed", shot.shooterRPM);
     
+  
     RobotContainer.hood.setAngle(distanceToShotMap.get(dist).hoodAngle);
   }
 

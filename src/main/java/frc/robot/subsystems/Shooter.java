@@ -46,10 +46,17 @@ public class Shooter extends SubsystemBase {
 
     static {
         //This is where you can include calibration points
-        distanceToShotMap.put(Feet.of(7.3), new Shot(4100, 75));
-        distanceToShotMap.put(Feet.of(9.7), new Shot(4200, 75));
-        distanceToShotMap.put(Feet.of(10.7), new Shot(5100, 72));
-        distanceToShotMap.put(Feet.of(12.1), new Shot(5500, 68));
+        //Tuned for velocityVoltage, DO NOT TOUCH UNLESS YOU KNOW WHAT YOU ARE DOING
+        distanceToShotMap.put(Feet.of(5), new Shot(3700, 75));
+        distanceToShotMap.put(Feet.of(7.3), new Shot(4300, 75));
+        distanceToShotMap.put(Feet.of(9.7), new Shot(4600, 75));
+        distanceToShotMap.put(Feet.of(10.7), new Shot(5700, 66));
+        distanceToShotMap.put(Feet.of(12.1), new Shot(6000, 68));
+        //Pre velocityVoltage Change - from VelocityDutyCycle
+        // distanceToShotMap.put(Feet.of(7.3), new Shot(4100, 75));
+        // distanceToShotMap.put(Feet.of(9.7), new Shot(4200, 75));
+        // distanceToShotMap.put(Feet.of(10.7), new Shot(5100, 72));
+        // distanceToShotMap.put(Feet.of(12.1), new Shot(5500, 68));
 
     }
   

@@ -34,7 +34,7 @@ public class Constants {
         /** Deadzone value to control when to start using joystick input values */
         public final static double RotationalDeadband = MaxAngularRate * 0.1; // Add a 10% deadband
 
-        public final static double MaxSpeed = 2.5; //Max targeted speed in M/S (15 NORMALLY)
+        public final static double MaxSpeed = 3; //Max targeted speed in M/S (15 NORMALLY)
         // public final static double MaxAngularRate = 1.5 * Math.PI * 3; //Max targeted rotations / second -- 3/4ths of a rotation for now
         public final static double MaxAcceleration = 2; //Max acceleration in M/s/s;
         public final static double MaxAngularAcceleration = 2 * Math.PI;
@@ -79,6 +79,10 @@ public class Constants {
         public final static double HeightOfHub = 6; //Feet
         public final static Pose2d BlueFieldHub = new Pose2d(4.0 , 4.6 , new Rotation2d(0.0));
         public final static Pose2d RedFieldHub = new Pose2d(4.0 , 12 , new Rotation2d(180.0));
+
+        public final static double ZERO = 0;
+        public final static double FIELD_DIMENSION_X = 16.540988;
+        public final static double FIELD_DIMENSION_Y = 8.069326;
 
     }
 }

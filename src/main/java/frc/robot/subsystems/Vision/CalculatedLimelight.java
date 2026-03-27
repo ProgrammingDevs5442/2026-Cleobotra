@@ -9,7 +9,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.Constants.fieldConstants;
 import frc.robot.Constants.visionConstants;
+import frc.robot.LimelightHelpers.PoseEstimate;
 
 /** Converts most of the important NetworkTables values to more friendly formats. */
 public class CalculatedLimelight extends CalculatedCamera{
@@ -76,6 +78,17 @@ public class CalculatedLimelight extends CalculatedCamera{
       ),
       Rotation2d.fromDegrees(fieldTable[5]) 
     );
+  }
+
+
+  public boolean poseInField(Pose2d pose2d) {
+    if (pose2d == null || pose2d.getTranslation().equals(Translation2d.kZero)) {
+      return false;
+    }
+    return pose2d.getX() > fieldConstants.ZERO
+      && pose2d.getX() < fieldConstants.FIELD_DIMENSION_X
+      && pose2d.getY() > fieldConstants.ZERO
+      && pose2d.getY() < fieldConstants.FIELD_DIMENSION_Y;
   }
 
   @Override

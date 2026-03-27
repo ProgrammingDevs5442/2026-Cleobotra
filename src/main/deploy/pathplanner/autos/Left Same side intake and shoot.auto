@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Drive out"
+            "pathName": "Example Path"
           }
         },
         {
@@ -25,7 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Intake Drive"
+            "pathName": "Same side intake"
           }
         },
         {
@@ -37,7 +37,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Drive in"
+            "pathName": "Same side intake shoot"
           }
         },
         {
@@ -51,17 +51,11 @@
           "data": {
             "name": "Shoot"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Fluff Intake"
-          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "left",
   "choreoAuto": false
 }

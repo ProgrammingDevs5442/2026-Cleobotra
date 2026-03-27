@@ -3,51 +3,59 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.052132530120482,
-        "y": 4.035
+        "x": 8.160722891566266,
+        "y": 3.4886144578313254
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.9265783132530121,
-        "y": 4.821795180722893
+        "x": 6.401361445783133,
+        "y": 2.9531566265060234
       },
       "isLocked": false,
-      "linkedName": "Shooting point"
+      "linkedName": "Right intake end"
     },
     {
       "anchor": {
-        "x": 4.6529277108433735,
-        "y": 5.41189156626506
+        "x": 6.215590361445784,
+        "y": 2.679963855421686
       },
       "prevControl": {
-        "x": 3.7568554216867476,
-        "y": 5.44467469879518
+        "x": 7.198109514972441,
+        "y": 2.8661253792477908
       },
       "nextControl": {
-        "x": 5.299814752159068,
-        "y": 5.388224967192536
+        "x": 5.1774578313253015,
+        "y": 2.4832650602409614
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.029590361445782,
-        "y": 5.400963855421687
+        "x": 3.035626506024096,
+        "y": 2.679963855421686
       },
       "prevControl": {
-        "x": 7.029590361445782,
-        "y": 5.400963855421687
+        "x": 3.560156626506024,
+        "y": 2.4941927710843377
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Pickup Start"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.6489626556016559,
-      "rotationDegrees": -89.7338233547443
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 134.45250960337768
+    },
+    {
+      "waypointRelativePos": 1.1966804979253083,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 1.7809128630705116,
+      "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [],
@@ -63,13 +71,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 45.00000000000007
   },
   "reversed": false,
-  "folder": "Depot Left",
+  "folder": "Right intake",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -1.332219853869709
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

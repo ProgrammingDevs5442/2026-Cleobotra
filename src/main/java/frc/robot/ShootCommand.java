@@ -22,7 +22,7 @@ public class ShootCommand extends Command {
   private boolean pressed;
   private boolean pressed2;
   private double increment = .01;
-  WaitCommand spinUpDelay = new WaitCommand(1);
+  WaitCommand spinUpDelay = new WaitCommand(.5);
   boolean shooting = false;
 
   /** Creates a new ShootCommand. */

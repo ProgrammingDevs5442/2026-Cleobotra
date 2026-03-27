@@ -9,8 +9,10 @@ import com.ctre.phoenix6.configs.AudioConfigs;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Vision.Vision;
 
 import com.ctre.phoenix6.*;
@@ -22,6 +24,11 @@ public class Robot extends TimedRobot {
 
   private final boolean kUseLimelight = false;
   public static boolean isAutonomous;
+  // WaitCommand initialShift = new WaitCommand(10);
+  // WaitCommand shiftSwitch = new WaitCommand(25);
+  // WaitCommand incrementTimer = new WaitCommand(.1);
+  // public double shiftTimer = 10;
+  // public boolean isYourShift = false;
 
   public Robot() {
     enableLiveWindowInTest(true);
@@ -36,6 +43,29 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
+    // if (initialShift.isFinished()) {
+    //   shiftSwitch.schedule();
+    //   initialShift.cancel();
+    // }
+    // else if (shiftSwitch.isFinished()) {
+    //   shiftSwitch.cancel();
+    //   isYourShift = !isYourShift;
+    //   shiftSwitch.schedule();
+    // }
+
+    // if (incrementTimer.isFinished()) {
+    //   shiftTimer -= .1;
+    //   incrementTimer.cancel();
+    //   incrementTimer.schedule();
+    // }
+
+    // if (shiftTimer <= 0) {
+    //   shiftTimer = 25;
+    // }
+
+    // SmartDashboard.putBoolean("Is your shift", isYourShift);
+    // SmartDashboard.putNumber("Shift Timer", shiftTimer);
+
     if (!RobotContainer.hasFieldOriented && RobotContainer.vision.hasTarget()) {
       RobotContainer.drivetrain.resetRotation(RobotContainer.vision.getFieldPose().getRotation());
       RobotContainer.hasFieldOriented = true;
@@ -44,6 +74,8 @@ public class Robot extends TimedRobot {
     var driveState = m_robotContainer.drivetrain.getState();
     double headingDeg = driveState.Pose.getRotation().getDegrees();
     LimelightHelpers.SetRobotOrientation("limelight-mason", headingDeg, 0, 0, 0, 0, 0);
+    LimelightHelpers.SetRobotOrientation("limelight-rightii", headingDeg, 0, 0, 0, 0, 0);
+  
   
 
     /*
@@ -61,22 +93,26 @@ public class Robot extends TimedRobot {
 // 116        return this;
 // // 117    }
 
-    if (kUseLimelight) {
-      // var driveState = m_robotContainer.drivetrain.getState();
-      // double headingDeg = driveState.Pose.getRotation().getDegrees();
-      double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
+    // if (kUseLimelight) {
+    //   // var driveState = m_robotContainer.drivetrain.getState();
+    //   // double headingDeg = driveState.Pose.getRotation().getDegrees();
+    //   double omegaRps = Units.radiansToRotations(driveState.Speeds.omegaRadiansPerSecond);
 
-      LimelightHelpers.SetRobotOrientation("limelight-mason", headingDeg, 0, 0, 0, 0, 0);
-      var llMeasurement = RobotContainer.vision.getFieldPose();
-      var llTimeMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-mason");
-      if (llMeasurement != null && RobotContainer.vision.hasTarget() && omegaRps < 2.0) {
-        m_robotContainer.drivetrain.addVisionMeasurement(llTimeMeasurement.pose, Utils.fpgaToCurrentTime(llTimeMeasurement.timestampSeconds));
-      }
-    }
+    //   LimelightHelpers.SetRobotOrientation("limelight-mason", headingDeg, 0, 0, 0, 0, 0);
+    //   var llMeasurement = RobotContainer.vision.getFieldPose();
+    //   var llTimeMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-mason");
+    //   if (llMeasurement != null && RobotContainer.vision.hasTarget() && omegaRps < 2.0) {
+    //     m_robotContainer.drivetrain.addVisionMeasurement(llTimeMeasurement.pose, Utils.fpgaToCurrentTime(llTimeMeasurement.timestampSeconds));
+    //   }
+    // }
+
+
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -107,6 +143,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    // initialShift.schedule();
+    // incrementTimer.schedule();
   }
 
   @Override

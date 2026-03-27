@@ -38,7 +38,7 @@ public class Vision extends SubsystemBase {
 
   
     public final static CalculatedLimelight LimelightCenter = new CalculatedLimelight("limelight-mason");
-    public final static CalculatedLimelight LimelightRight = new CalculatedLimelight("limelight-right");
+    public final static CalculatedLimelight LimelightRight = new CalculatedLimelight("limelight-rightii");
     // public final static CalculatedLimelight LimelightLeft = new CalculatedLimelight("limelight-left");
 
 

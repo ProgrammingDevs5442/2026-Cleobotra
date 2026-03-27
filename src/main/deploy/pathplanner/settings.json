@@ -5,11 +5,14 @@
   "pathFolders": [
     "Depot Left",
     "Depot Middle",
+    "left intake same side",
     "Right intake",
     "left intake"
   ],
   "autoFolders": [
-    "New Folder"
+    "Middle",
+    "left",
+    "right"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

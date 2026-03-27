@@ -10,6 +10,7 @@ import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.*;
@@ -196,6 +197,8 @@ public class TunerConstants {
      * This should only be called once in your robot program,.
      */
     public static CommandSwerveDrivetrain createDrivetrain() {
+        // Matrix<N3, N1> VISION_STD_DEV = VecBuilder.fill(0.7, 0.7, 99999);
+
         return new CommandSwerveDrivetrain(
             DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight
         );

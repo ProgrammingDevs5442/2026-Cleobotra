@@ -114,7 +114,7 @@ public class AutoCommands {
       return intakeWait.isFinished();
     }
   };
-  
+
   public static Command IntakeOff = new Command() {
     WaitCommand intakeWait = new WaitCommand(.15);
     @Override
@@ -176,7 +176,7 @@ public class AutoCommands {
       shotDelay.schedule();
       RobotContainer.Shooter.shootAtPosition(
         RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 
-        .85);
+        .90);
     }
 
     @Override

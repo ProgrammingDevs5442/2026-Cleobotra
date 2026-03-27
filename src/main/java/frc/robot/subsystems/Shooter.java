@@ -51,7 +51,7 @@ public class Shooter extends SubsystemBase {
         distanceToShotMap.put(Feet.of(7.3), new Shot(4300, 75));
         distanceToShotMap.put(Feet.of(9.7), new Shot(4600, 75));
         distanceToShotMap.put(Feet.of(10.7), new Shot(5700, 66));
-        distanceToShotMap.put(Feet.of(12.1), new Shot(6000, 68));
+        distanceToShotMap.put(Feet.of(12.1), new Shot(6000, 68));//Might want to recheck this one if shooting from this far commonly
         //Pre velocityVoltage Change - from VelocityDutyCycle
         // distanceToShotMap.put(Feet.of(7.3), new Shot(4100, 75));
         // distanceToShotMap.put(Feet.of(9.7), new Shot(4200, 75));
@@ -77,7 +77,11 @@ public class Shooter extends SubsystemBase {
   TalonFX fourthMotor = RobotContainer.ExtraShootMotor;//4
   List<TalonFX> shootMotors = List.of(middleMotor, rightMotor, fourthMotor, leftMotor);
   
+  //There are 2 modes(or maybe more idk) to control for velocity, VelocityDutyCycle and Velocity Voltage. 
+  //Velocity Duty Cycle just gives you a velocity out of it's battery right now, so at the start of the match, it might give you up to 6000 RPM, but towards the end of a match it might only give you 4500 RPM
   private final VelocityDutyCycle velocityRequest = new VelocityDutyCycle(0).withSlot(0).withEnableFOC(false);
+  
+  // Velocity voltage give you power out of a set battery voltage, so it might not give you all the speed you want, but it will stay consistant throughout the match as the battery voltage changes
   private final VelocityVoltage velocityVoltageRequest = new VelocityVoltage(0).withSlot(0).withEnableFOC(false);
 
   // This method will be called once per scheduler run
@@ -92,7 +96,7 @@ public class Shooter extends SubsystemBase {
     // double dist = Math.sqrt(Math.pow(x - pose.getX(),2) + Math.pow(z - pose.getY(),2));
     // SmartDashboard.putNumber("Distance to target", dist);
     
-    // Set speed of shoot motors to a specific velocity and maintain that. To actually use this you need to have pid values, duty cycle doesn't
+    // Set speed of shoot motors to a specific velocity and maintain that. To actually use this you need to have pid values, regular duty cycle doesn't
     if (shootSpeed != 0) {
       for (final TalonFX motor : shootMotors) {
         motor.setControl(velocityVoltageRequest.withVelocity(RPM.of(shootSpeed)));
@@ -125,7 +129,7 @@ public class Shooter extends SubsystemBase {
   public void shootAtPosition(Pose2d targetPose, double speed) {
     double x = targetPose.getX();
     double y = targetPose.getY(); 
-    // x,y,z is target position; z is vertical(depending on what coord system you use it might be different)
+    // x,y,z is target position; z is vertical(depending on what coord system you use it might be different) PLEASE DOUBLE CHECK ALL COORD SYSTEMS YOU ARE USING, THEY ARE ALL DIFFERENT
 
     //The pose of the robot on the field
     Pose2d pose = RobotContainer.vision.getFieldPose();
@@ -133,12 +137,11 @@ public class Shooter extends SubsystemBase {
 
     //Distance formula from robot pose on field to pose of target on field in meters
     Distance dist = Meters.of(Math.sqrt(Math.pow(x - pose.getX(),2) + Math.pow(y - pose.getY(),2)));
-    final Shot shot = distanceToShotMap.get(dist);//TODO Turn back on
-    calculatedShootVelocity = shot.shooterRPM;//TODO Turn back on
+    final Shot shot = distanceToShotMap.get(dist);
+    calculatedShootVelocity = shot.shooterRPM;
     // speed = shooterEfficiency;
     
-    shootSpeed = (calculatedShootVelocity) * speed;// * shooterEfficiency/100;//TODO get rid of shooterEfficiency
-
+    shootSpeed = (calculatedShootVelocity) * speed;
     SmartDashboard.putNumber("Calced Hood Angle", shot.hoodAngle);
     SmartDashboard.putNumber("Distance to target (M)", dist.in(Meters));
     SmartDashboard.putNumber("Distance to target (Ft)", dist.in(Feet));

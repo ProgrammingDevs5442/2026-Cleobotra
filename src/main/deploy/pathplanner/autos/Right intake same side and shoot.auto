@@ -5,15 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "Middle to depot"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Extend Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right drive out"
           }
         },
         {
@@ -25,7 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Depot pickup"
+            "pathName": "Right intake"
           }
         },
         {
@@ -37,7 +37,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Depot shoot"
+            "pathName": "Right drive in"
           }
         },
         {
@@ -56,6 +56,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Middle",
+  "folder": "right",
   "choreoAuto": false
 }

@@ -105,10 +105,10 @@ public class RobotContainer {
         .withKD(0.0)
         .withKV(0.117);
     public static Slot0Configs outerShootMotorConfigs = new Slot0Configs()
-        .withKP(1.1)
+        .withKP(1.2)
         .withKI(0.5)
         .withKD(0.0)
-        .withKV(0.117);
+        .withKV(0.119);
 
     // public static TalonFX feedMotorMiddle = new TalonFX(17);
     public static TalonFX ExtraShootMotor = new TalonFX(16);

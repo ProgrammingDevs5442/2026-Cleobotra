@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.778253012048193,
-        "y": 2.363060240963856
+        "x": 3.5082500000000003,
+        "y": 2.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.778253012048193,
-        "y": 3.363060240963856
+        "x": 4.50825,
+        "y": 2.6
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Right startin point"
     },
     {
       "anchor": {
-        "x": 7.778253012048193,
-        "y": 5.41189156626506
+        "x": 8.03,
+        "y": 2.6
       },
       "prevControl": {
-        "x": 7.778253012048193,
-        "y": 4.41189156626506
+        "x": 7.029999999999999,
+        "y": 2.6
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Right full intake start"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.5,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -47,8 +47,8 @@
   "reversed": false,
   "folder": "Right intake",
   "idealStartingState": {
-    "velocity": 0.0,
+    "velocity": 0,
     "rotation": 90.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

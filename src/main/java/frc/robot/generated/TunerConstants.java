@@ -197,7 +197,7 @@ public class TunerConstants {
      * This should only be called once in your robot program,.
      */
     public static CommandSwerveDrivetrain createDrivetrain() {
-        // Matrix<N3, N1> VISION_STD_DEV = VecBuilder.fill(0.7, 0.7, 99999);
+        Matrix<N3, N1> VISION_STD_DEV = VecBuilder.fill(0.7, 0.7, 99999);
 
         return new CommandSwerveDrivetrain(
             DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight

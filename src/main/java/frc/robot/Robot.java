@@ -66,15 +66,15 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putBoolean("Is your shift", isYourShift);
     // SmartDashboard.putNumber("Shift Timer", shiftTimer);
 
-    if (!RobotContainer.hasFieldOriented && RobotContainer.vision.hasTarget()) {
-      RobotContainer.drivetrain.resetRotation(RobotContainer.vision.getFieldPose().getRotation());
-      RobotContainer.hasFieldOriented = true;
-    } 
+    // if (!RobotContainer.hasFieldOriented && RobotContainer.vision.hasTarget()) {
+    //   RobotContainer.drivetrain.resetRotation(RobotContainer.vision.getFieldPose().getRotation());
+    //   RobotContainer.hasFieldOriented = true;
+    // } 
     
     var driveState = m_robotContainer.drivetrain.getState();
     double headingDeg = driveState.Pose.getRotation().getDegrees();
     LimelightHelpers.SetRobotOrientation("limelight-mason", headingDeg, 0, 0, 0, 0, 0);
-    LimelightHelpers.SetRobotOrientation("limelight-rightii", headingDeg, 0, 0, 0, 0, 0);
+    // LimelightHelpers.SetRobotOrientation("limelight-rightii", headingDeg, 0, 0, 0, 0, 0);
   
   
 

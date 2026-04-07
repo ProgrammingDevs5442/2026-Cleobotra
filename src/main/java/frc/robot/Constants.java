@@ -35,7 +35,7 @@ public class Constants {
         public final static double RotationalDeadband = MaxAngularRate * 0.1; // Add a 10% deadband
 
         public final static double MaxSpeed = 3; //Max targeted speed in M/S (15 NORMALLY)
-        // public final static double MaxAngularRate = 1.5 * Math.PI * 3; //Max targeted rotations / second -- 3/4ths of a rotation for now
+        // public final static double MaxAngularRate =s 1.5 * Math.PI * 3; //Max targeted rotations / second -- 3/4ths of a rotation for now
         public final static double MaxAcceleration = 2; //Max acceleration in M/s/s;
         public final static double MaxAngularAcceleration = 2 * Math.PI;
         public final static double SpeedDeadbandPercentage = 0; //Deadband or Deadzone of requested speed, as a percentage of the maximum speed;

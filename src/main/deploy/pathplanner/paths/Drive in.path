@@ -1,0 +1,63 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.412325249643366,
+        "y": 2.398259629101284
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.682783080968668,
+        "y": 1.8924524001856216
+      },
+      "isLocked": false,
+      "linkedName": "Pickup End"
+    },
+    {
+      "anchor": {
+        "x": 2.150481927710843,
+        "y": 2.526975903614458
+      },
+      "prevControl": {
+        "x": 3.4836626506024055,
+        "y": 2.352132530120481
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Left full shoot"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.19336099585062586,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 0.9037344398340293,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": true
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 50.0
+  },
+  "reversed": false,
+  "folder": "left intake",
+  "idealStartingState": {
+    "velocity": 1.0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": false
+}

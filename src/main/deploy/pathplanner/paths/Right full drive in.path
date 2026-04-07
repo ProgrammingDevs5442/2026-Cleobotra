@@ -1,0 +1,63 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.03,
+        "y": 5.521085918854414
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.7954892601431975,
+        "y": 5.58387828162291
+      },
+      "isLocked": false,
+      "linkedName": "Right full intake end"
+    },
+    {
+      "anchor": {
+        "x": 2.4673855421686746,
+        "y": 5.094987951807229
+      },
+      "prevControl": {
+        "x": 3.744163585128101,
+        "y": 5.743842367081692
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Right full shoot"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.31504257332071706,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 0.8448438978240201,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -37.30394827798349
+  },
+  "reversed": false,
+  "folder": "Right intake",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "useDefaultConstraints": true
+}

@@ -9,7 +9,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.Constants.fieldConstants;
 import frc.robot.Constants.visionConstants;
+import frc.robot.LimelightHelpers.PoseEstimate;
 
 /** Converts most of the important NetworkTables values to more friendly formats. */
 public class CalculatedLimelight extends CalculatedCamera{
@@ -58,11 +60,35 @@ public class CalculatedLimelight extends CalculatedCamera{
 
     return new Pose2d(
       new Translation2d(
-        fieldTable[2], // Z position (forward/back from camera perspective) in WPILIB coordinate system, x is forward back
+        fieldTable[1], // Z position (forward/back from camera perspective) in WPILIB coordinate system, x is forward back
         fieldTable[0]  // X position (right/left from camera perspective) in WPILIB coordinate system, y is right/left
       ),
-      Rotation2d.fromDegrees(fieldTable[5]) //TODO Rotation (pitch) actually nvm prolly not check later
+      Rotation2d.fromDegrees(fieldTable[5]) 
     );
+  }
+  /** Returns the field-relative Pose2d. */
+  @Override
+  public Pose2d getPathFieldPose() {
+    double[] fieldTable = getNetworkTable().getEntry("botpose_wpiblue").getDoubleArray(new double[7]);
+
+    return new Pose2d(
+      new Translation2d(
+        fieldTable[0], // Z position (forward/back from camera perspective) in WPILIB coordinate system, x is forward back
+        fieldTable[1]  // X position (right/left from camera perspective) in WPILIB coordinate system, y is right/left
+      ),
+      Rotation2d.fromDegrees(fieldTable[5]) 
+    );
+  }
+
+
+  public boolean poseInField(Pose2d pose2d) {
+    if (pose2d == null || pose2d.getTranslation().equals(Translation2d.kZero)) {
+      return false;
+    }
+    return pose2d.getX() > fieldConstants.ZERO
+      && pose2d.getX() < fieldConstants.FIELD_DIMENSION_X
+      && pose2d.getY() > fieldConstants.ZERO
+      && pose2d.getY() < fieldConstants.FIELD_DIMENSION_Y;
   }
 
   @Override

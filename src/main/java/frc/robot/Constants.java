@@ -6,35 +6,43 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.lang.reflect.Array;
+
 import com.pathplanner.lib.config.PIDConstants;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Pivort;
 
 
 /** Add your docs here. */
 public class Constants {
-
+    public static final class measurementConstants {
+        public final static double RPMToRadPS = ((2*Math.PI) / 60);
+        public final static double MetersToFeet = 3.28;
+    }
     public static final class driveConstants {
 
-        public final static double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-        public final static double MaxAngularRate = RotationsPerSecond.of(4.5).in(RadiansPerSecond); // 4.5 rotations per second max angular velocity
+        //public final static double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+        public final static double MaxAngularRate = RotationsPerSecond.of(1).in(RadiansPerSecond); // 4.5 rotations per second max angular velocity
 
         /** Deadzone value to control when to start using joystick input values */
         public final static double RotationalDeadband = MaxAngularRate * 0.1; // Add a 10% deadband
 
-        // public final static double MaxSpeed = 5; //Max targeted speed in M/S (15 NORMALLY)
-        // public final static double MaxAngularRate = 1.5 * Math.PI * 3; //Max targeted rotations / second -- 3/4ths of a rotation for now
+        public final static double MaxSpeed = 3; //Max targeted speed in M/S (15 NORMALLY)
+        // public final static double MaxAngularRate =s 1.5 * Math.PI * 3; //Max targeted rotations / second -- 3/4ths of a rotation for now
         public final static double MaxAcceleration = 2; //Max acceleration in M/s/s;
-        public final static double MaxAngularAcceleration = 4 * Math.PI;
+        public final static double MaxAngularAcceleration = 2 * Math.PI;
         public final static double SpeedDeadbandPercentage = 0; //Deadband or Deadzone of requested speed, as a percentage of the maximum speed;
 
         public final static double Linearity = 3; // How steep the response curve is (typically cubic, meaning 50% on stick = 12.5% speed)
 
-        public final static double ControllerDeadzone = 0.2;
+        public final static double ControllerDeadzone = 0.1;
 
         public final static PIDController chassisPID = new PIDController(01, 0, 0);
         public final static double ChassisPidTolerence = Math.PI/180;
@@ -52,26 +60,29 @@ public class Constants {
     }
 
     public static final class pivotConstants {
-        public final static double ShooterDeadzone = .5;
-        public final static double PivotPIDkp = .008; //TODO Tune these
+        public final static double PivotPIDkp = .08;
         public final static double PivotPIDki = 0;
         public final static double PivotPIDkd = 0;
-        public final static double PivotMotorRatio = .2;
-        public final static double PivotTableRatio = 30/(88.66*3);
-        public final static double ShootSpeed = 1.15;
-        public final static double DistanceToShootSpeedMultiplier = .2;
-        public final static double AngleOfShooter = 65; //Degrees
-        public final static double HeightOfShooter = 1.33;//Feet
-        public final static double MetersToFeet = 3.28;
-        public final static double VelocityToMotorPower = 0;
-        public final static double DiameterOfWheel = .1148; //Meters
-        public final static double MaxRPMPivot = 7700; //Motor type dependent
-        public final static double RPMToRadPS = ((2*Math.PI) / 60);
-        public final static double MaxPivotAngularRate = MaxRPMPivot * PivotMotorRatio * PivotTableRatio * RPMToRadPS;
-        public final static double MotorTransferEfficency = .55;
+    }
+
+    public static final class shooterConstants {
+        public final static double HeightOfShooter = 2;//Feet
+        public final static double ShootDifferenceThreshold = 3; // Degrees between orientation and target needed to shoot
+    }
+
+    public static final class intakeConstants {
+        public final static double IntakeSpeed = .6;
+        public final static double limit = 21; //Limit for extending intake
     }
 
     public static final class fieldConstants {
-        public final static double HeightOfHub = 2.5; //Feet
+        public final static double HeightOfHub = 6; //Feet
+        public final static Pose2d BlueFieldHub = new Pose2d(4.0 , 4.6 , new Rotation2d(0.0));
+        public final static Pose2d RedFieldHub = new Pose2d(4.0 , 12 , new Rotation2d(180.0));
+
+        public final static double ZERO = 0;
+        public final static double FIELD_DIMENSION_X = 16.540988;
+        public final static double FIELD_DIMENSION_Y = 8.069326;
+
     }
 }

@@ -1,0 +1,206 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot;
+
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.TimedRobot;
+
+
+
+
+/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+public class ShootCommand extends Command {
+  private boolean pressed;
+  private boolean pressed2;
+  private double increment = .01;
+  WaitCommand spinUpDelay = new WaitCommand(.5);
+  boolean shooting = false;
+
+  /** Creates a new ShootCommand. */
+  public ShootCommand() {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(RobotContainer.Shooter);
+    addRequirements(RobotContainer.hood);
+  }
+
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {}
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+
+    if (RobotContainer.xbox2.getRightTriggerAxis() > .25) {
+      passing();
+    }
+    else if (RobotContainer.xbox1.getRightTriggerAxis() > .5) {
+      if (!spinUpDelay.isScheduled() && !shooting) {
+        prepareShot();
+        spinUpDelay.schedule();//If the timer isn't already running, start it and prepare the shot
+      } else if (spinUpDelay.isFinished() || shooting) {
+        shooting();
+      }
+    }
+    else if(RobotContainer.xbox1.getRightBumperButton()) {
+      reverseFeed();
+    }
+    else if (RobotContainer.xbox2.getAButton()) {
+      cycling();
+    }
+    else if (!Robot.isAutonomous) {
+      endShot();
+      if (spinUpDelay.isScheduled()) {
+        spinUpDelay.cancel();
+      }
+      stopPassing();
+    }
+
+    if (RobotContainer.xbox1.getPOV() == 270 && !pressed2) {
+      RobotContainer.hood.modifyAngle(2);
+      pressed2 = true;
+    } else if (RobotContainer.xbox1.getPOV() == 90 && !pressed2) {
+      RobotContainer.hood.modifyAngle(-2);
+      pressed2 = true;
+    } else if (RobotContainer.xbox1.getPOV() != 0 && RobotContainer.xbox1.getPOV() != 180 && RobotContainer.xbox1.getPOV() != 90 && RobotContainer.xbox1.getPOV() != 270) {
+      pressed2 = false;
+
+    }
+    else {
+      RobotContainer.hood.modifyAngle(0);
+    }
+
+    // if (RobotContainer.xbox1.getPOV() == -1) {
+    //   pressed = false;
+    // }
+
+
+
+    if (RobotContainer.xbox2.getLeftTriggerAxis() > .2) {
+      intake();
+    }
+    else if (!Robot.isAutonomous){
+      stopIntake();
+    }
+
+    if (RobotContainer.xbox2.getRightTriggerAxis() > .25) {
+      passing();
+    }
+    else {
+      stopPassing();
+    }
+
+
+    
+
+
+    if (RobotContainer.xbox2.getPOV() == 0 && !pressed) {
+      RobotContainer.Shooter.modifyEfficiency(increment);
+      pressed = true;
+    } else if (RobotContainer.xbox2.getPOV() == 180 && !pressed) {
+      RobotContainer.Shooter.modifyEfficiency(-increment);
+      pressed = true;
+    } else if (RobotContainer.xbox2.getPOV() == 90 && !pressed) {
+      increment *= 2;
+      SmartDashboard.putNumber("Increment", increment);
+      pressed = true;
+    } else if (RobotContainer.xbox2.getPOV() == 270 && !pressed) {
+      increment /= 2;
+      SmartDashboard.putNumber("Increment", increment);
+      pressed = true;
+    } else if (RobotContainer.xbox2.getPOV() != 0 && RobotContainer.xbox2.getPOV() != 180 && RobotContainer.xbox2.getPOV() != 90 && RobotContainer.xbox2.getPOV() != 270) {
+      pressed = false;
+    }
+    else {
+      RobotContainer.Shooter.modifyEfficiency(0);
+    }
+  }
+
+  public void prepareShot() {
+    RobotContainer.Shooter.shootAtPosition(
+      RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 
+      1);
+    RobotContainer.Shooter.feedSpeed(-1);
+    // System.out.println("Preparing Shot");
+  }
+
+  public void shooting() {
+     RobotContainer.Shooter.shootAtPosition(
+      RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 
+      1);
+     RobotContainer.Shooter.feedSpeed(1);
+    // System.out.println("Shooting");
+    shooting = true;
+  }
+
+  public void endShot() {
+    RobotContainer.Shooter.shootAtPosition(
+      RobotContainer.isRedAlliance ? Constants.fieldConstants.RedFieldHub : Constants.fieldConstants.BlueFieldHub, 
+      0); 
+    RobotContainer.Shooter.feedSpeed(0);
+    // System.out.println("Ending Shot");
+    shooting = false;
+  }
+
+  public void cycling() {
+    RobotContainer.Shooter.setShootSpeed(350);
+    RobotContainer.Shooter.feedSpeed(1);
+    // System.out.println("Cycling");
+  }
+
+  public void passing() {
+    RobotContainer.Shooter.feedSpeed(1);
+    RobotContainer.Shooter.setShootSpeed(6000);
+    RobotContainer.hood.setPassing(true);
+  }
+
+  public void stopPassing() {
+    RobotContainer.hood.setPassing(false);
+  }
+
+  public void reverseFeed() {
+    RobotContainer.Shooter.feedSpeed(-1);
+    RobotContainer.Shooter.setIntakeSpeed(-.5);
+    // System.out.println("Reversing Feed");
+  }
+
+  public void intake() {
+    RobotContainer.Shooter.setIntakeSpeed(-1);
+    // System.out.println("Intaking");
+  }
+
+  public void stopIntake() {
+    RobotContainer.Shooter.setIntakeSpeed(0);
+    // System.out.println("Stopping Intake");
+  }
+  
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {}
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
+
+  public static class Shot {
+        public final double shooterRPM;
+        public final double hoodAngle;
+
+        public Shot(double shooterRPM, double hoodAngle) {
+            this.shooterRPM = shooterRPM;
+            this.hoodAngle = hoodAngle;
+        }
+    }
+}

@@ -29,36 +29,13 @@ public class PivortCommand extends Command {
   @Override
   public void execute() {
     //Send the value from the angle of the controller in radians, coverted to degrees
-    if (Math.sqrt(Math.pow(RobotContainer.xbox2.getLeftY(),2) + Math.pow(RobotContainer.xbox2.getLeftX(),2)) > pivotConstants.ShooterDeadzone) {
-      RobotContainer.pivort.manualMode(true);
-      RobotContainer.pivort.setTargetAngle(Math.toDegrees(Math.atan2(RobotContainer.xbox2.getLeftY(), RobotContainer.xbox2.getLeftX())));
-    // } else if (RobotContainer.turretVision.hasTarget(RobotContainer.turretVision.turretCameras)) {
-    } 
-    else {
-      RobotContainer.pivort.manualMode(false);
-      // if (targeting) { //TODO TEST THIS
-      //   RobotContainer.pivort.shootAtPosition(0, Constants.fieldConstants.HeightOfHub, 0, Constants.pivotConstants.ShootSpeed);;
-      // } else {
-      //   RobotContainer.pivort.setAutoRotate(0);
-      // }
-      if (RobotContainer.turretVision.hasTarget(RobotContainer.turretVision.turretCameras)) {
-        RobotContainer.pivort.setAutoRotate(RobotContainer.turretVision.TagTracking() + 6);
-      } else {
-        RobotContainer.pivort.setAutoRotate(0);
-      }
+    if (RobotContainer.xbox1.getBButtonPressed()) {
+      targeting = !targeting;
     }
-
+    if (!Robot.isAutonomous) {
+    RobotContainer.pivort.setAutoTarget(targeting);
+    }
     
-    if (RobotContainer.xbox2.getRightBumperButton()) {
-      targeting = true;
-    }
-
-
-    if (RobotContainer.xbox2.getAButton()) {
-      RobotContainer.pivort.shootSpeed(Constants.pivotConstants.ShootSpeed);
-    } else {
-      RobotContainer.pivort.shootSpeed(0);
-    }
   }
 
   // Called once the command ends or is interrupted.

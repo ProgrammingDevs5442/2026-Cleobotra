@@ -21,22 +21,26 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.Telemetry;
 import frc.robot.Constants.visionConstants;
-
+import edu.wpi.first.wpilibj.Timer;
+import com.ctre.phoenix6.Utils;
 
 public class Vision extends SubsystemBase {
   
   public ArrayList<CalculatedCamera> cameras = new ArrayList<CalculatedCamera>();
-  public ArrayList<CalculatedCamera> turretCameras = new ArrayList<CalculatedCamera>();
 
   
-    public final static CalculatedLimelight Limelight1 = new CalculatedLimelight("Limelight-left");//visionConstants.cameraOffset);
-    public final static CalculatedLimelight Limelight2 = new CalculatedLimelight("limelight-right");//visionConstants.cameraOffset);
-    public final static CalculatedLimelight LimelightTurret = new CalculatedLimelight("limelight-turret");//visionConstants.cameraOffset);
+    public final static CalculatedLimelight LimelightCenter = new CalculatedLimelight("limelight-mason");
+    // public final static CalculatedLimelight LimelightRight = new CalculatedLimelight("limelight-rightii");
+    // public final static CalculatedLimelight LimelightLeft = new CalculatedLimelight("limelight-left");
+
 
     // PhotonPoseEstimator microsoftPoseEstimator = new PhotonPoseEstimator(AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape), PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(0,0,0), new Rotation3d(0,0,0)));
     // PhotonPoseEstimator thriftyPoseEstimator = new PhotonPoseEstimator(AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape), PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(0,0,0), new Rotation3d(0,0,0)));
@@ -44,9 +48,9 @@ public class Vision extends SubsystemBase {
     Telemetry logger = RobotContainer.logger;
 
   public Vision() {
-    cameras.add(Limelight1);
-    cameras.add(Limelight2);
-    turretCameras.add(LimelightTurret);
+    cameras.add(LimelightCenter);
+    // cameras.add(LimelightRight);
+    // cameras.add(LimelightLeft);
   }
   
 
@@ -69,66 +73,45 @@ public class Vision extends SubsystemBase {
     fR /= tot;
     return new Pose2d(fX,fY, new Rotation2d(fR));
   }
-
-  public boolean hasTarget(ArrayList<CalculatedCamera> List) {
-    for (CalculatedCamera camera : List) {
+  
+  public boolean hasTarget() {
+    for (CalculatedCamera camera : cameras) {
       if (camera.hasTarget()) return true;
     }
     return false;
   }
-
-  // public double angleToTarget() {
-  //   double tX = 0;
-  //   double tY = 0;
-  //   double tot = 0;
-  //   for (CalculatedCamera camera: cameras) {
-  //     if (hasTarget()) {
-  //       tX += camera.getTargetPose().getX() * camera.getTrust();
-  //       tY += camera.getTargetPose().getY() * camera.getTrust();
-  //       tot += camera.getTrust();
-  //     }
-  //   }
-  //   tX /= tot;
-  //   tY = tot;
-  //   return Math.atan2(tY, tX);
-  // }
-
-  public double TagTracking() {
-    double dX = 0;
-    for (CalculatedCamera camera: turretCameras) {
-      if (hasTarget(turretCameras)) {
-        dX = camera.getTagAngle();
-      }
-    }
-    return dX;
-  }
-
-  public double getDistanceToTag() {
-    double dZ = 0;
-    for (CalculatedCamera camera: turretCameras) {
-      if (hasTarget(turretCameras)) {
-        dZ = camera.getDistanceToTag();
-      }
-    }
-    return dZ;
-  };
 
   @Override
   public void periodic() {
     // Update camera readings to be in sync with the robot
     for (CalculatedCamera camera: cameras) {
       camera.updateResult();
+
+      ///// Add to Odometry \\\\\
+      if (camera.hasTarget()) {
+        double now = Timer.getFPGATimestamp();
+        double timestamp = Utils.fpgaToCurrentTime(now);
+
+        // Update drivetrain odometry
+        if(!Robot.isAutonomous) {
+        RobotContainer.drivetrain.addVisionMeasurement(
+          camera.getPathFieldPose(),
+          timestamp
+        );
+        }
+      }
     }
 
-    SmartDashboard.putNumber("FR Camera X", Limelight1.getTargetPose().getX());
-    SmartDashboard.putNumber("FR Camera Y", Limelight1.getTargetPose().getY());
-    SmartDashboard.putNumber("FR Camera R", Limelight1.getTargetPose().getRotation().getDegrees());
-    SmartDashboard.putNumber("FR Camera Trust", Limelight1.getTrust());
     
-    SmartDashboard.putNumber("FL Camera X", Limelight2.getTargetPose().getX());
-    SmartDashboard.putNumber("FL Camera Y", Limelight2.getTargetPose().getY());
-    SmartDashboard.putNumber("FL Camera R", Limelight2.getTargetPose().getRotation().getDegrees());
-    SmartDashboard.putNumber("FL Camera Trust", Limelight2.getTrust());
+
+    SmartDashboard.putNumber("Field pose X", getFieldPose().getX());
+    SmartDashboard.putNumber("Field pose Y", getFieldPose().getY());
+    SmartDashboard.putNumber("Field pose R", getFieldPose().getRotation().getDegrees());
+    
+    // SmartDashboard.putNumber("FL Camera X", Limelight2.getTargetPose().getX());
+    // SmartDashboard.putNumber("FL Camera Y", Limelight2.getTargetPose().getY());
+    // SmartDashboard.putNumber("FL Camera R", Limelight2.getTargetPose().getRotation().getDegrees());
+    // SmartDashboard.putNumber("FL Camera Trust", Limelight2.getTrust());
     
   }
 }
